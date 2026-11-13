@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hayati/app/router.dart';
 import 'package:hayati/app/theme.dart';
 import 'package:hayati/core/config/app_config_provider.dart';
+import 'package:hayati/features/reminders/presentation/reminder_providers.dart';
 import 'package:hayati/features/settings/domain/app_preferences.dart';
 import 'package:hayati/features/settings/presentation/preferences_controller.dart';
 import 'package:hayati/l10n/app_localizations.dart';
@@ -14,6 +15,7 @@ class HayatiApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(appRouterProvider);
     final config = ref.watch(appConfigProvider);
+    ref.watch(reminderCoordinatorProvider);
     final preferences =
         ref.watch(preferencesControllerProvider).value ??
         AppPreferences.fallback;
