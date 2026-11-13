@@ -2,11 +2,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hayati/app/hayati_app.dart';
 import 'package:hayati/features/habits/presentation/habit_providers.dart';
+import 'package:hayati/features/auth/presentation/auth_providers.dart';
 import 'package:hayati/features/reminders/domain/reminder_planner.dart';
 import 'package:hayati/features/reminders/presentation/reminder_providers.dart';
 import 'package:hayati/features/settings/presentation/preferences_controller.dart';
 import 'package:material_ui/material_ui.dart';
 
+import 'support/memory_auth_repository.dart';
 import 'support/memory_habit_repository.dart';
 import 'support/memory_settings_repository.dart';
 import 'support/silent_reminder_scheduler.dart';
@@ -34,6 +36,7 @@ Future<void> _pumpApp(WidgetTester tester) async {
         reminderCoordinatorProvider.overrideWith(
           (ref) => ReminderCoordinator(SilentReminderScheduler()),
         ),
+        authRepositoryProvider.overrideWith((ref) => MemoryAuthRepository()),
       ],
       child: const HayatiApp(),
     ),
@@ -52,7 +55,7 @@ void main() {
     await _settle(tester);
     expect(find.text('Insights are coming in a later update.'), findsOneWidget);
 
-    await tester.tap(find.text('Settings'));
+    await tester.tap(find.text('Profile'));
     await _settle(tester);
     expect(find.text('Language'), findsOneWidget);
     expect(find.text('Development'), findsOneWidget);
@@ -71,7 +74,7 @@ void main() {
   testWidgets('Arabic selection mirrors the layout', (tester) async {
     await _pumpApp(tester);
 
-    await tester.tap(find.text('Settings'));
+    await tester.tap(find.text('Profile'));
     await _settle(tester);
     await tester.tap(find.text('Arabic'));
     await _settle(tester);
@@ -87,7 +90,7 @@ void main() {
   testWidgets('French selection uses the French strings', (tester) async {
     await _pumpApp(tester);
 
-    await tester.tap(find.text('Settings'));
+    await tester.tap(find.text('Profile'));
     await _settle(tester);
     await tester.tap(find.text('French'));
     await _settle(tester);
