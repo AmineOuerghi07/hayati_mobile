@@ -68,8 +68,13 @@ class LocalReminderScheduler implements ReminderScheduler {
   Future<void> _ensureReady() async {
     if (_ready) return;
     tzdata.initializeTimeZones();
-    final info = await FlutterTimezone.getLocalTimezone();
-    tz.setLocalLocation(tz.getLocation(info.identifier));
+    var identifier = 'UTC';
+    try {
+      identifier = (await FlutterTimezone.getLocalTimezone()).identifier;
+    } on Object {
+      identifier = 'UTC';
+    }
+    tz.setLocalLocation(reminderLocation(identifier));
     await _plugin.initialize(
       settings: const InitializationSettings(
         android: AndroidInitializationSettings('@mipmap/ic_launcher'),
@@ -100,5 +105,14 @@ class LocalReminderScheduler implements ReminderScheduler {
       scheduled = scheduled.add(const Duration(days: 1));
     }
     return scheduled;
+  }
+}
+
+/// Simulator hosts sometimes report `GMT`, which this database does not ship.
+tz.Location reminderLocation(String identifier) {
+  try {
+    return tz.getLocation(identifier);
+  } on tz.LocationNotFoundException {
+    return tz.UTC;
   }
 }
