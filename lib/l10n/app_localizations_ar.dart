@@ -52,4 +52,55 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get flavorProd => 'إنتاج';
+
+  @override
+  String get appearance => 'المظهر';
+
+  @override
+  String get appearanceSystem => 'الجهاز';
+
+  @override
+  String get appearanceLight => 'فاتح';
+
+  @override
+  String get appearanceDark => 'داكن';
+
+  @override
+  String get colorTheme => 'ألوان التطبيق';
+
+  @override
+  String get themeHayati => 'حياتي';
+
+  @override
+  String get themeOasis => 'واحة';
+
+  @override
+  String get themeDawn => 'فجر';
+
+  @override
+  String get themeDusk => 'غسق';
+
+  @override
+  String get themeBlossom => 'زهر';
+
+  @override
+  String get themeSea => 'بحر';
+
+  @override
+  String get themeInk => 'حبر';
+
+  @override
+  String get themeContrast => 'تباين';
+
+  @override
+  String get weekStartsOn => 'يبدأ الأسبوع يوم';
+
+  @override
+  String get weekDayMonday => 'الاثنين';
+
+  @override
+  String get weekDaySaturday => 'السبت';
+
+  @override
+  String get weekDaySunday => 'الأحد';
 }

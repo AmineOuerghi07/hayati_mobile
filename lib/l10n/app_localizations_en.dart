@@ -52,4 +52,55 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get flavorProd => 'Production';
+
+  @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get appearanceSystem => 'System';
+
+  @override
+  String get appearanceLight => 'Light';
+
+  @override
+  String get appearanceDark => 'Dark';
+
+  @override
+  String get colorTheme => 'Color theme';
+
+  @override
+  String get themeHayati => 'Hayati';
+
+  @override
+  String get themeOasis => 'Oasis';
+
+  @override
+  String get themeDawn => 'Dawn';
+
+  @override
+  String get themeDusk => 'Dusk';
+
+  @override
+  String get themeBlossom => 'Blossom';
+
+  @override
+  String get themeSea => 'Sea';
+
+  @override
+  String get themeInk => 'Ink';
+
+  @override
+  String get themeContrast => 'Contrast';
+
+  @override
+  String get weekStartsOn => 'Week starts on';
+
+  @override
+  String get weekDayMonday => 'Monday';
+
+  @override
+  String get weekDaySaturday => 'Saturday';
+
+  @override
+  String get weekDaySunday => 'Sunday';
 }

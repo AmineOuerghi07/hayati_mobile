@@ -1,16 +1,30 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hayati/app/hayati_app.dart';
+import 'package:hayati/features/settings/presentation/preferences_controller.dart';
 import 'package:material_ui/material_ui.dart';
 
+import 'support/memory_settings_repository.dart';
+
+Future<void> _settle(WidgetTester tester) async {
+  await tester.pump();
+  await tester.pump(const Duration(milliseconds: 50));
+}
+
 Future<void> _pumpApp(WidgetTester tester) async {
-  tester.view.physicalSize = const Size(390, 844);
+  tester.view.physicalSize = const Size(400, 2000);
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.resetPhysicalSize);
   addTearDown(tester.view.resetDevicePixelRatio);
 
-  await tester.pumpWidget(const ProviderScope(child: HayatiApp()));
-  await tester.pumpAndSettle();
+  final settings = MemorySettingsRepository();
+  await tester.pumpWidget(
+    ProviderScope(
+      overrides: [settingsRepositoryProvider.overrideWith((ref) => settings)],
+      child: const HayatiApp(),
+    ),
+  );
+  await _settle(tester);
 }
 
 void main() {
@@ -24,22 +38,32 @@ void main() {
     );
 
     await tester.tap(find.text('Stats'));
-    await tester.pumpAndSettle();
+    await _settle(tester);
     expect(find.text('Insights are coming in a later update.'), findsOneWidget);
 
     await tester.tap(find.text('Settings'));
-    await tester.pumpAndSettle();
+    await _settle(tester);
     expect(find.text('Language'), findsOneWidget);
     expect(find.text('Development'), findsOneWidget);
+
+    final before = Theme.of(tester.element(find.text('Color theme')))
+        .colorScheme
+        .primary;
+    await tester.tap(find.byTooltip('Dawn'));
+    await _settle(tester);
+    final after = Theme.of(tester.element(find.text('Color theme')))
+        .colorScheme
+        .primary;
+    expect(after, isNot(before));
   });
 
   testWidgets('Arabic selection mirrors the layout', (tester) async {
     await _pumpApp(tester);
 
     await tester.tap(find.text('Settings'));
-    await tester.pumpAndSettle();
+    await _settle(tester);
     await tester.tap(find.text('Arabic'));
-    await tester.pumpAndSettle();
+    await _settle(tester);
 
     expect(find.text('اليوم'), findsOneWidget);
     expect(find.text('اللغة'), findsOneWidget);
@@ -53,9 +77,9 @@ void main() {
     await _pumpApp(tester);
 
     await tester.tap(find.text('Settings'));
-    await tester.pumpAndSettle();
+    await _settle(tester);
     await tester.tap(find.text('French'));
-    await tester.pumpAndSettle();
+    await _settle(tester);
 
     expect(find.text("Aujourd'hui"), findsOneWidget);
     expect(find.text('Langue'), findsOneWidget);

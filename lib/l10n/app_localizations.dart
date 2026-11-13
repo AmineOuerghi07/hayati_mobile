@@ -185,6 +185,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Production'**
   String get flavorProd;
+
+  /// Settings section for light, dark, or system brightness.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearance;
+
+  /// No description provided for @appearanceSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get appearanceSystem;
+
+  /// No description provided for @appearanceLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get appearanceLight;
+
+  /// No description provided for @appearanceDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get appearanceDark;
+
+  /// Settings section for the named color palettes.
+  ///
+  /// In en, this message translates to:
+  /// **'Color theme'**
+  String get colorTheme;
+
+  /// No description provided for @themeHayati.
+  ///
+  /// In en, this message translates to:
+  /// **'Hayati'**
+  String get themeHayati;
+
+  /// No description provided for @themeOasis.
+  ///
+  /// In en, this message translates to:
+  /// **'Oasis'**
+  String get themeOasis;
+
+  /// No description provided for @themeDawn.
+  ///
+  /// In en, this message translates to:
+  /// **'Dawn'**
+  String get themeDawn;
+
+  /// No description provided for @themeDusk.
+  ///
+  /// In en, this message translates to:
+  /// **'Dusk'**
+  String get themeDusk;
+
+  /// No description provided for @themeBlossom.
+  ///
+  /// In en, this message translates to:
+  /// **'Blossom'**
+  String get themeBlossom;
+
+  /// No description provided for @themeSea.
+  ///
+  /// In en, this message translates to:
+  /// **'Sea'**
+  String get themeSea;
+
+  /// No description provided for @themeInk.
+  ///
+  /// In en, this message translates to:
+  /// **'Ink'**
+  String get themeInk;
+
+  /// No description provided for @themeContrast.
+  ///
+  /// In en, this message translates to:
+  /// **'Contrast'**
+  String get themeContrast;
+
+  /// No description provided for @weekStartsOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Week starts on'**
+  String get weekStartsOn;
+
+  /// No description provided for @weekDayMonday.
+  ///
+  /// In en, this message translates to:
+  /// **'Monday'**
+  String get weekDayMonday;
+
+  /// No description provided for @weekDaySaturday.
+  ///
+  /// In en, this message translates to:
+  /// **'Saturday'**
+  String get weekDaySaturday;
+
+  /// No description provided for @weekDaySunday.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunday'**
+  String get weekDaySunday;
 }
 
 class _AppLocalizationsDelegate

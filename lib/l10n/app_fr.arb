@@ -13,5 +13,22 @@
   "languageFrench": "Français",
   "environment": "Environnement",
   "flavorDev": "Développement",
-  "flavorProd": "Production"
+  "flavorProd": "Production",
+  "appearance": "Apparence",
+  "appearanceSystem": "Système",
+  "appearanceLight": "Clair",
+  "appearanceDark": "Sombre",
+  "colorTheme": "Thème de couleur",
+  "themeHayati": "Hayati",
+  "themeOasis": "Oasis",
+  "themeDawn": "Aube",
+  "themeDusk": "Crépuscule",
+  "themeBlossom": "Floraison",
+  "themeSea": "Mer",
+  "themeInk": "Encre",
+  "themeContrast": "Contraste",
+  "weekStartsOn": "La semaine commence le",
+  "weekDayMonday": "Lundi",
+  "weekDaySaturday": "Samedi",
+  "weekDaySunday": "Dimanche"
 }
