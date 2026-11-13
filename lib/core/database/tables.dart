@@ -19,6 +19,7 @@ class Habits extends Table {
   TextColumn get startDate => text()();
   DateTimeColumn get archivedAt => dateTime().nullable()();
   IntColumn get sortOrder => integer().withDefault(const Constant(0))();
+  TextColumn get scopeId => text().withDefault(const Constant('guest'))();
 
   @override
   Set<Column<Object>> get primaryKey => {id};
@@ -35,6 +36,7 @@ class HabitCompletions extends Table {
   RealColumn get value => real().withDefault(const Constant(1))();
   TextColumn get note => text().nullable()();
   DateTimeColumn get completedAt => dateTime().nullable()();
+  TextColumn get scopeId => text().withDefault(const Constant('guest'))();
 
   @override
   Set<Column<Object>> get primaryKey => {id};
@@ -61,4 +63,33 @@ class AppSettings extends Table {
   List<Set<Column<Object>>> get uniqueKeys => [
     {settingKey},
   ];
+}
+
+@DataClassName('AccountRow')
+class LocalAccounts extends Table {
+  TextColumn get id => text()();
+  TextColumn get email => text().nullable()();
+  TextColumn get phone => text().nullable()();
+  TextColumn get displayName => text()();
+  TextColumn get passwordSalt => text().nullable()();
+  TextColumn get passwordHash => text().nullable()();
+  DateTimeColumn get createdAt => dateTime()();
+  DateTimeColumn get deletedAt => dateTime().nullable()();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
+@DataClassName('ChallengeRow')
+class AuthChallenges extends Table {
+  TextColumn get id => text()();
+  TextColumn get purpose => text()();
+  TextColumn get destination => text()();
+  TextColumn get codeHash => text()();
+  DateTimeColumn get expiresAt => dateTime()();
+  IntColumn get attempts => integer().withDefault(const Constant(0))();
+  DateTimeColumn get consumedAt => dateTime().nullable()();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
 }

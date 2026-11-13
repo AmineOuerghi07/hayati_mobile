@@ -105,6 +105,88 @@ class AppLocalizationsEn extends AppLocalizations {
   String get weekDaySunday => 'Sunday';
 
   @override
+  String get profile => 'Profile';
+
+  @override
+  String get signIn => 'Sign in';
+
+  @override
+  String get createAccount => 'Create account';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get password => 'Password';
+
+  @override
+  String get displayName => 'Name';
+
+  @override
+  String get forgotPassword => 'Forgot password';
+
+  @override
+  String get usePhoneCode => 'Use a code instead';
+
+  @override
+  String get emailOrPhone => 'Email or phone';
+
+  @override
+  String get sendCode => 'Send code';
+
+  @override
+  String get verifyCode => 'Verify code';
+
+  @override
+  String get localDemoCode => 'Local demo code';
+
+  @override
+  String get resetHint =>
+      'If an account exists, a local demo code is created. No email is sent.';
+
+  @override
+  String get newPassword => 'New password';
+
+  @override
+  String get currentPassword => 'Current password';
+
+  @override
+  String get changePassword => 'Change password';
+
+  @override
+  String get signOut => 'Sign out';
+
+  @override
+  String get deleteAccount => 'Delete account';
+
+  @override
+  String get onThisDevice => 'On this device';
+
+  @override
+  String get guestStatus => 'Saved only on this device';
+
+  @override
+  String get invalidCredentials => 'Those details do not match.';
+
+  @override
+  String get emailInUse => 'That email already has an account.';
+
+  @override
+  String get invalidEmail => 'Enter a valid email.';
+
+  @override
+  String get weakPassword => 'Use at least 8 characters.';
+
+  @override
+  String get invalidCode => 'That code is not valid.';
+
+  @override
+  String get codeExpired => 'That code has expired.';
+
+  @override
+  String get accountNotFound => 'No account was found.';
+
+  @override
   String get addHabit => 'Add habit';
 
   @override

@@ -105,6 +105,88 @@ class AppLocalizationsAr extends AppLocalizations {
   String get weekDaySunday => 'الأحد';
 
   @override
+  String get profile => 'الملف';
+
+  @override
+  String get signIn => 'تسجيل الدخول';
+
+  @override
+  String get createAccount => 'إنشاء حساب';
+
+  @override
+  String get email => 'البريد';
+
+  @override
+  String get password => 'كلمة السر';
+
+  @override
+  String get displayName => 'الاسم';
+
+  @override
+  String get forgotPassword => 'نسيت كلمة السر';
+
+  @override
+  String get usePhoneCode => 'الدخول برمز';
+
+  @override
+  String get emailOrPhone => 'البريد أو الهاتف';
+
+  @override
+  String get sendCode => 'إنشاء الرمز';
+
+  @override
+  String get verifyCode => 'تأكيد الرمز';
+
+  @override
+  String get localDemoCode => 'رمز تجريبي محلي';
+
+  @override
+  String get resetHint =>
+      'إذا وُجد حساب، يُنشأ رمز تجريبي على هذا الجهاز. لا يُرسل بريد.';
+
+  @override
+  String get newPassword => 'كلمة سر جديدة';
+
+  @override
+  String get currentPassword => 'كلمة السر الحالية';
+
+  @override
+  String get changePassword => 'تغيير كلمة السر';
+
+  @override
+  String get signOut => 'تسجيل الخروج';
+
+  @override
+  String get deleteAccount => 'حذف الحساب';
+
+  @override
+  String get onThisDevice => 'على هذا الجهاز';
+
+  @override
+  String get guestStatus => 'محفوظ على هذا الجهاز فقط';
+
+  @override
+  String get invalidCredentials => 'البيانات غير مطابقة.';
+
+  @override
+  String get emailInUse => 'هذا البريد مستخدم.';
+
+  @override
+  String get invalidEmail => 'اكتب بريدًا صالحًا.';
+
+  @override
+  String get weakPassword => 'استخدم 8 أحرف على الأقل.';
+
+  @override
+  String get invalidCode => 'الرمز غير صالح.';
+
+  @override
+  String get codeExpired => 'انتهت صلاحية الرمز.';
+
+  @override
+  String get accountNotFound => 'لا يوجد حساب.';
+
+  @override
   String get addHabit => 'عادة جديدة';
 
   @override

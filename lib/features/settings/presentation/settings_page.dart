@@ -1,6 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hayati/app/theme.dart';
 import 'package:hayati/core/config/app_config_provider.dart';
+import 'package:hayati/features/auth/domain/auth_models.dart';
+import 'package:hayati/features/auth/presentation/auth_providers.dart';
 import 'package:hayati/features/settings/domain/app_preferences.dart';
 import 'package:hayati/features/settings/presentation/preferences_controller.dart';
 import 'package:hayati/l10n/app_localizations.dart';
@@ -28,7 +31,9 @@ class SettingsPage extends ConsumerWidget {
       child: ListView(
         padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
         children: [
-          Text(l10n.settings, style: theme.textTheme.headlineMedium),
+          Text(l10n.profile, style: theme.textTheme.headlineMedium),
+          const SizedBox(height: 16),
+          const _ProfileCard(),
           const SizedBox(height: 24),
           Text(l10n.language, style: theme.textTheme.titleMedium),
           const SizedBox(height: 8),
@@ -219,4 +224,112 @@ String _weekLabel(AppLocalizations l10n, int day) {
     DateTime.sunday => l10n.weekDaySunday,
     _ => l10n.weekDayMonday,
   };
+}
+
+class _ProfileCard extends ConsumerWidget {
+  const _ProfileCard();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final session =
+        ref.watch(authSessionProvider).value ?? const AuthSession.guest();
+    final user = session.user;
+    final scheme = Theme.of(context).colorScheme;
+    return Material(
+      color: scheme.primaryContainer,
+      borderRadius: BorderRadius.circular(24),
+      child: Padding(
+        padding: const EdgeInsetsDirectional.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 28,
+                  backgroundColor: scheme.primary,
+                  foregroundColor: scheme.onPrimary,
+                  child: Text(user?.initials ?? '?'),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        user?.displayName ?? l10n.onThisDevice,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      Text(
+                        user?.email ?? user?.phone ?? l10n.guestStatus,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            if (user == null)
+              FilledButton(
+                onPressed: () => context.push('/auth/sign-in'),
+                child: Text(l10n.signIn),
+              )
+            else ...[
+              OutlinedButton(
+                onPressed: () => context.push('/auth/change-password'),
+                child: Text(l10n.changePassword),
+              ),
+              TextButton(
+                onPressed: () => ref.read(authRepositoryProvider).signOut(),
+                child: Text(l10n.signOut),
+              ),
+              TextButton(
+                onPressed: () => _delete(context, ref),
+                child: Text(l10n.deleteAccount),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _delete(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
+    final password = TextEditingController();
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(l10n.deleteAccount),
+          content: TextField(
+            controller: password,
+            obscureText: true,
+            decoration: InputDecoration(labelText: l10n.password),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(l10n.cancel),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: Text(l10n.delete),
+            ),
+          ],
+        );
+      },
+    );
+    if (confirmed != true) return;
+    try {
+      await ref
+          .read(authRepositoryProvider)
+          .deleteAccount(password: password.text);
+    } on AuthFailure {
+      // The profile stays signed in when the password is wrong.
+    }
+    password.dispose();
+  }
 }

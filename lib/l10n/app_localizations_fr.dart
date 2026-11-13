@@ -107,6 +107,88 @@ class AppLocalizationsFr extends AppLocalizations {
   String get weekDaySunday => 'Dimanche';
 
   @override
+  String get profile => 'Profil';
+
+  @override
+  String get signIn => 'Connexion';
+
+  @override
+  String get createAccount => 'Créer un compte';
+
+  @override
+  String get email => 'E-mail';
+
+  @override
+  String get password => 'Mot de passe';
+
+  @override
+  String get displayName => 'Nom';
+
+  @override
+  String get forgotPassword => 'Mot de passe oublié';
+
+  @override
+  String get usePhoneCode => 'Utiliser un code';
+
+  @override
+  String get emailOrPhone => 'E-mail ou téléphone';
+
+  @override
+  String get sendCode => 'Créer le code';
+
+  @override
+  String get verifyCode => 'Vérifier le code';
+
+  @override
+  String get localDemoCode => 'Code de démonstration local';
+
+  @override
+  String get resetHint =>
+      'Si un compte existe, un code local est créé. Aucun e-mail n\'\'est envoyé.';
+
+  @override
+  String get newPassword => 'Nouveau mot de passe';
+
+  @override
+  String get currentPassword => 'Mot de passe actuel';
+
+  @override
+  String get changePassword => 'Changer le mot de passe';
+
+  @override
+  String get signOut => 'Déconnexion';
+
+  @override
+  String get deleteAccount => 'Supprimer le compte';
+
+  @override
+  String get onThisDevice => 'Sur cet appareil';
+
+  @override
+  String get guestStatus => 'Enregistré seulement sur cet appareil';
+
+  @override
+  String get invalidCredentials => 'Ces informations ne correspondent pas.';
+
+  @override
+  String get emailInUse => 'Cet e-mail a déjà un compte.';
+
+  @override
+  String get invalidEmail => 'Saisissez un e-mail valide.';
+
+  @override
+  String get weakPassword => 'Utilisez au moins 8 caractères.';
+
+  @override
+  String get invalidCode => 'Ce code n\'est pas valide.';
+
+  @override
+  String get codeExpired => 'Ce code a expiré.';
+
+  @override
+  String get accountNotFound => 'Aucun compte trouvé.';
+
+  @override
   String get addHabit => 'Ajouter une habitude';
 
   @override

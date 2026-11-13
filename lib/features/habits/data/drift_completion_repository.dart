@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:hayati/core/database/app_database.dart';
+import 'package:hayati/core/database/data_scope.dart';
 import 'package:hayati/features/habits/data/habit_codec.dart';
 import 'package:hayati/features/habits/domain/completion_repository.dart';
 import 'package:hayati/features/habits/domain/habit_completion.dart';
@@ -58,6 +59,7 @@ class DriftCompletionRepository implements CompletionRepository {
               value: Value(value),
               note: Value(note),
               completedAt: Value(now),
+              scopeId: Value(await DataScope(_db).current()),
             ),
           );
       return;

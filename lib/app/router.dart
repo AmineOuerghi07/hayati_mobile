@@ -1,6 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hayati/app/app_shell.dart';
+import 'package:hayati/features/auth/presentation/account_pages.dart';
+import 'package:hayati/features/auth/presentation/sign_in_page.dart';
 import 'package:hayati/features/habits/presentation/habit_detail_page.dart';
 import 'package:hayati/features/habits/presentation/habit_editor_page.dart';
 import 'package:hayati/features/habits/presentation/today_page.dart';
@@ -53,6 +55,26 @@ GoRouter appRouter(Ref ref) {
             ],
           ),
         ],
+      ),
+      GoRoute(
+        path: '/auth/sign-in',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const SignInPage(),
+      ),
+      GoRoute(
+        path: '/auth/otp',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const OtpPage(),
+      ),
+      GoRoute(
+        path: '/auth/forgot',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const ForgotPasswordPage(),
+      ),
+      GoRoute(
+        path: '/auth/change-password',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const ChangePasswordPage(),
       ),
       GoRoute(
         path: '/habits/new',
