@@ -2,6 +2,7 @@ import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hayati/core/time/calendar_date.dart';
+import 'package:hayati/core/widgets/async_error_view.dart';
 import 'package:hayati/features/habits/domain/habit.dart';
 import 'package:hayati/features/habits/domain/habit_schedule.dart';
 import 'package:hayati/features/habits/domain/streak_calculator.dart';
@@ -40,7 +41,7 @@ class HabitDetailPage extends ConsumerWidget {
       ),
       body: habitAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('$error')),
+        error: (error, stack) => const AsyncErrorView(),
         data: (habit) {
           if (habit == null) {
             return Center(child: Text(l10n.emptyTodayTitle));

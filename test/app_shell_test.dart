@@ -53,7 +53,7 @@ void main() {
 
     await tester.tap(find.text('Stats'));
     await _settle(tester);
-    expect(find.text('Insights are coming in a later update.'), findsOneWidget);
+    expect(find.text('This week'), findsOneWidget);
 
     await tester.tap(find.text('Profile'));
     await _settle(tester);

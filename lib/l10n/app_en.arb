@@ -146,5 +146,15 @@
   "history": "History",
   "icon": "Icon",
   "color": "Color",
-  "loading": "Loading"
+  "loading": "Loading",
+  "thisWeek": "This week",
+  "thisMonth": "This month",
+  "heatmap": "Last 12 weeks",
+  "habits": "Habits",
+  "noInsightsYet": "Nothing to measure yet. Finish a habit and it will show up here.",
+  "somethingWentWrong": "Something went wrong. Try again in a moment.",
+  "streakMilestone": "{count}-day streak",
+  "@streakMilestone": {
+    "placeholders": {"count": {"type": "int"}}
+  }
 }

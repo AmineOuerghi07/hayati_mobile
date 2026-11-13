@@ -297,4 +297,29 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get loading => 'Chargement';
+
+  @override
+  String get thisWeek => 'Cette semaine';
+
+  @override
+  String get thisMonth => 'Ce mois';
+
+  @override
+  String get heatmap => '12 dernières semaines';
+
+  @override
+  String get habits => 'Habitudes';
+
+  @override
+  String get noInsightsYet =>
+      'Rien à mesurer pour l\'\'instant. Terminez une habitude et elle apparaîtra ici.';
+
+  @override
+  String get somethingWentWrong =>
+      'Une erreur s\'\'est produite. Réessayez dans un instant.';
+
+  @override
+  String streakMilestone(int count) {
+    return 'Série de $count jours';
+  }
 }

@@ -295,4 +295,27 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get loading => 'جار التحميل';
+
+  @override
+  String get thisWeek => 'هذا الأسبوع';
+
+  @override
+  String get thisMonth => 'هذا الشهر';
+
+  @override
+  String get heatmap => 'آخر 12 أسبوعًا';
+
+  @override
+  String get habits => 'العادات';
+
+  @override
+  String get noInsightsYet => 'لا يوجد ما يُقاس بعد. أكمل عادة وستظهر هنا.';
+
+  @override
+  String get somethingWentWrong => 'حدث خطأ. حاول مرة أخرى بعد لحظات.';
+
+  @override
+  String streakMilestone(int count) {
+    return 'سلسلة من $count يوم';
+  }
 }

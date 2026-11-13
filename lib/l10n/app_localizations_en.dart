@@ -295,4 +295,29 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loading => 'Loading';
+
+  @override
+  String get thisWeek => 'This week';
+
+  @override
+  String get thisMonth => 'This month';
+
+  @override
+  String get heatmap => 'Last 12 weeks';
+
+  @override
+  String get habits => 'Habits';
+
+  @override
+  String get noInsightsYet =>
+      'Nothing to measure yet. Finish a habit and it will show up here.';
+
+  @override
+  String get somethingWentWrong =>
+      'Something went wrong. Try again in a moment.';
+
+  @override
+  String streakMilestone(int count) {
+    return '$count-day streak';
+  }
 }

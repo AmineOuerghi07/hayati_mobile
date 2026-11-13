@@ -659,6 +659,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Loading'**
   String get loading;
+
+  /// No description provided for @thisWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'This week'**
+  String get thisWeek;
+
+  /// No description provided for @thisMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'This month'**
+  String get thisMonth;
+
+  /// No description provided for @heatmap.
+  ///
+  /// In en, this message translates to:
+  /// **'Last 12 weeks'**
+  String get heatmap;
+
+  /// No description provided for @habits.
+  ///
+  /// In en, this message translates to:
+  /// **'Habits'**
+  String get habits;
+
+  /// No description provided for @noInsightsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to measure yet. Finish a habit and it will show up here.'**
+  String get noInsightsYet;
+
+  /// No description provided for @somethingWentWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Try again in a moment.'**
+  String get somethingWentWrong;
+
+  /// No description provided for @streakMilestone.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}-day streak'**
+  String streakMilestone(int count);
 }
 
 class _AppLocalizationsDelegate

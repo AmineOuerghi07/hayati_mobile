@@ -1,11 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hayati/core/time/calendar_date.dart';
+import 'package:hayati/core/widgets/async_error_view.dart';
 import 'package:hayati/features/habits/domain/habit.dart';
 import 'package:hayati/features/habits/domain/habit_completion.dart';
 import 'package:hayati/features/habits/domain/habit_due.dart';
+import 'package:hayati/features/habits/domain/streak_calculator.dart';
 import 'package:hayati/features/habits/presentation/habit_providers.dart';
 import 'package:hayati/features/habits/presentation/habit_style.dart';
+import 'package:hayati/features/settings/domain/app_preferences.dart';
+import 'package:hayati/features/settings/presentation/preferences_controller.dart';
+import 'package:hayati/features/stats/domain/insights.dart';
 import 'package:hayati/l10n/app_localizations.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -27,11 +32,11 @@ class TodayPage extends ConsumerWidget {
       ),
       body: habits.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('$error')),
+        error: (error, stack) => const AsyncErrorView(),
         data: (habitList) {
           return completions.when(
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (error, stack) => Center(child: Text('$error')),
+            error: (error, stack) => const AsyncErrorView(),
             data: (logged) {
               final due = [
                 for (final habit in habitList)
@@ -48,6 +53,7 @@ class TodayPage extends ConsumerWidget {
                 habits: habitList,
                 due: due,
                 done: done,
+                logged: logged,
                 today: today,
               );
             },
@@ -95,12 +101,14 @@ class _TodayList extends ConsumerWidget {
     required this.habits,
     required this.due,
     required this.done,
+    required this.logged,
     required this.today,
   });
 
   final List<Habit> habits;
   final List<Habit> due;
   final Map<String, HabitCompletion> done;
+  final List<HabitCompletion> logged;
   final CalendarDate today;
 
   @override
@@ -184,15 +192,47 @@ class _TodayList extends ConsumerWidget {
       value: habit.targetValue,
     );
     if (!context.mounted) return;
+    final milestone = _milestoneFor(ref, habit);
     messenger.showSnackBar(
       SnackBar(
-        content: Text(l10n.markedDone),
+        content: Text(
+          milestone == null ? l10n.markedDone : l10n.streakMilestone(milestone),
+        ),
         action: SnackBarAction(
           label: l10n.undo,
           onPressed: () => repository.clear(habitId: habit.id, date: today.iso),
         ),
       ),
     );
+  }
+
+  int? _milestoneFor(WidgetRef ref, Habit habit) {
+    final weekStart =
+        ref.read(preferencesControllerProvider).value?.weekStart ??
+        AppPreferences.fallback.weekStart;
+    final map = {
+      for (final item in logged)
+        if (item.habitId == habit.id) item.date: item.value,
+    };
+    const calculator = StreakCalculator();
+    final before = calculator
+        .calculate(
+          habit: habit.schedule,
+          completions: map,
+          today: today.iso,
+          weekStart: weekStart,
+        )
+        .current;
+    map[today.iso] = habit.targetValue;
+    final after = calculator
+        .calculate(
+          habit: habit.schedule,
+          completions: map,
+          today: today.iso,
+          weekStart: weekStart,
+        )
+        .current;
+    return crossedMilestone(before, after);
   }
 }
 

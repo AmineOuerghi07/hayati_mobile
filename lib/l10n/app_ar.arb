@@ -98,5 +98,15 @@
   "history": "السجل",
   "icon": "الأيقونة",
   "color": "اللون",
-  "loading": "جار التحميل"
+  "loading": "جار التحميل",
+  "thisWeek": "هذا الأسبوع",
+  "thisMonth": "هذا الشهر",
+  "heatmap": "آخر 12 أسبوعًا",
+  "habits": "العادات",
+  "noInsightsYet": "لا يوجد ما يُقاس بعد. أكمل عادة وستظهر هنا.",
+  "somethingWentWrong": "حدث خطأ. حاول مرة أخرى بعد لحظات.",
+  "streakMilestone": "سلسلة من {count} يوم",
+  "@streakMilestone": {
+    "placeholders": {"count": {"type": "int"}}
+  }
 }
