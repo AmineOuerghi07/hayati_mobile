@@ -5,6 +5,7 @@ import 'package:hayati/core/platform/reminder_picker.dart';
 import 'package:hayati/core/time/calendar_date.dart';
 import 'package:hayati/core/widgets/aurora_background.dart';
 import 'package:hayati/core/widgets/growing_plant.dart';
+import 'package:hayati/core/widgets/responsive.dart';
 import 'package:hayati/core/widgets/staggered_item.dart';
 import 'package:hayati/features/habits/domain/habit_templates.dart';
 import 'package:hayati/features/habits/presentation/habit_labels.dart';
@@ -45,6 +46,75 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
       1 => (0.4 + _picked.length * 0.1).clamp(0.4, 0.9).toDouble(),
       _ => 1.0,
     };
+    final pages = PageView(
+      controller: _page,
+      onPageChanged: (index) => setState(() => _index = index),
+      children: [
+        _Welcome(scheme: scheme),
+        _Picker(picked: _picked, onToggle: _toggle),
+        _ReminderStep(
+          reminder: _reminder,
+          onPick: () async {
+            final picked = await showReminderPicker(
+              context,
+              currentMinutes: _reminder,
+            );
+            if (picked == null) return;
+            setState(() => _reminder = picked);
+          },
+          onClear: () => setState(() => _reminder = null),
+        ),
+      ],
+    );
+    final dots = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        for (var dot = 0; dot < 3; dot++)
+          AnimatedContainer(
+            duration: tokens.motion(context, tokens.motionFast),
+            margin: const EdgeInsetsDirectional.symmetric(horizontal: 4),
+            width: dot == _index ? 18 : 8,
+            height: 8,
+            decoration: BoxDecoration(
+              color: dot == _index ? scheme.primary : scheme.outlineVariant,
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+      ],
+    );
+    final actions = Padding(
+      padding: const EdgeInsetsDirectional.fromSTEB(20, 16, 20, 16),
+      child: Row(
+        children: [
+          if (_index > 0)
+            TextButton(
+              onPressed: _busy
+                  ? null
+                  : () => _page.previousPage(
+                      duration: tokens.motion(context, tokens.motionMedium),
+                      curve: tokens.easeOut,
+                    ),
+              child: Text(l10n.cancel),
+            ),
+          const Spacer(),
+          FilledButton(
+            onPressed: _busy
+                ? null
+                : () {
+                    if (_index < 2) {
+                      _page.nextPage(
+                        duration: tokens.motion(context, tokens.motionMedium),
+                        curve: tokens.easeOut,
+                      );
+                      return;
+                    }
+                    _finish();
+                  },
+            child: Text(_index == 2 ? l10n.getStarted : l10n.continueAction),
+          ),
+        ],
+      ),
+    );
     return AuroraBackground(
       base: scheme.surface,
       colors: [
@@ -65,98 +135,37 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
         ),
         body: SafeArea(
           top: false,
-          child: Column(
-            children: [
-              GrowingPlant(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final short = constraints.maxHeight < 560;
+              final landscape = constraints.maxWidth > constraints.maxHeight;
+              final plant = GrowingPlant(
                 progress: growth,
-                size: 120,
+                size: short ? 96 : 120,
                 semanticsLabel: l10n.plantGrowth((growth * 100).round()),
                 flowerColor: scheme.tertiary,
-              ),
-              Expanded(
-                child: PageView(
-                  controller: _page,
-                  onPageChanged: (index) => setState(() => _index = index),
+              );
+              final flow = ResponsiveWidth(
+                maxWidth: 640,
+                child: Column(
                   children: [
-                    _Welcome(scheme: scheme),
-                    _Picker(picked: _picked, onToggle: _toggle),
-                    _ReminderStep(
-                      reminder: _reminder,
-                      onPick: () async {
-                        final picked = await showReminderPicker(
-                          context,
-                          currentMinutes: _reminder,
-                        );
-                        if (picked == null) return;
-                        setState(() => _reminder = picked);
-                      },
-                      onClear: () => setState(() => _reminder = null),
-                    ),
+                    if (!short) plant,
+                    Expanded(child: pages),
+                    dots,
+                    actions,
                   ],
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (var dot = 0; dot < 3; dot++)
-                    AnimatedContainer(
-                      duration: tokens.motion(context, tokens.motionFast),
-                      margin: const EdgeInsetsDirectional.symmetric(
-                        horizontal: 4,
-                      ),
-                      width: dot == _index ? 18 : 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        color: dot == _index
-                            ? scheme.primary
-                            : scheme.outlineVariant,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(20, 16, 20, 16),
-                child: Row(
+              );
+              if (short && landscape) {
+                return Row(
                   children: [
-                    if (_index > 0)
-                      TextButton(
-                        onPressed: _busy
-                            ? null
-                            : () => _page.previousPage(
-                                duration: tokens.motion(
-                                  context,
-                                  tokens.motionMedium,
-                                ),
-                                curve: tokens.easeOut,
-                              ),
-                        child: Text(l10n.cancel),
-                      ),
-                    const Spacer(),
-                    FilledButton(
-                      onPressed: _busy
-                          ? null
-                          : () {
-                              if (_index < 2) {
-                                _page.nextPage(
-                                  duration: tokens.motion(
-                                    context,
-                                    tokens.motionMedium,
-                                  ),
-                                  curve: tokens.easeOut,
-                                );
-                                return;
-                              }
-                              _finish();
-                            },
-                      child: Text(
-                        _index == 2 ? l10n.getStarted : l10n.continueAction,
-                      ),
-                    ),
+                    Expanded(flex: 2, child: Center(child: plant)),
+                    Expanded(flex: 5, child: flow),
                   ],
-                ),
-              ),
-            ],
+                );
+              }
+              return flow;
+            },
           ),
         ),
       ),
@@ -209,8 +218,7 @@ class _Welcome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return Padding(
-      padding: const EdgeInsetsDirectional.all(28),
+    return _FillScroll(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -255,41 +263,50 @@ class _Picker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(20, 8, 20, 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            l10n.onboardingHabitsTitle,
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          const SizedBox(height: 8),
-          Text(l10n.onboardingHabitsBody),
-          const SizedBox(height: 16),
-          Expanded(
-            child: GridView.count(
-              crossAxisCount: 2,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 1.35,
+    return CustomScrollView(
+      slivers: [
+        SliverPadding(
+          padding: const EdgeInsetsDirectional.fromSTEB(20, 8, 20, 16),
+          sliver: SliverToBoxAdapter(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                for (final (index, template) in habitTemplates.indexed)
-                  StaggeredItem(
-                    index: index,
-                    child: _TemplateTile(
-                      id: template.id,
-                      icon: template.icon,
-                      colorKey: template.colorKey,
-                      selected: picked.contains(template.id),
-                      onTap: () => onToggle(template.id),
-                    ),
-                  ),
+                Text(
+                  l10n.onboardingHabitsTitle,
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                const SizedBox(height: 8),
+                Text(l10n.onboardingHabitsBody),
               ],
             ),
           ),
-        ],
-      ),
+        ),
+        SliverPadding(
+          padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 8),
+          sliver: SliverGrid.builder(
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 220,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+              childAspectRatio: 1.35,
+            ),
+            itemCount: habitTemplates.length,
+            itemBuilder: (context, index) {
+              final template = habitTemplates[index];
+              return StaggeredItem(
+                index: index,
+                child: _TemplateTile(
+                  id: template.id,
+                  icon: template.icon,
+                  colorKey: template.colorKey,
+                  selected: picked.contains(template.id),
+                  onTap: () => onToggle(template.id),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }
@@ -391,8 +408,7 @@ class _ReminderStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return Padding(
-      padding: const EdgeInsetsDirectional.all(28),
+    return _FillScroll(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -416,6 +432,29 @@ class _ReminderStep extends StatelessWidget {
             TextButton(onPressed: onClear, child: Text(l10n.clearReminder)),
           const Spacer(flex: 2),
         ],
+      ),
+    );
+  }
+}
+
+/// Centers a column of [Spacer]-separated content when it fits, and lets it
+/// scroll on short or landscape screens instead of overflowing.
+class _FillScroll extends StatelessWidget {
+  const _FillScroll({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        padding: const EdgeInsetsDirectional.all(28),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: (constraints.maxHeight - 56).clamp(0, double.infinity),
+          ),
+          child: IntrinsicHeight(child: child),
+        ),
       ),
     );
   }

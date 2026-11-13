@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hayati/core/widgets/async_error_view.dart';
 import 'package:hayati/core/widgets/confirm_sheet.dart';
+import 'package:hayati/core/widgets/responsive.dart';
 import 'package:hayati/core/widgets/soft_card.dart';
 import 'package:hayati/features/habits/domain/habit.dart';
 import 'package:hayati/features/habits/presentation/habit_providers.dart';
@@ -28,8 +29,10 @@ class ArchivedHabitsPage extends ConsumerWidget {
           if (items.isEmpty) {
             return Center(child: Text(l10n.noArchivedHabits));
           }
-          return ListView(
-            padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 24),
+          return ResponsiveListView(
+            side: 16,
+            top: 8,
+            bottom: 24,
             children: [
               for (final habit in items)
                 Padding(

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hayati/app/theme.dart';
 import 'package:hayati/core/platform/reminder_picker.dart';
 import 'package:hayati/core/time/calendar_date.dart';
+import 'package:hayati/core/widgets/responsive.dart';
 import 'package:hayati/core/widgets/section_header.dart';
 import 'package:hayati/core/widgets/soft_card.dart';
 import 'package:hayati/features/habits/domain/habit.dart';
@@ -97,8 +98,11 @@ class _HabitEditorPageState extends ConsumerState<HabitEditorPage> {
           child: FilledButton(onPressed: _save, child: Text(l10n.save)),
         ),
       ),
-      body: ListView(
-        padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 24),
+      body: ResponsiveListView(
+        maxWidth: 640,
+        side: 16,
+        top: 8,
+        bottom: 24,
         children: [
           SectionHeader(l10n.preview),
           _Preview(

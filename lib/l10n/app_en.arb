@@ -289,5 +289,148 @@
   "quote5": "Be gentle with yourself. You are growing.",
   "quote6": "What you do every day matters more than what you do once in a while.",
   "quote7": "Begin where you are. Use what you have.",
-  "quote8": "A calm mind builds a strong life."
+  "quote8": "A calm mind builds a strong life.",
+  "authSignInTitle": "Welcome back",
+  "authSignInBody": "Sign in to keep your habits in sync across your devices.",
+  "authCreateTitle": "Start your journey",
+  "authCreateBody": "Create an account to back up your streaks and progress.",
+  "benefitSync": "Sync across your devices",
+  "benefitBackup": "Your streaks, safely backed up",
+  "benefitPrivate": "Private by design. No ads, ever.",
+  "orDivider": "or",
+  "notNow": "Not now",
+  "showPassword": "Show password",
+  "hidePassword": "Hide password",
+  "passwordWeak": "Weak",
+  "passwordFair": "Fair",
+  "passwordGood": "Good",
+  "passwordStrong": "Strong",
+  "passwordStrength": "Password strength: {level}",
+  "@passwordStrength": {
+    "placeholders": {"level": {"type": "String"}}
+  },
+  "otpBody": "We'll send a one-time code. No password needed.",
+  "codeSentTo": "Enter the code sent to {destination}",
+  "@codeSentTo": {
+    "placeholders": {"destination": {"type": "String"}}
+  },
+  "codeExpiresIn": "Expires in {time}",
+  "@codeExpiresIn": {
+    "placeholders": {"time": {"type": "String"}}
+  },
+  "codeExpiredHint": "This code expired. Send a new one.",
+  "resendCode": "Resend code",
+  "changeDestination": "Use a different address",
+  "stepOf": "Step {current} of {total}",
+  "@stepOf": {
+    "placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}
+  },
+  "passwordUpdated": "Password updated",
+  "passwordUpdatedBody": "You can sign in with your new password now.",
+  "changePasswordBody": "Use at least 8 characters with a mix of letters, numbers, and symbols.",
+  "achievements": "Achievements",
+  "seeAll": "See all",
+  "tools": "Tools",
+  "unlockedOf": "{count} of {total} unlocked",
+  "@unlockedOf": {
+    "placeholders": {"count": {"type": "int"}, "total": {"type": "int"}}
+  },
+  "achievementUnlocked": "{title}, unlocked",
+  "@achievementUnlocked": {
+    "placeholders": {"title": {"type": "String"}}
+  },
+  "achievementLocked": "{title}, locked, {current} of {target}",
+  "@achievementLocked": {
+    "placeholders": {"title": {"type": "String"}, "current": {"type": "int"}, "target": {"type": "int"}}
+  },
+  "unlocked": "Unlocked",
+  "progressOf": "{current} / {target}",
+  "@progressOf": {
+    "placeholders": {"current": {"type": "int"}, "target": {"type": "int"}}
+  },
+  "levelLabel": "Level {level}",
+  "@levelLabel": {
+    "placeholders": {"level": {"type": "int"}}
+  },
+  "xpProgress": "{current} / {total} XP",
+  "@xpProgress": {
+    "placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}
+  },
+  "levelSeed": "Seed",
+  "levelSprout": "Sprout",
+  "levelSapling": "Sapling",
+  "levelBloom": "Bloom",
+  "levelTree": "Tree",
+  "levelForest": "Forest",
+  "achFirstStep": "First step",
+  "achFirstStepBody": "Complete your first habit.",
+  "achStreak3": "Warming up",
+  "achStreak7": "One week strong",
+  "achStreak30": "Unstoppable",
+  "achStreakBody": "Reach a {count}-day streak.",
+  "@achStreakBody": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "achPerfectDay": "Perfect day",
+  "achPerfectDayBody": "Finish every habit that was due in one day.",
+  "achPerfectWeek": "Perfect week",
+  "achPerfectWeekBody": "Seven perfect days in a row.",
+  "achCheckIns50": "Half century",
+  "achCheckIns100": "Centurion",
+  "achCheckInsBody": "Complete {count} check-ins.",
+  "@achCheckInsBody": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "achHabitBuilder": "Habit builder",
+  "achHabitBuilderBody": "Keep five habits going at once.",
+  "achReflective": "Reflective",
+  "achReflectiveBody": "Write ten notes or moods.",
+  "achEarlyBird": "Early bird",
+  "achEarlyBirdBody": "Check in before 8 in the morning.",
+  "achNightOwl": "Night owl",
+  "achNightOwlBody": "Check in after 10 at night.",
+  "focusTitle": "Focus",
+  "focusShort": "A calm timer",
+  "focusBody": "Pick a length, put the phone down, and settle in.",
+  "focusDone": "Session complete. Well done.",
+  "focusLogged": "Logged {minutes} min to {habit}",
+  "@focusLogged": {
+    "placeholders": {"minutes": {"type": "int"}, "habit": {"type": "String"}}
+  },
+  "focusRemaining": "{time} remaining",
+  "@focusRemaining": {
+    "placeholders": {"time": {"type": "String"}}
+  },
+  "focusInProgress": "Focusing",
+  "focusPaused": "Paused",
+  "minutesShort": "{count} min",
+  "@minutesShort": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "start": "Start",
+  "pause": "Pause",
+  "resume": "Resume",
+  "reset": "Reset",
+  "startFocus": "Start a focus session",
+  "breatheTitle": "Breathe",
+  "breatheShort": "One calm minute",
+  "breatheBody": "Follow the circle: in for 4, hold for 4, out for 6.",
+  "breatheReady": "Ready",
+  "breatheIn": "Breathe in",
+  "breatheHold": "Hold",
+  "breatheOut": "Breathe out",
+  "breathCycles": "Breaths: {count}",
+  "@breathCycles": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "weeklyTrend": "Compared with last week",
+  "trendUp": "{points} points ahead of last week",
+  "@trendUp": {
+    "placeholders": {"points": {"type": "int"}}
+  },
+  "trendDown": "{points} points behind last week",
+  "@trendDown": {
+    "placeholders": {"points": {"type": "int"}}
+  },
+  "trendSame": "Same pace as last week"
 }

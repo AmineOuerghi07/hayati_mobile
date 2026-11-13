@@ -1,42 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hayati/app/theme.dart';
+import 'package:hayati/core/haptics.dart';
 import 'package:hayati/features/auth/domain/auth_models.dart';
 import 'package:hayati/features/auth/presentation/auth_providers.dart';
+import 'package:hayati/features/auth/presentation/auth_widgets.dart';
 import 'package:hayati/l10n/app_localizations.dart';
 import 'package:material_ui/material_ui.dart';
-
-class AuthScaffold extends StatelessWidget {
-  const AuthScaffold({required this.title, required this.child, super.key});
-
-  final String title;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Scaffold(
-      appBar: AppBar(),
-      body: ListView(
-        padding: const EdgeInsetsDirectional.fromSTEB(24, 8, 24, 32),
-        children: [
-          Container(
-            padding: const EdgeInsetsDirectional.all(20),
-            decoration: BoxDecoration(
-              color: scheme.primaryContainer,
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: Text(
-              title,
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-          ),
-          const SizedBox(height: 24),
-          child,
-        ],
-      ),
-    );
-  }
-}
 
 class SignInPage extends ConsumerStatefulWidget {
   const SignInPage({super.key});
@@ -64,59 +34,104 @@ class _SignInPageState extends ConsumerState<SignInPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final tokens = HayatiTokens.of(context);
     return AuthScaffold(
-      title: _creating ? l10n.createAccount : l10n.signIn,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      icon: _creating ? Icons.spa_rounded : Icons.waving_hand_rounded,
+      title: _creating ? l10n.authCreateTitle : l10n.authSignInTitle,
+      subtitle: _creating ? l10n.authCreateBody : l10n.authSignInBody,
+      footer: Column(
         children: [
-          if (_creating) ...[
-            TextField(
-              controller: _name,
-              textInputAction: TextInputAction.next,
-              decoration: InputDecoration(labelText: l10n.displayName),
-            ),
-            const SizedBox(height: 12),
-          ],
-          TextField(
-            controller: _email,
-            keyboardType: TextInputType.emailAddress,
-            textInputAction: TextInputAction.next,
-            decoration: InputDecoration(labelText: l10n.email),
-          ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _password,
-            obscureText: true,
-            decoration: InputDecoration(labelText: l10n.password),
-          ),
-          if (_failure != null) ...[
-            const SizedBox(height: 12),
-            Text(
-              authFailureMessage(l10n, _failure!),
-              style: TextStyle(color: Theme.of(context).colorScheme.error),
-            ),
-          ],
-          const SizedBox(height: 20),
-          FilledButton(
-            onPressed: _busy ? null : _submit,
-            child: Text(_creating ? l10n.createAccount : l10n.signIn),
-          ),
-          TextButton(
-            onPressed: () => context.push('/auth/forgot'),
-            child: Text(l10n.forgotPassword),
-          ),
-          TextButton(
-            onPressed: () => context.push('/auth/otp'),
-            child: Text(l10n.usePhoneCode),
-          ),
-          TextButton(
-            onPressed: () => setState(() {
-              _creating = !_creating;
-              _failure = null;
-            }),
-            child: Text(_creating ? l10n.signIn : l10n.createAccount),
-          ),
+          const BenefitList(),
+          const SizedBox(height: 8),
+          TextButton(onPressed: () => context.pop(), child: Text(l10n.notNow)),
         ],
+      ),
+      child: AutofillGroup(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            AuthModeSwitch(
+              labels: [l10n.signIn, l10n.createAccount],
+              index: _creating ? 1 : 0,
+              onChanged: (index) => setState(() {
+                _creating = index == 1;
+                _failure = null;
+              }),
+            ),
+            const SizedBox(height: 20),
+            AnimatedSwitcher(
+              duration: tokens.motion(context, tokens.motionMedium),
+              transitionBuilder: (child, animation) => SizeTransition(
+                sizeFactor: animation,
+                child: FadeTransition(opacity: animation, child: child),
+              ),
+              child: _creating
+                  ? Padding(
+                      key: const ValueKey('name'),
+                      padding: const EdgeInsetsDirectional.only(bottom: 12),
+                      child: AuthField(
+                        controller: _name,
+                        label: l10n.displayName,
+                        icon: Icons.person_outline_rounded,
+                        autofillHints: const [AutofillHints.name],
+                      ),
+                    )
+                  : const SizedBox(
+                      key: ValueKey('no-name'),
+                      width: double.infinity,
+                    ),
+            ),
+            AuthField(
+              controller: _email,
+              label: l10n.email,
+              icon: Icons.alternate_email_rounded,
+              keyboardType: TextInputType.emailAddress,
+              autofillHints: const [AutofillHints.email],
+            ),
+            const SizedBox(height: 12),
+            AuthField(
+              controller: _password,
+              label: l10n.password,
+              icon: Icons.lock_outline_rounded,
+              password: true,
+              textInputAction: TextInputAction.done,
+              autofillHints: [
+                _creating ? AutofillHints.newPassword : AutofillHints.password,
+              ],
+              onChanged: (_) {
+                if (_creating) setState(() {});
+              },
+              onSubmitted: (_) => _submit(),
+            ),
+            if (_creating) PasswordStrengthMeter(password: _password.text),
+            if (!_creating)
+              Align(
+                alignment: AlignmentDirectional.centerEnd,
+                child: TextButton(
+                  onPressed: () => context.push('/auth/forgot'),
+                  child: Text(l10n.forgotPassword),
+                ),
+              ),
+            AuthErrorBanner(
+              message: _failure == null
+                  ? null
+                  : authFailureMessage(l10n, _failure!),
+            ),
+            const SizedBox(height: 16),
+            BusyButton(
+              label: _creating ? l10n.createAccount : l10n.signIn,
+              icon: Icons.arrow_forward_rounded,
+              busy: _busy,
+              onPressed: _submit,
+            ),
+            const OrDivider(),
+            OutlinedButton.icon(
+              onPressed: () => context.push('/auth/otp'),
+              icon: const Icon(Icons.sms_outlined),
+              label: Text(l10n.usePhoneCode),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -140,8 +155,10 @@ class _SignInPageState extends ConsumerState<SignInPage> {
           password: _password.text,
         );
       }
+      playHaptic(strong: true);
       if (mounted) context.pop();
     } on AuthFailure catch (failure) {
+      playHaptic();
       setState(() => _failure = failure);
     } finally {
       if (mounted) setState(() => _busy = false);

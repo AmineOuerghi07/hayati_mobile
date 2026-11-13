@@ -8,6 +8,7 @@ import 'package:hayati/core/widgets/async_error_view.dart';
 import 'package:hayati/core/widgets/celebration_overlay.dart';
 import 'package:hayati/core/widgets/confirm_sheet.dart';
 import 'package:hayati/core/widgets/empty_state.dart';
+import 'package:hayati/core/widgets/responsive.dart';
 import 'package:hayati/core/widgets/skeleton.dart';
 import 'package:hayati/core/widgets/soft_card.dart';
 import 'package:hayati/core/widgets/staggered_item.dart';
@@ -28,6 +29,7 @@ import 'package:hayati/features/habits/presentation/week_strip_bar.dart';
 import 'package:hayati/features/settings/domain/app_preferences.dart';
 import 'package:hayati/features/settings/presentation/preferences_controller.dart';
 import 'package:hayati/features/stats/domain/insights.dart';
+import 'package:hayati/features/tools/presentation/tool_cards.dart';
 import 'package:hayati/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
@@ -174,35 +176,31 @@ class _FirstRun extends ConsumerWidget {
     final locale = Localizations.localeOf(context).toString();
     return SafeArea(
       bottom: false,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
-            child: TodayHero(
+      child: LayoutBuilder(
+        builder: (context, constraints) => ListView(
+          padding: responsiveInsets(constraints.maxWidth, top: 12, bottom: 24),
+          children: [
+            TodayHero(
               greeting: greetingFor(l10n, now),
               dateLabel: DateFormat.MMMMEEEEd(locale).format(now),
               quote: dailyQuote(l10n, now),
               counts: const DayCounts(done: 0, due: 0),
               bestStreak: 0,
             ),
-          ),
-          Expanded(
-            child: Center(
-              child: SingleChildScrollView(
-                child: EmptyState(
-                  icon: Icons.spa_outlined,
-                  title: l10n.emptyTodayTitle,
-                  body: l10n.emptyTodayBody,
-                  actionLabel: l10n.addHabit,
-                  onAction: onAdd,
-                  secondaryLabel: l10n.browseTemplates,
-                  onSecondary: () => showTemplateSheet(context, ref),
-                ),
-              ),
+            const SizedBox(height: 24),
+            EmptyState(
+              icon: Icons.spa_outlined,
+              title: l10n.emptyTodayTitle,
+              body: l10n.emptyTodayBody,
+              actionLabel: l10n.addHabit,
+              onAction: onAdd,
+              secondaryLabel: l10n.browseTemplates,
+              onSecondary: () => showTemplateSheet(context, ref),
             ),
-          ),
-        ],
+            const SizedBox(height: 24),
+            const ToolCards(),
+          ],
+        ),
       ),
     );
   }
@@ -245,178 +243,222 @@ class _TodayList extends ConsumerWidget {
     final dateLabel = DateFormat.yMMMEd(locale).format(selectedDay);
     final streaks = _streaks(weekStart);
     final bestStreak = streaks.values.fold(0, (a, b) => a > b ? a : b);
-    return SafeArea(
-      bottom: false,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 4),
-            child: TodayHero(
-              greeting: greetingFor(l10n, DateTime.now()),
-              dateLabel: DateFormat.MMMMEEEEd(locale).format(selectedDay),
-              quote: dailyQuote(l10n, selectedDay),
-              counts: counts,
-              bestStreak: bestStreak,
+    final header = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TodayHero(
+          greeting: greetingFor(l10n, DateTime.now()),
+          dateLabel: DateFormat.MMMMEEEEd(locale).format(selectedDay),
+          quote: dailyQuote(l10n, selectedDay),
+          counts: counts,
+          bestStreak: bestStreak,
+        ),
+        const SizedBox(height: 4),
+        Row(
+          children: [
+            IconButton(
+              tooltip: l10n.previousWeek,
+              onPressed: () => ref
+                  .read(selectedDateProvider.notifier)
+                  .select(selected.addDays(-7)),
+              icon: const Icon(Icons.arrow_back),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsetsDirectional.symmetric(horizontal: 4),
-            child: Row(
-              children: [
-                IconButton(
-                  tooltip: l10n.previousWeek,
-                  onPressed: () => ref
-                      .read(selectedDateProvider.notifier)
-                      .select(selected.addDays(-7)),
-                  icon: const Icon(Icons.arrow_back),
-                ),
-                Expanded(
-                  child: WeekStripBar(
-                    selected: selected,
-                    today: today,
-                    weekStart: weekStart,
-                    habits: habits,
-                    completions: logged,
-                    onSelect: (day) =>
-                        ref.read(selectedDateProvider.notifier).select(day),
-                  ),
-                ),
-                IconButton(
-                  tooltip: l10n.nextWeek,
-                  onPressed:
-                      selected.startOfWeek(weekStart) ==
-                          today.startOfWeek(weekStart)
-                      ? null
-                      : () {
-                          final forward = selected.addDays(7);
-                          ref
-                              .read(selectedDateProvider.notifier)
-                              .select(forward > today ? today : forward);
-                        },
-                  icon: const Icon(Icons.arrow_forward),
-                ),
-              ],
-            ),
-          ),
-          if (selected != today)
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
-              child: SoftCard(
-                padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 8, 8),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(l10n.backfillBanner(dateLabel)),
-                          Text(
-                            l10n.loggingPastBody,
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ],
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () =>
-                          ref.read(selectedDateProvider.notifier).jumpToToday(),
-                      child: Text(l10n.backToToday),
-                    ),
-                  ],
-                ),
+            Expanded(
+              child: WeekStripBar(
+                selected: selected,
+                today: today,
+                weekStart: weekStart,
+                habits: habits,
+                completions: logged,
+                onSelect: (day) =>
+                    ref.read(selectedDateProvider.notifier).select(day),
               ),
             ),
-          const SizedBox(height: 8),
-          Expanded(
-            child: NotificationListener<ScrollNotification>(
-              onNotification: (notification) {
-                if (notification is ScrollUpdateNotification) {
-                  onScroll(notification.metrics.pixels < 24);
-                }
-                return false;
-              },
-              child: due.isEmpty
-                  ? ListView(
+            IconButton(
+              tooltip: l10n.nextWeek,
+              onPressed:
+                  selected.startOfWeek(weekStart) ==
+                      today.startOfWeek(weekStart)
+                  ? null
+                  : () {
+                      final forward = selected.addDays(7);
+                      ref
+                          .read(selectedDateProvider.notifier)
+                          .select(forward > today ? today : forward);
+                    },
+              icon: const Icon(Icons.arrow_forward),
+            ),
+          ],
+        ),
+        if (selected != today)
+          Padding(
+            padding: const EdgeInsetsDirectional.only(top: 12),
+            child: SoftCard(
+              padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 8, 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsetsDirectional.all(24),
+                        Text(l10n.backfillBanner(dateLabel)),
+                        Text(
+                          l10n.loggingPastBody,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () =>
+                        ref.read(selectedDateProvider.notifier).jumpToToday(),
+                    child: Text(l10n.backToToday),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        const SizedBox(height: 8),
+      ],
+    );
+
+    Widget list({required Widget? top, required EdgeInsetsDirectional insets}) {
+      final listInsets = insets
+          .copyWith(top: 12, bottom: 96)
+          .resolve(Directionality.of(context));
+      return NotificationListener<ScrollNotification>(
+        onNotification: (notification) {
+          if (notification is ScrollUpdateNotification &&
+              notification.metrics.axis == Axis.vertical) {
+            onScroll(notification.metrics.pixels < 24);
+          }
+          return false;
+        },
+        child: due.isEmpty
+            ? ListView(
+                padding: listInsets,
+                children: [
+                  ?top,
+                  Padding(
+                    padding: const EdgeInsetsDirectional.symmetric(
+                      vertical: 24,
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.wb_sunny_outlined,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
                           child: Text(
                             selected == today
                                 ? l10n.emptyTodayTitle
                                 : l10n.nothingDueOnDay,
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
                         ),
                       ],
-                    )
-                  : ReorderableListView.builder(
-                      padding: const EdgeInsetsDirectional.fromSTEB(
-                        16,
-                        4,
-                        16,
-                        96,
-                      ).resolve(Directionality.of(context)),
-                      buildDefaultDragHandles: false,
-                      itemCount: due.length,
-                      onReorderItem: (oldIndex, newIndex) {
-                        final nextDue = [...due];
-                        final moved = nextDue.removeAt(oldIndex);
-                        nextDue.insert(newIndex, moved);
-                        final dueIds = nextDue
-                            .map((habit) => habit.id)
-                            .toList();
-                        final dueSet = dueIds.toSet();
-                        final queue = List.of(dueIds);
-                        final ordered = [
-                          for (final habit in habits)
-                            if (dueSet.contains(habit.id))
-                              queue.removeAt(0)
-                            else
-                              habit.id,
-                        ];
-                        ref.read(habitRepositoryProvider).reorder(ordered);
-                      },
-                      itemBuilder: (context, index) {
-                        final habit = due[index];
-                        final loggedValue = done[habit.id]?.value ?? 0;
-                        return StaggeredItem(
-                          key: ValueKey(habit.id),
-                          index: index,
-                          child: Padding(
-                            padding: const EdgeInsetsDirectional.only(
-                              bottom: 8,
-                            ),
-                            child: HabitCard(
-                              index: index,
-                              habit: habit,
-                              value: loggedValue,
-                              streak: streaks[habit.id] ?? 0,
-                              onOpen: () => context.push('/habits/${habit.id}'),
-                              onToggle: () => _toggle(
-                                context,
-                                ref,
-                                habit,
-                                meetsTarget(loggedValue, habit.targetValue),
-                              ),
-                              onStep: (delta) => _step(
-                                context,
-                                ref,
-                                habit,
-                                loggedValue,
-                                delta,
-                              ),
-                              onNote: () => _note(context, ref, habit),
-                              onEdit: () =>
-                                  context.push('/habits/${habit.id}/edit'),
-                              onArchive: () => _archive(context, ref, habit),
-                            ),
-                          ),
-                        );
-                      },
                     ),
-            ),
-          ),
-        ],
+                  ),
+                  const ToolCards(),
+                ],
+              )
+            : ReorderableListView.builder(
+                padding: listInsets,
+                header: top,
+                buildDefaultDragHandles: false,
+                footer: const Padding(
+                  padding: EdgeInsetsDirectional.only(top: 12),
+                  child: ToolCards(),
+                ),
+                itemCount: due.length,
+                onReorderItem: (oldIndex, newIndex) {
+                  final nextDue = [...due];
+                  final moved = nextDue.removeAt(oldIndex);
+                  nextDue.insert(newIndex, moved);
+                  final dueIds = nextDue.map((habit) => habit.id).toList();
+                  final dueSet = dueIds.toSet();
+                  final queue = List.of(dueIds);
+                  final ordered = [
+                    for (final habit in habits)
+                      if (dueSet.contains(habit.id))
+                        queue.removeAt(0)
+                      else
+                        habit.id,
+                  ];
+                  ref.read(habitRepositoryProvider).reorder(ordered);
+                },
+                itemBuilder: (context, index) {
+                  final habit = due[index];
+                  final loggedValue = done[habit.id]?.value ?? 0;
+                  return StaggeredItem(
+                    key: ValueKey(habit.id),
+                    index: index,
+                    child: Padding(
+                      padding: const EdgeInsetsDirectional.only(bottom: 8),
+                      child: HabitCard(
+                        index: index,
+                        habit: habit,
+                        value: loggedValue,
+                        streak: streaks[habit.id] ?? 0,
+                        onOpen: () => context.push('/habits/${habit.id}'),
+                        onToggle: () => _toggle(
+                          context,
+                          ref,
+                          habit,
+                          meetsTarget(loggedValue, habit.targetValue),
+                        ),
+                        onStep: (delta) =>
+                            _step(context, ref, habit, loggedValue, delta),
+                        onNote: () => _note(context, ref, habit),
+                        onEdit: () => context.push('/habits/${habit.id}/edit'),
+                        onArchive: () => _archive(context, ref, habit),
+                      ),
+                    ),
+                  );
+                },
+              ),
+      );
+    }
+
+    return SafeArea(
+      bottom: false,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          if (constraints.maxWidth >= expandedMinWidth) {
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 400,
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsetsDirectional.fromSTEB(
+                      24,
+                      12,
+                      8,
+                      24,
+                    ),
+                    child: header,
+                  ),
+                ),
+                Expanded(
+                  child: list(
+                    top: null,
+                    insets: responsiveInsets(
+                      constraints.maxWidth - 400,
+                      maxWidth: 640,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+          return list(
+            top: header,
+            insets: responsiveInsets(constraints.maxWidth),
+          );
+        },
       ),
     );
   }

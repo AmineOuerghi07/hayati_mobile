@@ -1,17 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hayati/core/time/calendar_date.dart';
-import 'package:hayati/core/widgets/async_error_view.dart';
-import 'package:hayati/core/widgets/empty_state.dart';
 import 'package:hayati/app/theme.dart';
+import 'package:hayati/core/time/calendar_date.dart';
 import 'package:hayati/core/widgets/animated_count.dart';
+import 'package:hayati/core/widgets/async_error_view.dart';
 import 'package:hayati/core/widgets/aurora_background.dart';
 import 'package:hayati/core/widgets/concentric_rings.dart';
-import 'package:hayati/core/widgets/staggered_item.dart';
-import 'package:hayati/core/widgets/streak_flame.dart';
+import 'package:hayati/core/widgets/empty_state.dart';
+import 'package:hayati/core/widgets/responsive.dart';
 import 'package:hayati/core/widgets/section_header.dart';
 import 'package:hayati/core/widgets/skeleton.dart';
 import 'package:hayati/core/widgets/soft_card.dart';
+import 'package:hayati/core/widgets/staggered_item.dart';
+import 'package:hayati/core/widgets/streak_flame.dart';
 import 'package:hayati/features/habits/domain/completion_note.dart';
 import 'package:hayati/features/habits/domain/habit.dart';
 import 'package:hayati/features/habits/domain/habit_completion.dart';
@@ -127,7 +128,7 @@ class _StatsBody extends StatelessWidget {
         if (item.date.compareTo(weekAgo) >= 0)
           ?CompletionNote.decode(item.note).mood,
     ]);
-    final sections = <Widget>[
+    final overview = <Widget>[
       _RingsHero(counts: todayCounts, rates: rates),
       if (habits.isEmpty)
         EmptyState(
@@ -147,8 +148,16 @@ class _StatsBody extends StatelessWidget {
           bestStreak: bestStreak,
           mood: mood,
         ),
+        if (rates.weekTrend != null) ...[
+          const SizedBox(height: 12),
+          _TrendCard(points: rates.weekTrend!),
+        ],
         SectionHeader(l10n.lastSevenDays),
         _WeekBars(days: days, today: today),
+      ],
+    ];
+    final detail = <Widget>[
+      if (habits.isNotEmpty) ...[
         SectionHeader(l10n.heatmap),
         _Heatmap(levels: levels, today: today),
         SectionHeader(l10n.habits),
@@ -164,19 +173,59 @@ class _StatsBody extends StatelessWidget {
           ),
       ],
     ];
+    final title = Padding(
+      padding: const EdgeInsetsDirectional.symmetric(horizontal: 4),
+      child: Text(l10n.stats, style: theme.textTheme.headlineMedium),
+    );
     return SafeArea(
       bottom: false,
-      child: ListView(
-        padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 32),
-        children: [
-          Padding(
-            padding: const EdgeInsetsDirectional.symmetric(horizontal: 4),
-            child: Text(l10n.stats, style: theme.textTheme.headlineMedium),
-          ),
-          const SizedBox(height: 16),
-          for (var index = 0; index < sections.length; index++)
-            StaggeredItem(index: index, child: sections[index]),
-        ],
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          if (constraints.maxWidth >= expandedMinWidth && detail.isNotEmpty) {
+            Widget column(List<Widget> items, int offset) => Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                for (var index = 0; index < items.length; index++)
+                  StaggeredItem(index: index + offset, child: items[index]),
+              ],
+            );
+            return ListView(
+              padding: responsiveInsets(
+                constraints.maxWidth,
+                maxWidth: 1200,
+                side: 24,
+                top: 16,
+                bottom: 32,
+              ),
+              children: [
+                title,
+                const SizedBox(height: 16),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(child: column(overview, 0)),
+                    const SizedBox(width: 24),
+                    Expanded(child: column(detail, 2)),
+                  ],
+                ),
+              ],
+            );
+          }
+          final sections = [...overview, ...detail];
+          return ListView(
+            padding: responsiveInsets(
+              constraints.maxWidth,
+              top: 16,
+              bottom: 32,
+            ),
+            children: [
+              title,
+              const SizedBox(height: 16),
+              for (var index = 0; index < sections.length; index++)
+                StaggeredItem(index: index, child: sections[index]),
+            ],
+          );
+        },
       ),
     );
   }
@@ -260,6 +309,70 @@ class _RingsHero extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _TrendCard extends StatelessWidget {
+  const _TrendCard({required this.points});
+
+  final int points;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final tokens = HayatiTokens.of(context);
+    final up = points > 0;
+    final flat = points == 0;
+    final color = flat
+        ? theme.colorScheme.secondary
+        : up
+        ? const Color(0xFF16A34A)
+        : const Color(0xFFEA580C);
+    final icon = flat
+        ? Icons.trending_flat_rounded
+        : up
+        ? Icons.trending_up_rounded
+        : Icons.trending_down_rounded;
+    final message = flat
+        ? l10n.trendSame
+        : up
+        ? l10n.trendUp(points)
+        : l10n.trendDown(-points);
+    return SoftCard(
+      tint: Color.alphaBlend(color.withValues(alpha: 0.08), tokens.cardTint),
+      padding: const EdgeInsetsDirectional.all(14),
+      child: Row(
+        children: [
+          TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: 1),
+            duration: tokens.motion(context, const Duration(milliseconds: 700)),
+            curve: Curves.elasticOut,
+            builder: (context, t, child) =>
+                Transform.scale(scale: 0.5 + 0.5 * t, child: child),
+            child: Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.15),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: color),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(l10n.weeklyTrend, style: theme.textTheme.labelLarge),
+                Text(message, style: theme.textTheme.bodyMedium),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -361,22 +474,28 @@ class _SummaryGrid extends StatelessWidget {
         label: l10n.moodThisWeek,
       ),
     ];
-    return Column(
-      children: [
-        for (var row = 0; row < 2; row++) ...[
-          if (row > 0) const SizedBox(height: 12),
-          IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(child: tiles[row * 2]),
-                const SizedBox(width: 12),
-                Expanded(child: tiles[row * 2 + 1]),
-              ],
-            ),
-          ),
-        ],
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final perRow = constraints.maxWidth >= 640 ? 4 : 2;
+        return Column(
+          children: [
+            for (var row = 0; row < tiles.length ~/ perRow; row++) ...[
+              if (row > 0) const SizedBox(height: 12),
+              IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    for (var col = 0; col < perRow; col++) ...[
+                      if (col > 0) const SizedBox(width: 12),
+                      Expanded(child: tiles[row * perRow + col]),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ],
+        );
+      },
     );
   }
 

@@ -5,12 +5,19 @@ import 'package:hayati/features/habits/domain/habit_due.dart';
 import 'package:hayati/features/habits/domain/habit_schedule.dart';
 
 class InsightRates {
-  const InsightRates({this.today, this.week, this.month});
+  const InsightRates({this.today, this.week, this.month, this.lastWeek});
 
   /// Null when nothing was due.
   final double? today;
   final double? week;
   final double? month;
+  final double? lastWeek;
+
+  /// Percentage points between this week and last week, or null.
+  int? get weekTrend {
+    if (week == null || lastWeek == null) return null;
+    return ((week! - lastWeek!) * 100).round();
+  }
 }
 
 const streakMilestones = [3, 7, 14, 30, 50, 100];
@@ -83,6 +90,7 @@ InsightRates computeInsightRates({
     today: rate(today, today),
     week: rate(weekStartDate, weekStartDate.addDays(6)),
     month: rate(monthStart, CalendarDate(today.year, today.month + 1, 0)),
+    lastWeek: rate(weekStartDate.addDays(-7), weekStartDate.addDays(-1)),
   );
 }
 

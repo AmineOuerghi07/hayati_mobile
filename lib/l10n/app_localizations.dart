@@ -1259,6 +1259,540 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'A calm mind builds a strong life.'**
   String get quote8;
+
+  /// No description provided for @authSignInTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back'**
+  String get authSignInTitle;
+
+  /// No description provided for @authSignInBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to keep your habits in sync across your devices.'**
+  String get authSignInBody;
+
+  /// No description provided for @authCreateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Start your journey'**
+  String get authCreateTitle;
+
+  /// No description provided for @authCreateBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an account to back up your streaks and progress.'**
+  String get authCreateBody;
+
+  /// No description provided for @benefitSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync across your devices'**
+  String get benefitSync;
+
+  /// No description provided for @benefitBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Your streaks, safely backed up'**
+  String get benefitBackup;
+
+  /// No description provided for @benefitPrivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Private by design. No ads, ever.'**
+  String get benefitPrivate;
+
+  /// No description provided for @orDivider.
+  ///
+  /// In en, this message translates to:
+  /// **'or'**
+  String get orDivider;
+
+  /// No description provided for @notNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get notNow;
+
+  /// No description provided for @showPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get showPassword;
+
+  /// No description provided for @hidePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get hidePassword;
+
+  /// No description provided for @passwordWeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Weak'**
+  String get passwordWeak;
+
+  /// No description provided for @passwordFair.
+  ///
+  /// In en, this message translates to:
+  /// **'Fair'**
+  String get passwordFair;
+
+  /// No description provided for @passwordGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get passwordGood;
+
+  /// No description provided for @passwordStrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Strong'**
+  String get passwordStrong;
+
+  /// No description provided for @passwordStrength.
+  ///
+  /// In en, this message translates to:
+  /// **'Password strength: {level}'**
+  String passwordStrength(String level);
+
+  /// No description provided for @otpBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll send a one-time code. No password needed.'**
+  String get otpBody;
+
+  /// No description provided for @codeSentTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the code sent to {destination}'**
+  String codeSentTo(String destination);
+
+  /// No description provided for @codeExpiresIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Expires in {time}'**
+  String codeExpiresIn(String time);
+
+  /// No description provided for @codeExpiredHint.
+  ///
+  /// In en, this message translates to:
+  /// **'This code expired. Send a new one.'**
+  String get codeExpiredHint;
+
+  /// No description provided for @resendCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend code'**
+  String get resendCode;
+
+  /// No description provided for @changeDestination.
+  ///
+  /// In en, this message translates to:
+  /// **'Use a different address'**
+  String get changeDestination;
+
+  /// No description provided for @stepOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {current} of {total}'**
+  String stepOf(int current, int total);
+
+  /// No description provided for @passwordUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Password updated'**
+  String get passwordUpdated;
+
+  /// No description provided for @passwordUpdatedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You can sign in with your new password now.'**
+  String get passwordUpdatedBody;
+
+  /// No description provided for @changePasswordBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Use at least 8 characters with a mix of letters, numbers, and symbols.'**
+  String get changePasswordBody;
+
+  /// No description provided for @achievements.
+  ///
+  /// In en, this message translates to:
+  /// **'Achievements'**
+  String get achievements;
+
+  /// No description provided for @seeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See all'**
+  String get seeAll;
+
+  /// No description provided for @tools.
+  ///
+  /// In en, this message translates to:
+  /// **'Tools'**
+  String get tools;
+
+  /// No description provided for @unlockedOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of {total} unlocked'**
+  String unlockedOf(int count, int total);
+
+  /// No description provided for @achievementUnlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'{title}, unlocked'**
+  String achievementUnlocked(String title);
+
+  /// No description provided for @achievementLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'{title}, locked, {current} of {target}'**
+  String achievementLocked(String title, int current, int target);
+
+  /// No description provided for @unlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlocked'**
+  String get unlocked;
+
+  /// No description provided for @progressOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{current} / {target}'**
+  String progressOf(int current, int target);
+
+  /// No description provided for @levelLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Level {level}'**
+  String levelLabel(int level);
+
+  /// No description provided for @xpProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{current} / {total} XP'**
+  String xpProgress(int current, int total);
+
+  /// No description provided for @levelSeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Seed'**
+  String get levelSeed;
+
+  /// No description provided for @levelSprout.
+  ///
+  /// In en, this message translates to:
+  /// **'Sprout'**
+  String get levelSprout;
+
+  /// No description provided for @levelSapling.
+  ///
+  /// In en, this message translates to:
+  /// **'Sapling'**
+  String get levelSapling;
+
+  /// No description provided for @levelBloom.
+  ///
+  /// In en, this message translates to:
+  /// **'Bloom'**
+  String get levelBloom;
+
+  /// No description provided for @levelTree.
+  ///
+  /// In en, this message translates to:
+  /// **'Tree'**
+  String get levelTree;
+
+  /// No description provided for @levelForest.
+  ///
+  /// In en, this message translates to:
+  /// **'Forest'**
+  String get levelForest;
+
+  /// No description provided for @achFirstStep.
+  ///
+  /// In en, this message translates to:
+  /// **'First step'**
+  String get achFirstStep;
+
+  /// No description provided for @achFirstStepBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete your first habit.'**
+  String get achFirstStepBody;
+
+  /// No description provided for @achStreak3.
+  ///
+  /// In en, this message translates to:
+  /// **'Warming up'**
+  String get achStreak3;
+
+  /// No description provided for @achStreak7.
+  ///
+  /// In en, this message translates to:
+  /// **'One week strong'**
+  String get achStreak7;
+
+  /// No description provided for @achStreak30.
+  ///
+  /// In en, this message translates to:
+  /// **'Unstoppable'**
+  String get achStreak30;
+
+  /// No description provided for @achStreakBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Reach a {count}-day streak.'**
+  String achStreakBody(int count);
+
+  /// No description provided for @achPerfectDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Perfect day'**
+  String get achPerfectDay;
+
+  /// No description provided for @achPerfectDayBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish every habit that was due in one day.'**
+  String get achPerfectDayBody;
+
+  /// No description provided for @achPerfectWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Perfect week'**
+  String get achPerfectWeek;
+
+  /// No description provided for @achPerfectWeekBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Seven perfect days in a row.'**
+  String get achPerfectWeekBody;
+
+  /// No description provided for @achCheckIns50.
+  ///
+  /// In en, this message translates to:
+  /// **'Half century'**
+  String get achCheckIns50;
+
+  /// No description provided for @achCheckIns100.
+  ///
+  /// In en, this message translates to:
+  /// **'Centurion'**
+  String get achCheckIns100;
+
+  /// No description provided for @achCheckInsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete {count} check-ins.'**
+  String achCheckInsBody(int count);
+
+  /// No description provided for @achHabitBuilder.
+  ///
+  /// In en, this message translates to:
+  /// **'Habit builder'**
+  String get achHabitBuilder;
+
+  /// No description provided for @achHabitBuilderBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep five habits going at once.'**
+  String get achHabitBuilderBody;
+
+  /// No description provided for @achReflective.
+  ///
+  /// In en, this message translates to:
+  /// **'Reflective'**
+  String get achReflective;
+
+  /// No description provided for @achReflectiveBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Write ten notes or moods.'**
+  String get achReflectiveBody;
+
+  /// No description provided for @achEarlyBird.
+  ///
+  /// In en, this message translates to:
+  /// **'Early bird'**
+  String get achEarlyBird;
+
+  /// No description provided for @achEarlyBirdBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Check in before 8 in the morning.'**
+  String get achEarlyBirdBody;
+
+  /// No description provided for @achNightOwl.
+  ///
+  /// In en, this message translates to:
+  /// **'Night owl'**
+  String get achNightOwl;
+
+  /// No description provided for @achNightOwlBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Check in after 10 at night.'**
+  String get achNightOwlBody;
+
+  /// No description provided for @focusTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus'**
+  String get focusTitle;
+
+  /// No description provided for @focusShort.
+  ///
+  /// In en, this message translates to:
+  /// **'A calm timer'**
+  String get focusShort;
+
+  /// No description provided for @focusBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a length, put the phone down, and settle in.'**
+  String get focusBody;
+
+  /// No description provided for @focusDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Session complete. Well done.'**
+  String get focusDone;
+
+  /// No description provided for @focusLogged.
+  ///
+  /// In en, this message translates to:
+  /// **'Logged {minutes} min to {habit}'**
+  String focusLogged(int minutes, String habit);
+
+  /// No description provided for @focusRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'{time} remaining'**
+  String focusRemaining(String time);
+
+  /// No description provided for @focusInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Focusing'**
+  String get focusInProgress;
+
+  /// No description provided for @focusPaused.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused'**
+  String get focusPaused;
+
+  /// No description provided for @minutesShort.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} min'**
+  String minutesShort(int count);
+
+  /// No description provided for @start.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get start;
+
+  /// No description provided for @pause.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get pause;
+
+  /// No description provided for @resume.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume'**
+  String get resume;
+
+  /// No description provided for @reset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get reset;
+
+  /// No description provided for @startFocus.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a focus session'**
+  String get startFocus;
+
+  /// No description provided for @breatheTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Breathe'**
+  String get breatheTitle;
+
+  /// No description provided for @breatheShort.
+  ///
+  /// In en, this message translates to:
+  /// **'One calm minute'**
+  String get breatheShort;
+
+  /// No description provided for @breatheBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow the circle: in for 4, hold for 4, out for 6.'**
+  String get breatheBody;
+
+  /// No description provided for @breatheReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready'**
+  String get breatheReady;
+
+  /// No description provided for @breatheIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Breathe in'**
+  String get breatheIn;
+
+  /// No description provided for @breatheHold.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold'**
+  String get breatheHold;
+
+  /// No description provided for @breatheOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Breathe out'**
+  String get breatheOut;
+
+  /// No description provided for @breathCycles.
+  ///
+  /// In en, this message translates to:
+  /// **'Breaths: {count}'**
+  String breathCycles(int count);
+
+  /// No description provided for @weeklyTrend.
+  ///
+  /// In en, this message translates to:
+  /// **'Compared with last week'**
+  String get weeklyTrend;
+
+  /// No description provided for @trendUp.
+  ///
+  /// In en, this message translates to:
+  /// **'{points} points ahead of last week'**
+  String trendUp(int points);
+
+  /// No description provided for @trendDown.
+  ///
+  /// In en, this message translates to:
+  /// **'{points} points behind last week'**
+  String trendDown(int points);
+
+  /// No description provided for @trendSame.
+  ///
+  /// In en, this message translates to:
+  /// **'Same pace as last week'**
+  String get trendSame;
 }
 
 class _AppLocalizationsDelegate

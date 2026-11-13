@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hayati/app/app_shell.dart';
+import 'package:hayati/features/achievements/presentation/achievements_page.dart';
 import 'package:hayati/features/auth/presentation/account_pages.dart';
 import 'package:hayati/features/auth/presentation/sign_in_page.dart';
 import 'package:hayati/features/habits/presentation/habit_detail_page.dart';
@@ -12,6 +13,8 @@ import 'package:hayati/features/onboarding/presentation/onboarding_redirect.dart
 import 'package:hayati/features/settings/presentation/archived_habits_page.dart';
 import 'package:hayati/features/settings/presentation/settings_page.dart';
 import 'package:hayati/features/stats/presentation/stats_page.dart';
+import 'package:hayati/features/tools/presentation/breathe_page.dart';
+import 'package:hayati/features/tools/presentation/focus_page.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -89,6 +92,25 @@ GoRouter appRouter(Ref ref) {
         path: '/archived',
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const ArchivedHabitsPage(),
+      ),
+      GoRoute(
+        path: '/achievements',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const AchievementsPage(),
+      ),
+      GoRoute(
+        path: '/focus',
+        parentNavigatorKey: _rootNavigatorKey,
+        pageBuilder: (context, state) => slideUpPage(
+          pageKey: state.pageKey,
+          child: FocusPage(habitId: state.uri.queryParameters['habit']),
+        ),
+      ),
+      GoRoute(
+        path: '/breathe',
+        parentNavigatorKey: _rootNavigatorKey,
+        pageBuilder: (context, state) =>
+            slideUpPage(pageKey: state.pageKey, child: const BreathePage()),
       ),
       GoRoute(
         path: '/auth/sign-in',

@@ -5,9 +5,10 @@ import 'package:hayati/app/theme.dart';
 import 'package:hayati/core/time/calendar_date.dart';
 import 'package:hayati/core/widgets/animated_count.dart';
 import 'package:hayati/core/widgets/async_error_view.dart';
-import 'package:hayati/core/widgets/confirm_sheet.dart';
 import 'package:hayati/core/widgets/aurora_background.dart';
 import 'package:hayati/core/widgets/concentric_rings.dart';
+import 'package:hayati/core/widgets/confirm_sheet.dart';
+import 'package:hayati/core/widgets/responsive.dart';
 import 'package:hayati/core/widgets/section_header.dart';
 import 'package:hayati/core/widgets/soft_card.dart';
 import 'package:hayati/core/widgets/streak_flame.dart';
@@ -75,10 +76,19 @@ class HabitDetailPage extends ConsumerWidget {
             today: today,
           );
           final weeks = habit.frequencyType == FrequencyType.timesPerWeek;
-          return ListView(
-            padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 32),
+          return ResponsiveListView(
+            maxWidth: 760,
+            side: 16,
+            top: 0,
+            bottom: 32,
             children: [
               _HeroHeader(habit: habit, rate: rate),
+              const SizedBox(height: 12),
+              FilledButton.tonalIcon(
+                onPressed: () => context.push('/focus?habit=${habit.id}'),
+                icon: const Icon(Icons.timer_outlined),
+                label: Text(l10n.startFocus),
+              ),
               const SizedBox(height: 16),
               Row(
                 children: [

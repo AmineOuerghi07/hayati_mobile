@@ -626,4 +626,312 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get quote8 => 'A calm mind builds a strong life.';
+
+  @override
+  String get authSignInTitle => 'Welcome back';
+
+  @override
+  String get authSignInBody =>
+      'Sign in to keep your habits in sync across your devices.';
+
+  @override
+  String get authCreateTitle => 'Start your journey';
+
+  @override
+  String get authCreateBody =>
+      'Create an account to back up your streaks and progress.';
+
+  @override
+  String get benefitSync => 'Sync across your devices';
+
+  @override
+  String get benefitBackup => 'Your streaks, safely backed up';
+
+  @override
+  String get benefitPrivate => 'Private by design. No ads, ever.';
+
+  @override
+  String get orDivider => 'or';
+
+  @override
+  String get notNow => 'Not now';
+
+  @override
+  String get showPassword => 'Show password';
+
+  @override
+  String get hidePassword => 'Hide password';
+
+  @override
+  String get passwordWeak => 'Weak';
+
+  @override
+  String get passwordFair => 'Fair';
+
+  @override
+  String get passwordGood => 'Good';
+
+  @override
+  String get passwordStrong => 'Strong';
+
+  @override
+  String passwordStrength(String level) {
+    return 'Password strength: $level';
+  }
+
+  @override
+  String get otpBody => 'We\'ll send a one-time code. No password needed.';
+
+  @override
+  String codeSentTo(String destination) {
+    return 'Enter the code sent to $destination';
+  }
+
+  @override
+  String codeExpiresIn(String time) {
+    return 'Expires in $time';
+  }
+
+  @override
+  String get codeExpiredHint => 'This code expired. Send a new one.';
+
+  @override
+  String get resendCode => 'Resend code';
+
+  @override
+  String get changeDestination => 'Use a different address';
+
+  @override
+  String stepOf(int current, int total) {
+    return 'Step $current of $total';
+  }
+
+  @override
+  String get passwordUpdated => 'Password updated';
+
+  @override
+  String get passwordUpdatedBody =>
+      'You can sign in with your new password now.';
+
+  @override
+  String get changePasswordBody =>
+      'Use at least 8 characters with a mix of letters, numbers, and symbols.';
+
+  @override
+  String get achievements => 'Achievements';
+
+  @override
+  String get seeAll => 'See all';
+
+  @override
+  String get tools => 'Tools';
+
+  @override
+  String unlockedOf(int count, int total) {
+    return '$count of $total unlocked';
+  }
+
+  @override
+  String achievementUnlocked(String title) {
+    return '$title, unlocked';
+  }
+
+  @override
+  String achievementLocked(String title, int current, int target) {
+    return '$title, locked, $current of $target';
+  }
+
+  @override
+  String get unlocked => 'Unlocked';
+
+  @override
+  String progressOf(int current, int target) {
+    return '$current / $target';
+  }
+
+  @override
+  String levelLabel(int level) {
+    return 'Level $level';
+  }
+
+  @override
+  String xpProgress(int current, int total) {
+    return '$current / $total XP';
+  }
+
+  @override
+  String get levelSeed => 'Seed';
+
+  @override
+  String get levelSprout => 'Sprout';
+
+  @override
+  String get levelSapling => 'Sapling';
+
+  @override
+  String get levelBloom => 'Bloom';
+
+  @override
+  String get levelTree => 'Tree';
+
+  @override
+  String get levelForest => 'Forest';
+
+  @override
+  String get achFirstStep => 'First step';
+
+  @override
+  String get achFirstStepBody => 'Complete your first habit.';
+
+  @override
+  String get achStreak3 => 'Warming up';
+
+  @override
+  String get achStreak7 => 'One week strong';
+
+  @override
+  String get achStreak30 => 'Unstoppable';
+
+  @override
+  String achStreakBody(int count) {
+    return 'Reach a $count-day streak.';
+  }
+
+  @override
+  String get achPerfectDay => 'Perfect day';
+
+  @override
+  String get achPerfectDayBody => 'Finish every habit that was due in one day.';
+
+  @override
+  String get achPerfectWeek => 'Perfect week';
+
+  @override
+  String get achPerfectWeekBody => 'Seven perfect days in a row.';
+
+  @override
+  String get achCheckIns50 => 'Half century';
+
+  @override
+  String get achCheckIns100 => 'Centurion';
+
+  @override
+  String achCheckInsBody(int count) {
+    return 'Complete $count check-ins.';
+  }
+
+  @override
+  String get achHabitBuilder => 'Habit builder';
+
+  @override
+  String get achHabitBuilderBody => 'Keep five habits going at once.';
+
+  @override
+  String get achReflective => 'Reflective';
+
+  @override
+  String get achReflectiveBody => 'Write ten notes or moods.';
+
+  @override
+  String get achEarlyBird => 'Early bird';
+
+  @override
+  String get achEarlyBirdBody => 'Check in before 8 in the morning.';
+
+  @override
+  String get achNightOwl => 'Night owl';
+
+  @override
+  String get achNightOwlBody => 'Check in after 10 at night.';
+
+  @override
+  String get focusTitle => 'Focus';
+
+  @override
+  String get focusShort => 'A calm timer';
+
+  @override
+  String get focusBody => 'Pick a length, put the phone down, and settle in.';
+
+  @override
+  String get focusDone => 'Session complete. Well done.';
+
+  @override
+  String focusLogged(int minutes, String habit) {
+    return 'Logged $minutes min to $habit';
+  }
+
+  @override
+  String focusRemaining(String time) {
+    return '$time remaining';
+  }
+
+  @override
+  String get focusInProgress => 'Focusing';
+
+  @override
+  String get focusPaused => 'Paused';
+
+  @override
+  String minutesShort(int count) {
+    return '$count min';
+  }
+
+  @override
+  String get start => 'Start';
+
+  @override
+  String get pause => 'Pause';
+
+  @override
+  String get resume => 'Resume';
+
+  @override
+  String get reset => 'Reset';
+
+  @override
+  String get startFocus => 'Start a focus session';
+
+  @override
+  String get breatheTitle => 'Breathe';
+
+  @override
+  String get breatheShort => 'One calm minute';
+
+  @override
+  String get breatheBody =>
+      'Follow the circle: in for 4, hold for 4, out for 6.';
+
+  @override
+  String get breatheReady => 'Ready';
+
+  @override
+  String get breatheIn => 'Breathe in';
+
+  @override
+  String get breatheHold => 'Hold';
+
+  @override
+  String get breatheOut => 'Breathe out';
+
+  @override
+  String breathCycles(int count) {
+    return 'Breaths: $count';
+  }
+
+  @override
+  String get weeklyTrend => 'Compared with last week';
+
+  @override
+  String trendUp(int points) {
+    return '$points points ahead of last week';
+  }
+
+  @override
+  String trendDown(int points) {
+    return '$points points behind last week';
+  }
+
+  @override
+  String get trendSame => 'Same pace as last week';
 }

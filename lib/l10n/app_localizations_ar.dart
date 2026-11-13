@@ -619,4 +619,309 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get quote8 => 'العقل الهادئ يبني حياة قوية.';
+
+  @override
+  String get authSignInTitle => 'أهلًا بعودتك';
+
+  @override
+  String get authSignInBody => 'سجّل الدخول لمزامنة عاداتك على كل أجهزتك.';
+
+  @override
+  String get authCreateTitle => 'ابدأ رحلتك';
+
+  @override
+  String get authCreateBody => 'أنشئ حسابًا لحفظ سلاسلك وتقدّمك.';
+
+  @override
+  String get benefitSync => 'مزامنة على كل أجهزتك';
+
+  @override
+  String get benefitBackup => 'سلاسلك محفوظة بأمان';
+
+  @override
+  String get benefitPrivate => 'خاص منذ البداية. بلا إعلانات أبدًا.';
+
+  @override
+  String get orDivider => 'أو';
+
+  @override
+  String get notNow => 'ليس الآن';
+
+  @override
+  String get showPassword => 'إظهار كلمة المرور';
+
+  @override
+  String get hidePassword => 'إخفاء كلمة المرور';
+
+  @override
+  String get passwordWeak => 'ضعيفة';
+
+  @override
+  String get passwordFair => 'مقبولة';
+
+  @override
+  String get passwordGood => 'جيدة';
+
+  @override
+  String get passwordStrong => 'قوية';
+
+  @override
+  String passwordStrength(String level) {
+    return 'قوة كلمة المرور: $level';
+  }
+
+  @override
+  String get otpBody => 'سنرسل لك رمزًا لمرة واحدة. لا حاجة لكلمة مرور.';
+
+  @override
+  String codeSentTo(String destination) {
+    return 'أدخل الرمز المرسل إلى $destination';
+  }
+
+  @override
+  String codeExpiresIn(String time) {
+    return 'ينتهي خلال $time';
+  }
+
+  @override
+  String get codeExpiredHint => 'انتهت صلاحية الرمز. أرسل رمزًا جديدًا.';
+
+  @override
+  String get resendCode => 'إعادة إرسال الرمز';
+
+  @override
+  String get changeDestination => 'استخدام عنوان آخر';
+
+  @override
+  String stepOf(int current, int total) {
+    return 'الخطوة $current من $total';
+  }
+
+  @override
+  String get passwordUpdated => 'تم تحديث كلمة المرور';
+
+  @override
+  String get passwordUpdatedBody =>
+      'يمكنك الآن تسجيل الدخول بكلمة المرور الجديدة.';
+
+  @override
+  String get changePasswordBody =>
+      'استخدم 8 أحرف على الأقل تمزج بين الحروف والأرقام والرموز.';
+
+  @override
+  String get achievements => 'الإنجازات';
+
+  @override
+  String get seeAll => 'عرض الكل';
+
+  @override
+  String get tools => 'أدوات';
+
+  @override
+  String unlockedOf(int count, int total) {
+    return '$count من $total مفتوحة';
+  }
+
+  @override
+  String achievementUnlocked(String title) {
+    return '$title، مفتوح';
+  }
+
+  @override
+  String achievementLocked(String title, int current, int target) {
+    return '$title، مقفل، $current من $target';
+  }
+
+  @override
+  String get unlocked => 'مفتوح';
+
+  @override
+  String progressOf(int current, int target) {
+    return '$current / $target';
+  }
+
+  @override
+  String levelLabel(int level) {
+    return 'المستوى $level';
+  }
+
+  @override
+  String xpProgress(int current, int total) {
+    return '$current / $total نقطة';
+  }
+
+  @override
+  String get levelSeed => 'بذرة';
+
+  @override
+  String get levelSprout => 'برعم';
+
+  @override
+  String get levelSapling => 'شتلة';
+
+  @override
+  String get levelBloom => 'زهرة';
+
+  @override
+  String get levelTree => 'شجرة';
+
+  @override
+  String get levelForest => 'غابة';
+
+  @override
+  String get achFirstStep => 'الخطوة الأولى';
+
+  @override
+  String get achFirstStepBody => 'أكمل عادتك الأولى.';
+
+  @override
+  String get achStreak3 => 'بداية الحماس';
+
+  @override
+  String get achStreak7 => 'أسبوع كامل';
+
+  @override
+  String get achStreak30 => 'لا يمكن إيقافك';
+
+  @override
+  String achStreakBody(int count) {
+    return 'حقّق سلسلة من $count أيام.';
+  }
+
+  @override
+  String get achPerfectDay => 'يوم مثالي';
+
+  @override
+  String get achPerfectDayBody => 'أنجز كل العادات المطلوبة في يوم واحد.';
+
+  @override
+  String get achPerfectWeek => 'أسبوع مثالي';
+
+  @override
+  String get achPerfectWeekBody => 'سبعة أيام مثالية متتالية.';
+
+  @override
+  String get achCheckIns50 => 'نصف المئة';
+
+  @override
+  String get achCheckIns100 => 'المئوي';
+
+  @override
+  String achCheckInsBody(int count) {
+    return 'أكمل $count مرة إنجاز.';
+  }
+
+  @override
+  String get achHabitBuilder => 'باني العادات';
+
+  @override
+  String get achHabitBuilderBody => 'حافظ على خمس عادات في وقت واحد.';
+
+  @override
+  String get achReflective => 'متأمّل';
+
+  @override
+  String get achReflectiveBody => 'اكتب عشر ملاحظات أو حالات مزاجية.';
+
+  @override
+  String get achEarlyBird => 'طائر الصباح';
+
+  @override
+  String get achEarlyBirdBody => 'سجّل إنجازًا قبل الثامنة صباحًا.';
+
+  @override
+  String get achNightOwl => 'بومة الليل';
+
+  @override
+  String get achNightOwlBody => 'سجّل إنجازًا بعد العاشرة ليلًا.';
+
+  @override
+  String get focusTitle => 'تركيز';
+
+  @override
+  String get focusShort => 'مؤقت هادئ';
+
+  @override
+  String get focusBody => 'اختر المدة، ضع الهاتف جانبًا، واستقر.';
+
+  @override
+  String get focusDone => 'انتهت الجلسة. أحسنت.';
+
+  @override
+  String focusLogged(int minutes, String habit) {
+    return 'تم تسجيل $minutes دقيقة في $habit';
+  }
+
+  @override
+  String focusRemaining(String time) {
+    return 'متبقٍ $time';
+  }
+
+  @override
+  String get focusInProgress => 'جارٍ التركيز';
+
+  @override
+  String get focusPaused => 'متوقف مؤقتًا';
+
+  @override
+  String minutesShort(int count) {
+    return '$count د';
+  }
+
+  @override
+  String get start => 'ابدأ';
+
+  @override
+  String get pause => 'إيقاف مؤقت';
+
+  @override
+  String get resume => 'استئناف';
+
+  @override
+  String get reset => 'إعادة ضبط';
+
+  @override
+  String get startFocus => 'ابدأ جلسة تركيز';
+
+  @override
+  String get breatheTitle => 'تنفّس';
+
+  @override
+  String get breatheShort => 'دقيقة هادئة';
+
+  @override
+  String get breatheBody => 'اتبع الدائرة: شهيق 4، احبس 4، زفير 6.';
+
+  @override
+  String get breatheReady => 'جاهز';
+
+  @override
+  String get breatheIn => 'شهيق';
+
+  @override
+  String get breatheHold => 'احبس';
+
+  @override
+  String get breatheOut => 'زفير';
+
+  @override
+  String breathCycles(int count) {
+    return 'الأنفاس: $count';
+  }
+
+  @override
+  String get weeklyTrend => 'مقارنة بالأسبوع الماضي';
+
+  @override
+  String trendUp(int points) {
+    return 'متقدّم بـ $points نقطة عن الأسبوع الماضي';
+  }
+
+  @override
+  String trendDown(int points) {
+    return 'متأخر بـ $points نقطة عن الأسبوع الماضي';
+  }
+
+  @override
+  String get trendSame => 'نفس وتيرة الأسبوع الماضي';
 }
