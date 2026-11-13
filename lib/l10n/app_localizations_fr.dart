@@ -105,4 +105,108 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get weekDaySunday => 'Dimanche';
+
+  @override
+  String get addHabit => 'Ajouter une habitude';
+
+  @override
+  String get editHabit => 'Modifier l\'\'habitude';
+
+  @override
+  String get habitName => 'Nom';
+
+  @override
+  String get nameRequired => 'Saisissez un nom';
+
+  @override
+  String get save => 'Enregistrer';
+
+  @override
+  String get archive => 'Archiver';
+
+  @override
+  String get unarchive => 'Désarchiver';
+
+  @override
+  String get delete => 'Supprimer';
+
+  @override
+  String get deleteHabitTitle => 'Supprimer cette habitude ?';
+
+  @override
+  String get deleteHabitMessage =>
+      'L\'\'habitude quitte la liste. Son historique reste sur cet appareil.';
+
+  @override
+  String get cancel => 'Annuler';
+
+  @override
+  String get frequency => 'Fréquence';
+
+  @override
+  String get frequencyDaily => 'Tous les jours';
+
+  @override
+  String get frequencyWeekdays => 'Jours précis';
+
+  @override
+  String get frequencyTimesPerWeek => 'Fois par semaine';
+
+  @override
+  String get timesEachWeek => 'Fois chaque semaine';
+
+  @override
+  String get reminder => 'Rappel';
+
+  @override
+  String get reminderNone => 'Aucun rappel';
+
+  @override
+  String get clearReminder => 'Effacer le rappel';
+
+  @override
+  String get currentStreak => 'Série en cours';
+
+  @override
+  String get bestStreak => 'Meilleure série';
+
+  @override
+  String streakDays(int count) {
+    return '$count jours';
+  }
+
+  @override
+  String streakWeeks(int count) {
+    return '$count semaines';
+  }
+
+  @override
+  String get markedDone => 'Marqué comme fait';
+
+  @override
+  String get clearedForToday => 'Annulé pour aujourd\'\'hui';
+
+  @override
+  String get undo => 'Annuler';
+
+  @override
+  String get emptyTodayTitle => 'Rien de prévu aujourd\'hui';
+
+  @override
+  String get emptyTodayBody => 'Ajoutez une habitude et elle apparaîtra ici.';
+
+  @override
+  String get chooseDays => 'Choisissez au moins un jour';
+
+  @override
+  String get history => 'Historique';
+
+  @override
+  String get icon => 'Icône';
+
+  @override
+  String get color => 'Couleur';
+
+  @override
+  String get loading => 'Chargement';
 }

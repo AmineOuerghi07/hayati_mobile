@@ -103,4 +103,108 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get weekDaySunday => 'الأحد';
+
+  @override
+  String get addHabit => 'عادة جديدة';
+
+  @override
+  String get editHabit => 'تعديل العادة';
+
+  @override
+  String get habitName => 'الاسم';
+
+  @override
+  String get nameRequired => 'اكتب اسمًا';
+
+  @override
+  String get save => 'حفظ';
+
+  @override
+  String get archive => 'أرشفة';
+
+  @override
+  String get unarchive => 'إلغاء الأرشفة';
+
+  @override
+  String get delete => 'حذف';
+
+  @override
+  String get deleteHabitTitle => 'حذف هذه العادة؟';
+
+  @override
+  String get deleteHabitMessage =>
+      'ستختفي العادة من قائمتك. يبقى سجلها على هذا الجهاز.';
+
+  @override
+  String get cancel => 'إلغاء';
+
+  @override
+  String get frequency => 'التكرار';
+
+  @override
+  String get frequencyDaily => 'كل يوم';
+
+  @override
+  String get frequencyWeekdays => 'أيام محددة';
+
+  @override
+  String get frequencyTimesPerWeek => 'مرات في الأسبوع';
+
+  @override
+  String get timesEachWeek => 'المرات في كل أسبوع';
+
+  @override
+  String get reminder => 'تذكير';
+
+  @override
+  String get reminderNone => 'بدون تذكير';
+
+  @override
+  String get clearReminder => 'إزالة التذكير';
+
+  @override
+  String get currentStreak => 'السلسلة الحالية';
+
+  @override
+  String get bestStreak => 'أفضل سلسلة';
+
+  @override
+  String streakDays(int count) {
+    return '$count يوم';
+  }
+
+  @override
+  String streakWeeks(int count) {
+    return '$count أسبوع';
+  }
+
+  @override
+  String get markedDone => 'تم التسجيل';
+
+  @override
+  String get clearedForToday => 'أُلغي تسجيل اليوم';
+
+  @override
+  String get undo => 'تراجع';
+
+  @override
+  String get emptyTodayTitle => 'لا شيء مستحق اليوم';
+
+  @override
+  String get emptyTodayBody => 'أضف عادة وستظهر هنا.';
+
+  @override
+  String get chooseDays => 'اختر يومًا واحدًا على الأقل';
+
+  @override
+  String get history => 'السجل';
+
+  @override
+  String get icon => 'الأيقونة';
+
+  @override
+  String get color => 'اللون';
+
+  @override
+  String get loading => 'جار التحميل';
 }

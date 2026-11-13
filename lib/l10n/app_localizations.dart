@@ -287,6 +287,204 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sunday'**
   String get weekDaySunday;
+
+  /// No description provided for @addHabit.
+  ///
+  /// In en, this message translates to:
+  /// **'Add habit'**
+  String get addHabit;
+
+  /// No description provided for @editHabit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit habit'**
+  String get editHabit;
+
+  /// No description provided for @habitName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get habitName;
+
+  /// No description provided for @nameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a name'**
+  String get nameRequired;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @archive.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive'**
+  String get archive;
+
+  /// No description provided for @unarchive.
+  ///
+  /// In en, this message translates to:
+  /// **'Unarchive'**
+  String get unarchive;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @deleteHabitTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this habit?'**
+  String get deleteHabitTitle;
+
+  /// No description provided for @deleteHabitMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The habit leaves your list. Its history stays on this device.'**
+  String get deleteHabitMessage;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @frequency.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequency'**
+  String get frequency;
+
+  /// No description provided for @frequencyDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Every day'**
+  String get frequencyDaily;
+
+  /// No description provided for @frequencyWeekdays.
+  ///
+  /// In en, this message translates to:
+  /// **'Specific days'**
+  String get frequencyWeekdays;
+
+  /// No description provided for @frequencyTimesPerWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Times per week'**
+  String get frequencyTimesPerWeek;
+
+  /// No description provided for @timesEachWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Times each week'**
+  String get timesEachWeek;
+
+  /// No description provided for @reminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder'**
+  String get reminder;
+
+  /// No description provided for @reminderNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No reminder'**
+  String get reminderNone;
+
+  /// No description provided for @clearReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear reminder'**
+  String get clearReminder;
+
+  /// No description provided for @currentStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Current streak'**
+  String get currentStreak;
+
+  /// No description provided for @bestStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Best streak'**
+  String get bestStreak;
+
+  /// No description provided for @streakDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} days'**
+  String streakDays(int count);
+
+  /// No description provided for @streakWeeks.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} weeks'**
+  String streakWeeks(int count);
+
+  /// No description provided for @markedDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Marked done'**
+  String get markedDone;
+
+  /// No description provided for @clearedForToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Cleared for today'**
+  String get clearedForToday;
+
+  /// No description provided for @undo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get undo;
+
+  /// No description provided for @emptyTodayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing due today'**
+  String get emptyTodayTitle;
+
+  /// No description provided for @emptyTodayBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a habit and it will show up here.'**
+  String get emptyTodayBody;
+
+  /// No description provided for @chooseDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose at least one day'**
+  String get chooseDays;
+
+  /// No description provided for @history.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get history;
+
+  /// No description provided for @icon.
+  ///
+  /// In en, this message translates to:
+  /// **'Icon'**
+  String get icon;
+
+  /// No description provided for @color.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get color;
+
+  /// No description provided for @loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading'**
+  String get loading;
 }
 
 class _AppLocalizationsDelegate

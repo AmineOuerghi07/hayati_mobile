@@ -214,6 +214,47 @@ final class HabitByIdFamily extends $Family
   String toString() => r'habitByIdProvider';
 }
 
+@ProviderFor(allCompletions)
+final allCompletionsProvider = AllCompletionsProvider._();
+
+final class AllCompletionsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<HabitCompletion>>,
+          List<HabitCompletion>,
+          Stream<List<HabitCompletion>>
+        >
+    with
+        $FutureModifier<List<HabitCompletion>>,
+        $StreamProvider<List<HabitCompletion>> {
+  AllCompletionsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'allCompletionsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$allCompletionsHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<List<HabitCompletion>> $createElement(
+    $ProviderPointer pointer,
+  ) => $StreamProviderElement(pointer);
+
+  @override
+  Stream<List<HabitCompletion>> create(Ref ref) {
+    return allCompletions(ref);
+  }
+}
+
+String _$allCompletionsHash() => r'a9949a936664720ad80315c189b2cd23b3749db8';
+
 @ProviderFor(completionsForHabit)
 final completionsForHabitProvider = CompletionsForHabitFamily._();
 

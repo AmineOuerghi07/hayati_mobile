@@ -103,4 +103,108 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get weekDaySunday => 'Sunday';
+
+  @override
+  String get addHabit => 'Add habit';
+
+  @override
+  String get editHabit => 'Edit habit';
+
+  @override
+  String get habitName => 'Name';
+
+  @override
+  String get nameRequired => 'Enter a name';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get archive => 'Archive';
+
+  @override
+  String get unarchive => 'Unarchive';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get deleteHabitTitle => 'Delete this habit?';
+
+  @override
+  String get deleteHabitMessage =>
+      'The habit leaves your list. Its history stays on this device.';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get frequency => 'Frequency';
+
+  @override
+  String get frequencyDaily => 'Every day';
+
+  @override
+  String get frequencyWeekdays => 'Specific days';
+
+  @override
+  String get frequencyTimesPerWeek => 'Times per week';
+
+  @override
+  String get timesEachWeek => 'Times each week';
+
+  @override
+  String get reminder => 'Reminder';
+
+  @override
+  String get reminderNone => 'No reminder';
+
+  @override
+  String get clearReminder => 'Clear reminder';
+
+  @override
+  String get currentStreak => 'Current streak';
+
+  @override
+  String get bestStreak => 'Best streak';
+
+  @override
+  String streakDays(int count) {
+    return '$count days';
+  }
+
+  @override
+  String streakWeeks(int count) {
+    return '$count weeks';
+  }
+
+  @override
+  String get markedDone => 'Marked done';
+
+  @override
+  String get clearedForToday => 'Cleared for today';
+
+  @override
+  String get undo => 'Undo';
+
+  @override
+  String get emptyTodayTitle => 'Nothing due today';
+
+  @override
+  String get emptyTodayBody => 'Add a habit and it will show up here.';
+
+  @override
+  String get chooseDays => 'Choose at least one day';
+
+  @override
+  String get history => 'History';
+
+  @override
+  String get icon => 'Icon';
+
+  @override
+  String get color => 'Color';
+
+  @override
+  String get loading => 'Loading';
 }

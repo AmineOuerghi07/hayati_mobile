@@ -1,11 +1,16 @@
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hayati/app/app_shell.dart';
+import 'package:hayati/features/habits/presentation/habit_detail_page.dart';
+import 'package:hayati/features/habits/presentation/habit_editor_page.dart';
 import 'package:hayati/features/habits/presentation/today_page.dart';
 import 'package:hayati/features/settings/presentation/settings_page.dart';
 import 'package:hayati/features/stats/presentation/stats_page.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'router.g.dart';
+
+final _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 
 /// App navigation.
 ///
@@ -15,6 +20,7 @@ part 'router.g.dart';
 @Riverpod(keepAlive: true)
 GoRouter appRouter(Ref ref) {
   return GoRouter(
+    navigatorKey: _rootNavigatorKey,
     initialLocation: '/today',
     routes: [
       StatefulShellRoute.indexedStack(
@@ -47,6 +53,25 @@ GoRouter appRouter(Ref ref) {
             ],
           ),
         ],
+      ),
+      GoRoute(
+        path: '/habits/new',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const HabitEditorPage(),
+      ),
+      GoRoute(
+        path: '/habits/:id/edit',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) {
+          return HabitEditorPage(habitId: state.pathParameters['id']);
+        },
+      ),
+      GoRoute(
+        path: '/habits/:id',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) {
+          return HabitDetailPage(habitId: state.pathParameters['id']!);
+        },
       ),
     ],
   );

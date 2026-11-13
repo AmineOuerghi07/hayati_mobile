@@ -32,6 +32,11 @@ Stream<Habit?> habitById(Ref ref, String id) {
 }
 
 @riverpod
+Stream<List<HabitCompletion>> allCompletions(Ref ref) {
+  return ref.watch(completionRepositoryProvider).watchAll();
+}
+
+@riverpod
 Stream<List<HabitCompletion>> completionsForHabit(Ref ref, String habitId) {
   return ref.watch(completionRepositoryProvider).watchForHabit(habitId);
 }
