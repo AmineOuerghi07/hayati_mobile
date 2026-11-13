@@ -1,9 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hayati/app/theme.dart';
+import 'package:hayati/core/config/app_config.dart';
 import 'package:hayati/core/config/app_config_provider.dart';
+import 'package:hayati/core/widgets/section_header.dart';
+import 'package:hayati/core/widgets/soft_card.dart';
 import 'package:hayati/features/auth/domain/auth_models.dart';
 import 'package:hayati/features/auth/presentation/auth_providers.dart';
+import 'package:hayati/features/onboarding/presentation/onboarding_gate.dart';
 import 'package:hayati/features/settings/domain/app_preferences.dart';
 import 'package:hayati/features/settings/presentation/preferences_controller.dart';
 import 'package:hayati/features/sync/presentation/sync_providers.dart';
@@ -30,113 +34,193 @@ class SettingsPage extends ConsumerWidget {
     return SafeArea(
       bottom: false,
       child: ListView(
-        padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
+        padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 32),
         children: [
           Text(l10n.profile, style: theme.textTheme.headlineMedium),
           const SizedBox(height: 16),
           const _ProfileCard(),
-          const SizedBox(height: 24),
-          Text(l10n.language, style: theme.textTheme.titleMedium),
-          const SizedBox(height: 8),
-          RadioGroup<_LanguageChoice>(
-            groupValue: choice,
-            onChanged: (value) {
-              if (value == null) return;
-              controller.setLocale(_localeFor(value));
-            },
+          SectionHeader(l10n.appearance),
+          SoftCard(
+            padding: const EdgeInsetsDirectional.symmetric(vertical: 8),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                for (final option in _LanguageChoice.values)
-                  RadioListTile<_LanguageChoice>(
-                    contentPadding: const EdgeInsetsDirectional.symmetric(
-                      horizontal: 8,
-                    ),
-                    value: option,
-                    title: Text(_languageLabel(l10n, option)),
-                  ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(l10n.appearance, style: theme.textTheme.titleMedium),
-          const SizedBox(height: 8),
-          RadioGroup<Appearance>(
-            groupValue: preferences.appearance,
-            onChanged: (value) {
-              if (value == null) return;
-              controller.setAppearance(value);
-            },
-            child: Column(
-              children: [
-                for (final option in Appearance.values)
-                  RadioListTile<Appearance>(
-                    contentPadding: const EdgeInsetsDirectional.symmetric(
-                      horizontal: 8,
-                    ),
-                    value: option,
-                    title: Text(_appearanceLabel(l10n, option)),
-                  ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(l10n.colorTheme, style: theme.textTheme.titleMedium),
-          const SizedBox(height: 12),
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: [
-              for (final preset in appThemes)
-                _ThemeSwatch(
-                  label: themeLabel(l10n, preset.id),
-                  color: preset.seed,
-                  selected: preferences.themeId == preset.id,
-                  onTap: () => controller.setTheme(preset.id),
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
+                  child: Text(l10n.language, style: theme.textTheme.titleSmall),
                 ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Text(l10n.weekStartsOn, style: theme.textTheme.titleMedium),
-          const SizedBox(height: 8),
-          RadioGroup<int>(
-            groupValue: _weekChoice(preferences.weekStart),
-            onChanged: (value) {
-              if (value == null) return;
-              controller.setWeekStart(value);
-            },
-            child: Column(
-              children: [
-                for (final day in [
-                  DateTime.monday,
-                  DateTime.saturday,
-                  DateTime.sunday,
-                ])
-                  RadioListTile<int>(
-                    contentPadding: const EdgeInsetsDirectional.symmetric(
-                      horizontal: 8,
-                    ),
-                    value: day,
-                    title: Text(_weekLabel(l10n, day)),
+                RadioGroup<_LanguageChoice>(
+                  groupValue: choice,
+                  onChanged: (value) {
+                    if (value == null) return;
+                    controller.setLocale(_localeFor(value));
+                  },
+                  child: Column(
+                    children: [
+                      for (final option in _LanguageChoice.values)
+                        RadioListTile<_LanguageChoice>(
+                          value: option,
+                          title: Text(_languageLabel(l10n, option)),
+                        ),
+                    ],
                   ),
+                ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
+                  child: Text(
+                    l10n.appearance,
+                    style: theme.textTheme.titleSmall,
+                  ),
+                ),
+                RadioGroup<Appearance>(
+                  groupValue: preferences.appearance,
+                  onChanged: (value) {
+                    if (value == null) return;
+                    controller.setAppearance(value);
+                  },
+                  child: Column(
+                    children: [
+                      for (final option in Appearance.values)
+                        RadioListTile<Appearance>(
+                          value: option,
+                          title: Text(_appearanceLabel(l10n, option)),
+                        ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 12),
+                  child: Text(
+                    l10n.colorTheme,
+                    style: theme.textTheme.titleSmall,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.symmetric(
+                    horizontal: 16,
+                  ),
+                  child: Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    children: [
+                      for (final preset in appThemes)
+                        _ThemeSwatch(
+                          label: themeLabel(l10n, preset.id),
+                          color: preset.seed,
+                          selected: preferences.themeId == preset.id,
+                          onTap: () => controller.setTheme(preset.id),
+                        ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
+                  child: Text(
+                    l10n.weekStartsOn,
+                    style: theme.textTheme.titleSmall,
+                  ),
+                ),
+                RadioGroup<int>(
+                  groupValue: _weekChoice(preferences.weekStart),
+                  onChanged: (value) {
+                    if (value == null) return;
+                    controller.setWeekStart(value);
+                  },
+                  child: Column(
+                    children: [
+                      for (final day in [
+                        DateTime.monday,
+                        DateTime.saturday,
+                        DateTime.sunday,
+                      ])
+                        RadioListTile<int>(
+                          value: day,
+                          title: Text(_weekLabel(l10n, day)),
+                        ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
-          const SizedBox(height: 8),
-          SwitchListTile(
-            contentPadding: const EdgeInsetsDirectional.symmetric(
-              horizontal: 8,
+          SectionHeader(l10n.habits),
+          SoftCard(
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: [
+                ListTile(
+                  title: Text(l10n.archivedHabits),
+                  trailing: const Icon(Icons.arrow_forward),
+                  onTap: () => context.push('/archived'),
+                ),
+                ListTile(
+                  title: Text(l10n.replayOnboarding),
+                  onTap: () async {
+                    ref.read(onboardingFlagProvider.notifier).markReplay();
+                    await controller.setOnboardingDone(false);
+                    if (!context.mounted) return;
+                    context.go('/onboarding');
+                  },
+                ),
+              ],
             ),
-            title: Text(l10n.usageReports),
-            subtitle: Text(l10n.usageReportsBody),
-            value: preferences.analyticsEnabled,
-            onChanged: controller.setAnalyticsEnabled,
           ),
-          ListTile(
-            contentPadding: const EdgeInsetsDirectional.symmetric(
-              horizontal: 8,
+          SectionHeader(l10n.privacy),
+          SoftCard(
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: [
+                SwitchListTile(
+                  title: Text(l10n.usageReports),
+                  subtitle: Text(l10n.usageReportsBody),
+                  value: preferences.analyticsEnabled,
+                  onChanged: controller.setAnalyticsEnabled,
+                ),
+                ListTile(
+                  title: Text(l10n.privacy),
+                  subtitle: Text(l10n.privacyBody),
+                  onTap: () {
+                    showDialog<void>(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text(l10n.privacy),
+                          content: Text(l10n.privacyBody),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text(l10n.cancel),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
             ),
-            title: Text(l10n.environment),
-            subtitle: Text(flavorLabel),
+          ),
+          SectionHeader(l10n.sectionAbout),
+          SoftCard(
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: [
+                ListTile(
+                  title: Text(l10n.environment),
+                  subtitle: Text(flavorLabel),
+                ),
+                ListTile(title: Text(l10n.versionLabel(hayatiVersion))),
+                ListTile(
+                  title: Text(l10n.licenses),
+                  onTap: () => showLicensePage(
+                    context: context,
+                    applicationName: l10n.appTitle,
+                    applicationVersion: hayatiVersion,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -159,6 +243,7 @@ class _ThemeSwatch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tokens = HayatiTokens.of(context);
     final outline = Theme.of(context).colorScheme.onSurface;
     return Semantics(
       button: true,
@@ -166,19 +251,32 @@ class _ThemeSwatch extends StatelessWidget {
       label: label,
       child: Tooltip(
         message: label,
-        child: Material(
-          color: color,
-          shape: CircleBorder(
-            side: BorderSide(
-              color: selected ? outline : Colors.transparent,
-              width: 3,
+        child: Column(
+          children: [
+            AnimatedContainer(
+              duration: tokens.motion(context, tokens.motionFast),
+              curve: tokens.easeOut,
+              width: selected ? 52 : 48,
+              height: selected ? 52 : 48,
+              decoration: BoxDecoration(
+                color: color,
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: selected ? outline : Colors.transparent,
+                  width: 3,
+                ),
+              ),
+              child: Material(
+                color: Colors.transparent,
+                shape: const CircleBorder(),
+                child: InkWell(
+                  customBorder: const CircleBorder(),
+                  onTap: onTap,
+                  child: const SizedBox.expand(),
+                ),
+              ),
             ),
-          ),
-          child: InkWell(
-            customBorder: const CircleBorder(),
-            onTap: onTap,
-            child: const SizedBox.square(dimension: 48),
-          ),
+          ],
         ),
       ),
     );
@@ -246,71 +344,67 @@ class _ProfileCard extends ConsumerWidget {
         ref.watch(authSessionProvider).value ?? const AuthSession.guest();
     final user = session.user;
     final scheme = Theme.of(context).colorScheme;
-    return Material(
-      color: scheme.primaryContainer,
-      borderRadius: BorderRadius.circular(24),
-      child: Padding(
-        padding: const EdgeInsetsDirectional.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  radius: 28,
-                  backgroundColor: scheme.primary,
-                  foregroundColor: scheme.onPrimary,
-                  child: Text(user?.initials ?? '?'),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        user?.displayName ?? l10n.onThisDevice,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      Text(
-                        user?.email ?? user?.phone ?? l10n.guestStatus,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            if (user == null)
-              FilledButton(
-                onPressed: () => context.push('/auth/sign-in'),
-                child: Text(l10n.signIn),
-              )
-            else ...[
-              OutlinedButton(
-                onPressed: () => context.push('/auth/change-password'),
-                child: Text(l10n.changePassword),
+    return SoftCard(
+      tint: scheme.primaryContainer,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              CircleAvatar(
+                radius: 28,
+                backgroundColor: scheme.primary,
+                foregroundColor: scheme.onPrimary,
+                child: Text(user?.initials ?? '?'),
               ),
-              TextButton(
-                onPressed: () =>
-                    ref.read(syncControllerProvider.notifier).syncNow(),
-                child: Text(
-                  ref.watch(syncControllerProvider) == 'syncing'
-                      ? l10n.syncing
-                      : l10n.syncNow,
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      user?.displayName ?? l10n.onThisDevice,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    Text(
+                      user?.email ?? user?.phone ?? l10n.guestStatus,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
                 ),
-              ),
-              TextButton(
-                onPressed: () => ref.read(authRepositoryProvider).signOut(),
-                child: Text(l10n.signOut),
-              ),
-              TextButton(
-                onPressed: () => _delete(context, ref),
-                child: Text(l10n.deleteAccount),
               ),
             ],
+          ),
+          const SizedBox(height: 16),
+          if (user == null)
+            FilledButton(
+              onPressed: () => context.push('/auth/sign-in'),
+              child: Text(l10n.signIn),
+            )
+          else ...[
+            OutlinedButton(
+              onPressed: () => context.push('/auth/change-password'),
+              child: Text(l10n.changePassword),
+            ),
+            TextButton(
+              onPressed: () =>
+                  ref.read(syncControllerProvider.notifier).syncNow(),
+              child: Text(
+                ref.watch(syncControllerProvider) == 'syncing'
+                    ? l10n.syncing
+                    : l10n.syncNow,
+              ),
+            ),
+            TextButton(
+              onPressed: () => ref.read(authRepositoryProvider).signOut(),
+              child: Text(l10n.signOut),
+            ),
+            TextButton(
+              onPressed: () => _delete(context, ref),
+              child: Text(l10n.deleteAccount),
+            ),
           ],
-        ),
+        ],
       ),
     );
   }

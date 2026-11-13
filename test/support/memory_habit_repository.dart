@@ -20,6 +20,12 @@ class MemoryHabitRepository implements HabitRepository {
   }
 
   @override
+  Stream<List<Habit>> watchArchived() async* {
+    yield _archived();
+    yield* _updates.stream.map((_) => _archived());
+  }
+
+  @override
   Stream<Habit?> watchById(String id) async* {
     yield _find(id);
     yield* _updates.stream.map((_) => _find(id));
@@ -37,6 +43,7 @@ class MemoryHabitRepository implements HabitRepository {
       colorKey: draft.colorKey,
       type: draft.type,
       targetValue: draft.targetValue,
+      unit: draft.unit,
       frequencyType: draft.frequencyType,
       weekdays: draft.weekdays,
       timesPerWeek: draft.timesPerWeek,
@@ -91,6 +98,19 @@ class MemoryHabitRepository implements HabitRepository {
     }
     _habits.sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
     _updates.add(null);
+  }
+
+  List<Habit> _archived() {
+    final visible = [
+      for (final habit in _habits)
+        if (!habit.isDeleted && habit.isArchived) habit,
+    ];
+    visible.sort(
+      (a, b) => (b.archivedAt ?? DateTime.utc(0)).compareTo(
+        a.archivedAt ?? DateTime.utc(0),
+      ),
+    );
+    return visible;
   }
 
   List<Habit> _active() {

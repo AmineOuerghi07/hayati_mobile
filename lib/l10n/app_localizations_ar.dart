@@ -324,4 +324,299 @@ class AppLocalizationsAr extends AppLocalizations {
   String streakMilestone(int count) {
     return 'سلسلة من $count يوم';
   }
+
+  @override
+  String get allDoneTitle => 'اكتمل اليوم';
+
+  @override
+  String get allDoneBody => 'كل عادات اليوم تمت.';
+
+  @override
+  String get greetingMorning => 'صباح الخير';
+
+  @override
+  String get greetingAfternoon => 'طاب نهارك';
+
+  @override
+  String get greetingEvening => 'مساء الخير';
+
+  @override
+  String doneOfTotal(int done, int total) {
+    return 'تم $done من $total';
+  }
+
+  @override
+  String backfillBanner(String date) {
+    return 'تسجيل $date';
+  }
+
+  @override
+  String get loggingPastBody => 'يبقى هذا اليوم في سجلك.';
+
+  @override
+  String get backToToday => 'العودة إلى اليوم';
+
+  @override
+  String get browseTemplates => 'قوالب جاهزة';
+
+  @override
+  String get skip => 'تخطي';
+
+  @override
+  String get continueAction => 'متابعة';
+
+  @override
+  String get getStarted => 'ابدأ';
+
+  @override
+  String get welcomeTitle => 'حياتي';
+
+  @override
+  String get welcomeSubtitle => 'حياتي';
+
+  @override
+  String get welcomeBody => 'مكان هادئ للعادات التي يتكون منها يومك.';
+
+  @override
+  String get onboardingHabitsTitle => 'ابدأ بعدد قليل';
+
+  @override
+  String get onboardingHabitsBody => 'اختر ما يناسبك. يمكنك تغييره لاحقًا.';
+
+  @override
+  String get onboardingReminderTitle => 'تذكير لطيف';
+
+  @override
+  String get onboardingReminderBody =>
+      'اختياري. تذكير واحد للعادات التي اخترتها.';
+
+  @override
+  String get templateWater => 'اشرب ماء';
+
+  @override
+  String get templateRead => 'قراءة';
+
+  @override
+  String get templateWalk => 'مشي';
+
+  @override
+  String get templatePray => 'صلاة';
+
+  @override
+  String get templateSleep => 'نوم مبكر';
+
+  @override
+  String get templateJournal => 'كتابة';
+
+  @override
+  String get unitGlasses => 'أكواب';
+
+  @override
+  String get unitPages => 'صفحات';
+
+  @override
+  String get unitMinutes => 'دقائق';
+
+  @override
+  String get unitTimes => 'مرات';
+
+  @override
+  String get goal => 'الهدف';
+
+  @override
+  String get goalCheck => 'إنجاز';
+
+  @override
+  String get goalCount => 'عدّ';
+
+  @override
+  String get target => 'المقدار';
+
+  @override
+  String get unit => 'الوحدة';
+
+  @override
+  String get preview => 'معاينة';
+
+  @override
+  String get suggestions => 'اقتراحات';
+
+  @override
+  String get customUnit => 'أو اكتب وحدة';
+
+  @override
+  String quantityProgress(int current, int target, String unit) {
+    return '$current / $target $unit';
+  }
+
+  @override
+  String percentValue(int percent) {
+    return '$percent%';
+  }
+
+  @override
+  String get noRate => '—';
+
+  @override
+  String ringSemantics(String label, String value) {
+    return '$label، $value بالمئة';
+  }
+
+  @override
+  String ringEmpty(String label) {
+    return '$label، لا شيء مستحق';
+  }
+
+  @override
+  String increaseHabit(String name) {
+    return 'زيادة $name';
+  }
+
+  @override
+  String decreaseHabit(String name) {
+    return 'إنقاص $name';
+  }
+
+  @override
+  String get noteTitle => 'ملاحظة';
+
+  @override
+  String get saveNote => 'حفظ الملاحظة';
+
+  @override
+  String get moodLabel => 'كيف كان الشعور؟';
+
+  @override
+  String get moodAwful => 'صعب';
+
+  @override
+  String get moodLow => 'منخفض';
+
+  @override
+  String get moodOkay => 'عادي';
+
+  @override
+  String get moodGood => 'جيد';
+
+  @override
+  String get moodGreat => 'رائع';
+
+  @override
+  String get recentNotes => 'ملاحظات';
+
+  @override
+  String get noNotesYet => 'لا ملاحظات بعد.';
+
+  @override
+  String get privacy => 'الخصوصية';
+
+  @override
+  String get privacyBody =>
+      'عاداتك محفوظة على هذا الجهاز. هذا الإصدار لا يرسل شيئًا حتى لو فعّلت التقارير.';
+
+  @override
+  String get archivedHabits => 'المؤرشفة';
+
+  @override
+  String get noArchivedHabits => 'لا توجد عادات مؤرشفة.';
+
+  @override
+  String get replayOnboarding => 'إعادة المقدمة';
+
+  @override
+  String get licenses => 'التراخيص';
+
+  @override
+  String versionLabel(String version) {
+    return 'الإصدار $version';
+  }
+
+  @override
+  String get sectionAbout => 'حول';
+
+  @override
+  String get archiveHabitTitle => 'أرشفة هذه العادة؟';
+
+  @override
+  String get archiveHabitMessage => 'ستختفي من اليوم. يمكنك إرجاعها من الملف.';
+
+  @override
+  String get archivedMessage => 'تمت الأرشفة';
+
+  @override
+  String get restoredMessage => 'تمت الاستعادة';
+
+  @override
+  String get lastSevenDays => 'آخر 7 أيام';
+
+  @override
+  String get completionRate => 'الإنجاز';
+
+  @override
+  String get addNote => 'أضف ملاحظة';
+
+  @override
+  String get dragToReorder => 'اسحب للترتيب';
+
+  @override
+  String get nothingDueOnDay => 'لا شيء مستحق في هذا اليوم';
+
+  @override
+  String get cleared => 'تم المسح';
+
+  @override
+  String get previousMonth => 'الشهر السابق';
+
+  @override
+  String get nextMonth => 'الشهر التالي';
+
+  @override
+  String get previousWeek => 'الأسبوع السابق';
+
+  @override
+  String get nextWeek => 'الأسبوع التالي';
+
+  @override
+  String get heroStart => 'يوم جديد. خطوة صغيرة تكفي للبداية.';
+
+  @override
+  String get heroProgress => 'إيقاع جميل. واصل.';
+
+  @override
+  String plantGrowth(int percent) {
+    return 'نبتتك نمت بنسبة $percent بالمئة';
+  }
+
+  @override
+  String get perfectDays => 'أيام مثالية، آخر 30 يومًا';
+
+  @override
+  String get checkIns => 'مرات الإنجاز';
+
+  @override
+  String get moodThisWeek => 'المزاج هذا الأسبوع';
+
+  @override
+  String get quote1 => 'الخطوات الصغيرة كل يوم تصنع حياة تحبها.';
+
+  @override
+  String get quote2 => 'لا يلزمك الكمال، يكفيك الاستمرار.';
+
+  @override
+  String get quote3 => 'اسقِ النبتة التي تريدها أن تنمو.';
+
+  @override
+  String get quote4 => 'التقدم، لا الكمال.';
+
+  @override
+  String get quote5 => 'كن لطيفًا مع نفسك. أنت تنمو.';
+
+  @override
+  String get quote6 => 'ما تفعله كل يوم أهم مما تفعله من حين لآخر.';
+
+  @override
+  String get quote7 => 'ابدأ من حيث أنت، بما لديك.';
+
+  @override
+  String get quote8 => 'العقل الهادئ يبني حياة قوية.';
 }

@@ -55,6 +55,64 @@ void main() {
     await tester.pump(const Duration(milliseconds: 50));
     expect(await completions.watchForHabit(habit.id).first, isEmpty);
   });
+
+  testWidgets('a quantity habit steps up without jumping to done', (
+    tester,
+  ) async {
+    final habits = MemoryHabitRepository();
+    final completions = MemoryCompletionRepository();
+    final habit = await habits.create(
+      HabitDraft(
+        name: 'Water',
+        icon: 'water',
+        colorKey: 'sea',
+        type: HabitType.quantity,
+        targetValue: 8,
+        unit: 'glasses',
+        frequencyType: FrequencyType.daily,
+        startDate: CalendarDate.today().iso,
+      ),
+    );
+    await _pump(tester, habits: habits, completions: completions);
+
+    await tester.tap(find.byKey(ValueKey('plus-${habit.id}')));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+
+    expect(find.text('1 / 8 glasses'), findsOneWidget);
+    final rows = await completions.watchForHabit(habit.id).first;
+    expect(rows.single.value, 1);
+  });
+
+  testWidgets('the week strip can log a previous day', (tester) async {
+    final habits = MemoryHabitRepository();
+    final completions = MemoryCompletionRepository();
+    final habit = await habits.create(
+      HabitDraft(
+        name: 'Water',
+        icon: 'water',
+        colorKey: 'sea',
+        type: HabitType.boolean,
+        frequencyType: FrequencyType.daily,
+        startDate: CalendarDate.today().addDays(-21).iso,
+      ),
+    );
+    await _pump(tester, habits: habits, completions: completions);
+
+    await tester.tap(find.byTooltip('Previous week'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+    final earlier = CalendarDate.today().addDays(-7);
+    await tester.tap(find.byKey(ValueKey('day-${earlier.iso}')));
+    await tester.pump();
+    expect(find.text('Back to today'), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Water'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    final rows = await completions.watchForHabit(habit.id).first;
+    expect(rows.single.date, earlier.iso);
+  });
 }
 
 Future<void> _pump(
@@ -88,5 +146,6 @@ Future<void> _pump(
     ),
   );
   await tester.pump();
+  await tester.pump(const Duration(milliseconds: 50));
   await tester.pump(const Duration(milliseconds: 50));
 }

@@ -36,6 +36,23 @@ class DriftHabitRepository implements HabitRepository {
   }
 
   @override
+  Stream<List<Habit>> watchArchived() {
+    return _watchScoped((scope) {
+      final query = _db.select(_db.habits)
+        ..where(
+          (row) =>
+              row.deletedAt.isNull() &
+              row.archivedAt.isNotNull() &
+              row.scopeId.equals(scope),
+        )
+        ..orderBy([(row) => OrderingTerm.desc(row.archivedAt)]);
+      return query.get().then(
+        (rows) => [for (final row in rows) habitFromRow(row)],
+      );
+    });
+  }
+
+  @override
   Stream<Habit?> watchById(String id) {
     return _watchScoped((scope) {
       final query = _db.select(_db.habits)

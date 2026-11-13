@@ -37,11 +37,27 @@ void main() {
       find.byWidgetPredicate((widget) {
         if (widget is! Text) return false;
         final value = widget.data ?? '';
-        return value == 'Nothing due today' ||
+        return value == 'Skip' ||
+            value == 'Nothing due today' ||
             value == 'لا شيء مستحق اليوم' ||
             value.contains('aujourd');
       }),
       timeout: const Duration(seconds: 90),
+    );
+    final skip = find.text('Skip');
+    if (skip.evaluate().isNotEmpty) {
+      await tester.tap(skip.first);
+      await tester.pump();
+    }
+    await _until(
+      tester,
+      find.byWidgetPredicate((widget) {
+        if (widget is! Text) return false;
+        final value = widget.data ?? '';
+        return value == 'Nothing due today' ||
+            value == 'لا شيء مستحق اليوم' ||
+            value.contains('aujourd');
+      }),
     );
 
     await tester.tap(find.text('Add habit'));

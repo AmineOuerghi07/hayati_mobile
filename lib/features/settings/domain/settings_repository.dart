@@ -12,4 +12,6 @@ abstract class SettingsRepository {
   Future<void> setWeekStart(int weekStart);
 
   Future<void> setAnalyticsEnabled(bool enabled);
+
+  Future<void> setOnboardingDone(bool done);
 }

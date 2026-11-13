@@ -36,6 +36,55 @@ Color habitColor(String key) {
   };
 }
 
+/// A two-stop gradient from [color] toward a lighter, slightly shifted hue.
+LinearGradient habitGradient(Color color) {
+  final hsl = HSLColor.fromColor(color);
+  final light = hsl
+      .withHue((hsl.hue + 18) % 360)
+      .withLightness((hsl.lightness + 0.14).clamp(0, 0.8))
+      .toColor();
+  return LinearGradient(
+    begin: AlignmentDirectional.topStart,
+    end: AlignmentDirectional.bottomEnd,
+    colors: [light, color],
+  );
+}
+
+/// A rounded tile with the habit icon on its gradient.
+class HabitBadge extends StatelessWidget {
+  const HabitBadge({
+    required this.icon,
+    required this.colorKey,
+    this.size = 44,
+    super.key,
+  });
+
+  final String icon;
+  final String colorKey;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = habitColor(colorKey);
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        gradient: habitGradient(color),
+        borderRadius: BorderRadius.circular(size * 0.32),
+        boxShadow: [
+          BoxShadow(
+            color: color.withValues(alpha: 0.28),
+            blurRadius: size * 0.25,
+            offset: Offset(0, size * 0.1),
+          ),
+        ],
+      ),
+      child: Icon(habitIcon(icon), color: Colors.white, size: size * 0.52),
+    );
+  }
+}
+
 String habitColorLabel(AppLocalizations l10n, String key) {
   return switch (key) {
     'sea' => l10n.themeSea,
