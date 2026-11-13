@@ -1,0 +1,17 @@
+{
+  "@@locale": "fr",
+  "appTitle": "Hayati",
+  "today": "Aujourd'hui",
+  "stats": "Statistiques",
+  "settings": "Réglages",
+  "todayPlaceholder": "Les habitudes sur lesquelles vous travaillez apparaîtront ici.",
+  "statsPlaceholder": "Les statistiques arriveront dans une prochaine mise à jour.",
+  "language": "Langue",
+  "languageSystem": "Langue du système",
+  "languageEnglish": "Anglais",
+  "languageArabic": "Arabe",
+  "languageFrench": "Français",
+  "environment": "Environnement",
+  "flavorDev": "Développement",
+  "flavorProd": "Production"
+}

@@ -1,0 +1,59 @@
+{
+  "@@locale": "en",
+  "appTitle": "Hayati",
+  "@appTitle": {
+    "description": "Application name shown in the task switcher."
+  },
+  "today": "Today",
+  "@today": {
+    "description": "Bottom navigation label for the daily habits screen."
+  },
+  "stats": "Stats",
+  "@stats": {
+    "description": "Bottom navigation label for the insights screen."
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Bottom navigation label for the settings screen."
+  },
+  "todayPlaceholder": "Habits you are working on will show up here.",
+  "@todayPlaceholder": {
+    "description": "Empty state on the Today screen before habits exist."
+  },
+  "statsPlaceholder": "Insights are coming in a later update.",
+  "@statsPlaceholder": {
+    "description": "Placeholder on the Stats screen until insights are built."
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Settings section title for the language picker."
+  },
+  "languageSystem": "System default",
+  "@languageSystem": {
+    "description": "Language option that follows the device locale."
+  },
+  "languageEnglish": "English",
+  "@languageEnglish": {
+    "description": "Language option for English."
+  },
+  "languageArabic": "Arabic",
+  "@languageArabic": {
+    "description": "Language option for Arabic."
+  },
+  "languageFrench": "French",
+  "@languageFrench": {
+    "description": "Language option for French."
+  },
+  "environment": "Environment",
+  "@environment": {
+    "description": "Settings row that shows whether this build is dev or prod."
+  },
+  "flavorDev": "Development",
+  "@flavorDev": {
+    "description": "Name of the development build flavor."
+  },
+  "flavorProd": "Production",
+  "@flavorProd": {
+    "description": "Name of the production build flavor."
+  }
+}

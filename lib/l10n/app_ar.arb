@@ -1,0 +1,17 @@
+{
+  "@@locale": "ar",
+  "appTitle": "حياتي",
+  "today": "اليوم",
+  "stats": "الإحصائيات",
+  "settings": "الإعدادات",
+  "todayPlaceholder": "ستظهر هنا العادات التي تعمل عليها.",
+  "statsPlaceholder": "الإحصاءات ستصل في تحديث لاحق.",
+  "language": "اللغة",
+  "languageSystem": "لغة الجهاز",
+  "languageEnglish": "الإنجليزية",
+  "languageArabic": "العربية",
+  "languageFrench": "الفرنسية",
+  "environment": "البيئة",
+  "flavorDev": "تطوير",
+  "flavorProd": "إنتاج"
+}
