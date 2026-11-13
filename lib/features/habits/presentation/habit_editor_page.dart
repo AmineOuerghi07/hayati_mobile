@@ -69,6 +69,7 @@ class _HabitEditorPageState extends ConsumerState<HabitEditorPage> {
     return Scaffold(
       appBar: AppBar(title: Text(editing ? l10n.editHabit : l10n.addHabit)),
       body: ListView(
+        key: const Key('habit-editor'),
         padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 24),
         children: [
           TextField(

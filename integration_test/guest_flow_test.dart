@@ -17,7 +17,14 @@ void main() {
     await tester.enterText(find.byType(TextField).first, 'Water');
     await tester.testTextInput.receiveAction(TextInputAction.done);
     await tester.pump();
-    await tester.scrollUntilVisible(find.text('Save'), 400);
+    await tester.scrollUntilVisible(
+      find.text('Save'),
+      400,
+      scrollable: find.descendant(
+        of: find.byKey(const Key('habit-editor')),
+        matching: find.byType(Scrollable),
+      ),
+    );
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
 
