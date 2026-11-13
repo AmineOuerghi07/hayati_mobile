@@ -713,6 +713,468 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count}-day streak'**
   String streakMilestone(int count);
+
+  /// No description provided for @allDoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'That\'s the day'**
+  String get allDoneTitle;
+
+  /// No description provided for @allDoneBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Every habit for today is done.'**
+  String get allDoneBody;
+
+  /// No description provided for @greetingMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'Good morning'**
+  String get greetingMorning;
+
+  /// No description provided for @greetingAfternoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Good afternoon'**
+  String get greetingAfternoon;
+
+  /// No description provided for @greetingEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Good evening'**
+  String get greetingEvening;
+
+  /// No description provided for @doneOfTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} of {total} done'**
+  String doneOfTotal(int done, int total);
+
+  /// No description provided for @backfillBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Logging {date}'**
+  String backfillBanner(String date);
+
+  /// No description provided for @loggingPastBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This day stays in your history.'**
+  String get loggingPastBody;
+
+  /// No description provided for @backToToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to today'**
+  String get backToToday;
+
+  /// No description provided for @browseTemplates.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse templates'**
+  String get browseTemplates;
+
+  /// No description provided for @skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
+
+  /// No description provided for @continueAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueAction;
+
+  /// No description provided for @getStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get getStarted;
+
+  /// No description provided for @welcomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Hayati'**
+  String get welcomeTitle;
+
+  /// No description provided for @welcomeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My life'**
+  String get welcomeSubtitle;
+
+  /// No description provided for @welcomeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A quiet place for the habits that make up your day.'**
+  String get welcomeBody;
+
+  /// No description provided for @onboardingHabitsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Start with a few'**
+  String get onboardingHabitsTitle;
+
+  /// No description provided for @onboardingHabitsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick any that feel right. You can change them later.'**
+  String get onboardingHabitsBody;
+
+  /// No description provided for @onboardingReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A gentle nudge'**
+  String get onboardingReminderTitle;
+
+  /// No description provided for @onboardingReminderBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional. One reminder for the habits you just picked.'**
+  String get onboardingReminderBody;
+
+  /// No description provided for @templateWater.
+  ///
+  /// In en, this message translates to:
+  /// **'Drink water'**
+  String get templateWater;
+
+  /// No description provided for @templateRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Read'**
+  String get templateRead;
+
+  /// No description provided for @templateWalk.
+  ///
+  /// In en, this message translates to:
+  /// **'Walk'**
+  String get templateWalk;
+
+  /// No description provided for @templatePray.
+  ///
+  /// In en, this message translates to:
+  /// **'Pray'**
+  String get templatePray;
+
+  /// No description provided for @templateSleep.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep on time'**
+  String get templateSleep;
+
+  /// No description provided for @templateJournal.
+  ///
+  /// In en, this message translates to:
+  /// **'Journal'**
+  String get templateJournal;
+
+  /// No description provided for @unitGlasses.
+  ///
+  /// In en, this message translates to:
+  /// **'glasses'**
+  String get unitGlasses;
+
+  /// No description provided for @unitPages.
+  ///
+  /// In en, this message translates to:
+  /// **'pages'**
+  String get unitPages;
+
+  /// No description provided for @unitMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'minutes'**
+  String get unitMinutes;
+
+  /// No description provided for @unitTimes.
+  ///
+  /// In en, this message translates to:
+  /// **'times'**
+  String get unitTimes;
+
+  /// No description provided for @goal.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal'**
+  String get goal;
+
+  /// No description provided for @goalCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Check off'**
+  String get goalCheck;
+
+  /// No description provided for @goalCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Count'**
+  String get goalCount;
+
+  /// No description provided for @target.
+  ///
+  /// In en, this message translates to:
+  /// **'Target'**
+  String get target;
+
+  /// No description provided for @unit.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit'**
+  String get unit;
+
+  /// No description provided for @preview.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get preview;
+
+  /// No description provided for @suggestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggestions'**
+  String get suggestions;
+
+  /// No description provided for @customUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'Or type a unit'**
+  String get customUnit;
+
+  /// No description provided for @quantityProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{current} / {target} {unit}'**
+  String quantityProgress(int current, int target, String unit);
+
+  /// No description provided for @percentValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}%'**
+  String percentValue(int percent);
+
+  /// No description provided for @noRate.
+  ///
+  /// In en, this message translates to:
+  /// **'—'**
+  String get noRate;
+
+  /// No description provided for @ringSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'{label}, {value} percent'**
+  String ringSemantics(String label, String value);
+
+  /// No description provided for @ringEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'{label}, nothing due'**
+  String ringEmpty(String label);
+
+  /// No description provided for @increaseHabit.
+  ///
+  /// In en, this message translates to:
+  /// **'Increase {name}'**
+  String increaseHabit(String name);
+
+  /// No description provided for @decreaseHabit.
+  ///
+  /// In en, this message translates to:
+  /// **'Decrease {name}'**
+  String decreaseHabit(String name);
+
+  /// No description provided for @noteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get noteTitle;
+
+  /// No description provided for @saveNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Save note'**
+  String get saveNote;
+
+  /// No description provided for @moodLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'How did it feel?'**
+  String get moodLabel;
+
+  /// No description provided for @moodAwful.
+  ///
+  /// In en, this message translates to:
+  /// **'Rough'**
+  String get moodAwful;
+
+  /// No description provided for @moodLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Low'**
+  String get moodLow;
+
+  /// No description provided for @moodOkay.
+  ///
+  /// In en, this message translates to:
+  /// **'Okay'**
+  String get moodOkay;
+
+  /// No description provided for @moodGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get moodGood;
+
+  /// No description provided for @moodGreat.
+  ///
+  /// In en, this message translates to:
+  /// **'Great'**
+  String get moodGreat;
+
+  /// No description provided for @recentNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get recentNotes;
+
+  /// No description provided for @noNotesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No notes yet.'**
+  String get noNotesYet;
+
+  /// No description provided for @privacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy'**
+  String get privacy;
+
+  /// No description provided for @privacyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your habits stay on this device. Nothing is sent from this build, even if usage reports are on.'**
+  String get privacyBody;
+
+  /// No description provided for @archivedHabits.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived'**
+  String get archivedHabits;
+
+  /// No description provided for @noArchivedHabits.
+  ///
+  /// In en, this message translates to:
+  /// **'No archived habits.'**
+  String get noArchivedHabits;
+
+  /// No description provided for @replayOnboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Replay the introduction'**
+  String get replayOnboarding;
+
+  /// No description provided for @licenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Licenses'**
+  String get licenses;
+
+  /// No description provided for @versionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String versionLabel(String version);
+
+  /// No description provided for @sectionAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get sectionAbout;
+
+  /// No description provided for @archiveHabitTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive this habit?'**
+  String get archiveHabitTitle;
+
+  /// No description provided for @archiveHabitMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'It leaves Today. You can restore it from Profile.'**
+  String get archiveHabitMessage;
+
+  /// No description provided for @archivedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived'**
+  String get archivedMessage;
+
+  /// No description provided for @restoredMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Restored'**
+  String get restoredMessage;
+
+  /// No description provided for @lastSevenDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Last 7 days'**
+  String get lastSevenDays;
+
+  /// No description provided for @completionRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Completion'**
+  String get completionRate;
+
+  /// No description provided for @addNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a note'**
+  String get addNote;
+
+  /// No description provided for @dragToReorder.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to reorder'**
+  String get dragToReorder;
+
+  /// No description provided for @nothingDueOnDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing due on this day'**
+  String get nothingDueOnDay;
+
+  /// No description provided for @cleared.
+  ///
+  /// In en, this message translates to:
+  /// **'Cleared'**
+  String get cleared;
+
+  /// No description provided for @previousMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous month'**
+  String get previousMonth;
+
+  /// No description provided for @nextMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Next month'**
+  String get nextMonth;
+
+  /// No description provided for @previousWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous week'**
+  String get previousWeek;
+
+  /// No description provided for @nextWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Next week'**
+  String get nextWeek;
 }
 
 class _AppLocalizationsDelegate

@@ -16,6 +16,7 @@ import 'support/silent_reminder_scheduler.dart';
 Future<void> _settle(WidgetTester tester) async {
   await tester.pump();
   await tester.pump(const Duration(milliseconds: 50));
+  await tester.pump(const Duration(milliseconds: 50));
 }
 
 Future<void> _pumpApp(WidgetTester tester) async {

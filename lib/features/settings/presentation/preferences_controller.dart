@@ -42,4 +42,8 @@ class PreferencesController extends _$PreferencesController {
   Future<void> setAnalyticsEnabled(bool enabled) {
     return ref.read(settingsRepositoryProvider).setAnalyticsEnabled(enabled);
   }
+
+  Future<void> setOnboardingDone(bool done) {
+    return ref.read(settingsRepositoryProvider).setOnboardingDone(done);
+  }
 }

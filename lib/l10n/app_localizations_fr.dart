@@ -329,4 +329,258 @@ class AppLocalizationsFr extends AppLocalizations {
   String streakMilestone(int count) {
     return 'Série de $count jours';
   }
+
+  @override
+  String get allDoneTitle => 'La journée est faite';
+
+  @override
+  String get allDoneBody => 'Toutes les habitudes du jour sont terminées.';
+
+  @override
+  String get greetingMorning => 'Bonjour';
+
+  @override
+  String get greetingAfternoon => 'Bon après-midi';
+
+  @override
+  String get greetingEvening => 'Bonsoir';
+
+  @override
+  String doneOfTotal(int done, int total) {
+    return '$done sur $total faites';
+  }
+
+  @override
+  String backfillBanner(String date) {
+    return 'Saisie du $date';
+  }
+
+  @override
+  String get loggingPastBody => 'Ce jour reste dans votre historique.';
+
+  @override
+  String get backToToday => 'Retour à aujourd\'\'hui';
+
+  @override
+  String get browseTemplates => 'Parcourir les modèles';
+
+  @override
+  String get skip => 'Passer';
+
+  @override
+  String get continueAction => 'Continuer';
+
+  @override
+  String get getStarted => 'Commencer';
+
+  @override
+  String get welcomeTitle => 'Hayati';
+
+  @override
+  String get welcomeSubtitle => 'Ma vie';
+
+  @override
+  String get welcomeBody =>
+      'Un endroit calme pour les habitudes qui font votre journée.';
+
+  @override
+  String get onboardingHabitsTitle => 'Commencez par quelques-unes';
+
+  @override
+  String get onboardingHabitsBody =>
+      'Choisissez celles qui vous vont. Vous pourrez les changer.';
+
+  @override
+  String get onboardingReminderTitle => 'Un rappel doux';
+
+  @override
+  String get onboardingReminderBody =>
+      'Facultatif. Une heure pour les habitudes choisies.';
+
+  @override
+  String get templateWater => 'Boire de l\'\'eau';
+
+  @override
+  String get templateRead => 'Lire';
+
+  @override
+  String get templateWalk => 'Marcher';
+
+  @override
+  String get templatePray => 'Prier';
+
+  @override
+  String get templateSleep => 'Se coucher tôt';
+
+  @override
+  String get templateJournal => 'Écrire';
+
+  @override
+  String get unitGlasses => 'verres';
+
+  @override
+  String get unitPages => 'pages';
+
+  @override
+  String get unitMinutes => 'minutes';
+
+  @override
+  String get unitTimes => 'fois';
+
+  @override
+  String get goal => 'Objectif';
+
+  @override
+  String get goalCheck => 'Cocher';
+
+  @override
+  String get goalCount => 'Compter';
+
+  @override
+  String get target => 'Quantité';
+
+  @override
+  String get unit => 'Unité';
+
+  @override
+  String get preview => 'Aperçu';
+
+  @override
+  String get suggestions => 'Suggestions';
+
+  @override
+  String get customUnit => 'Ou saisir une unité';
+
+  @override
+  String quantityProgress(int current, int target, String unit) {
+    return '$current / $target $unit';
+  }
+
+  @override
+  String percentValue(int percent) {
+    return '$percent%';
+  }
+
+  @override
+  String get noRate => '—';
+
+  @override
+  String ringSemantics(String label, String value) {
+    return '$label, $value pour cent';
+  }
+
+  @override
+  String ringEmpty(String label) {
+    return '$label, rien de prévu';
+  }
+
+  @override
+  String increaseHabit(String name) {
+    return 'Augmenter $name';
+  }
+
+  @override
+  String decreaseHabit(String name) {
+    return 'Diminuer $name';
+  }
+
+  @override
+  String get noteTitle => 'Note';
+
+  @override
+  String get saveNote => 'Enregistrer la note';
+
+  @override
+  String get moodLabel => 'Comment ça s\'\'est passé ?';
+
+  @override
+  String get moodAwful => 'Difficile';
+
+  @override
+  String get moodLow => 'Bas';
+
+  @override
+  String get moodOkay => 'Correct';
+
+  @override
+  String get moodGood => 'Bien';
+
+  @override
+  String get moodGreat => 'Très bien';
+
+  @override
+  String get recentNotes => 'Notes';
+
+  @override
+  String get noNotesYet => 'Pas encore de note.';
+
+  @override
+  String get privacy => 'Confidentialité';
+
+  @override
+  String get privacyBody =>
+      'Vos habitudes restent sur cet appareil. Rien n\'\'est envoyé, même si les rapports sont activés.';
+
+  @override
+  String get archivedHabits => 'Archivées';
+
+  @override
+  String get noArchivedHabits => 'Aucune habitude archivée.';
+
+  @override
+  String get replayOnboarding => 'Revoir l\'\'introduction';
+
+  @override
+  String get licenses => 'Licences';
+
+  @override
+  String versionLabel(String version) {
+    return 'Version $version';
+  }
+
+  @override
+  String get sectionAbout => 'À propos';
+
+  @override
+  String get archiveHabitTitle => 'Archiver cette habitude ?';
+
+  @override
+  String get archiveHabitMessage =>
+      'Elle quitte Aujourd\'\'hui. Vous pouvez la restaurer depuis le profil.';
+
+  @override
+  String get archivedMessage => 'Archivée';
+
+  @override
+  String get restoredMessage => 'Restaurée';
+
+  @override
+  String get lastSevenDays => '7 derniers jours';
+
+  @override
+  String get completionRate => 'Réussite';
+
+  @override
+  String get addNote => 'Ajouter une note';
+
+  @override
+  String get dragToReorder => 'Glisser pour réordonner';
+
+  @override
+  String get nothingDueOnDay => 'Rien de prévu ce jour-là';
+
+  @override
+  String get cleared => 'Effacé';
+
+  @override
+  String get previousMonth => 'Mois précédent';
+
+  @override
+  String get nextMonth => 'Mois suivant';
+
+  @override
+  String get previousWeek => 'Semaine précédente';
+
+  @override
+  String get nextWeek => 'Semaine suivante';
 }

@@ -102,6 +102,76 @@ List<int> heatmapLevels({
   ];
 }
 
+class DayCounts {
+  const DayCounts({required this.done, required this.due});
+
+  final int done;
+  final int due;
+
+  double? get rate => due == 0 ? null : done / due;
+}
+
+/// How many habits were due on [day], and how many reached their target.
+DayCounts dayCounts({
+  required List<Habit> habits,
+  required List<HabitCompletion> completions,
+  required CalendarDate day,
+}) {
+  final values = {
+    for (final item in completions)
+      if (item.date == day.iso) item.habitId: item.value,
+  };
+  var due = 0;
+  var done = 0;
+  for (final habit in habits) {
+    if (!isHabitDueOn(habit, day)) continue;
+    due += 1;
+    if ((values[habit.id] ?? 0) >= habit.targetValue) done += 1;
+  }
+  return DayCounts(done: done, due: due);
+}
+
+/// Oldest first, ending on [today].
+List<DayCounts> recentDayCounts({
+  required List<Habit> habits,
+  required List<HabitCompletion> completions,
+  required CalendarDate today,
+  int days = 7,
+}) {
+  final start = today.addDays(1 - days);
+  return [
+    for (var index = 0; index < days; index++)
+      dayCounts(
+        habits: habits,
+        completions: completions,
+        day: start.addDays(index),
+      ),
+  ];
+}
+
+/// Share of due days in the last [days] where [habit] reached its target.
+double? habitCompletionRate({
+  required Habit habit,
+  required List<HabitCompletion> completions,
+  required CalendarDate today,
+  int days = 30,
+}) {
+  var due = 0;
+  var done = 0;
+  final values = {
+    for (final item in completions)
+      if (item.habitId == habit.id) item.date: item.value,
+  };
+  final start = today.addDays(1 - days);
+  for (var day = start; day <= today; day = day.addDays(1)) {
+    if (!isHabitDueOn(habit, day)) continue;
+    due += 1;
+    if ((values[day.iso] ?? 0) >= habit.targetValue) done += 1;
+  }
+  if (due == 0) return null;
+  return done / due;
+}
+
 int _level(List<Habit> habits, Map<String, double> values, CalendarDate day) {
   var due = 0;
   var done = 0;

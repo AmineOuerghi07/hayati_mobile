@@ -158,5 +158,119 @@
   "streakMilestone": "{count}-day streak",
   "@streakMilestone": {
     "placeholders": {"count": {"type": "int"}}
-  }
+  },
+  "allDoneTitle": "That's the day",
+  "allDoneBody": "Every habit for today is done.",
+  "greetingMorning": "Good morning",
+  "greetingAfternoon": "Good afternoon",
+  "greetingEvening": "Good evening",
+  "doneOfTotal": "{done} of {total} done",
+  "@doneOfTotal": {
+    "placeholders": {
+      "done": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "backfillBanner": "Logging {date}",
+  "@backfillBanner": {
+    "placeholders": {"date": {"type": "String"}}
+  },
+  "loggingPastBody": "This day stays in your history.",
+  "backToToday": "Back to today",
+  "browseTemplates": "Browse templates",
+  "skip": "Skip",
+  "continueAction": "Continue",
+  "getStarted": "Start",
+  "welcomeTitle": "Hayati",
+  "welcomeSubtitle": "My life",
+  "welcomeBody": "A quiet place for the habits that make up your day.",
+  "onboardingHabitsTitle": "Start with a few",
+  "onboardingHabitsBody": "Pick any that feel right. You can change them later.",
+  "onboardingReminderTitle": "A gentle nudge",
+  "onboardingReminderBody": "Optional. One reminder for the habits you just picked.",
+  "templateWater": "Drink water",
+  "templateRead": "Read",
+  "templateWalk": "Walk",
+  "templatePray": "Pray",
+  "templateSleep": "Sleep on time",
+  "templateJournal": "Journal",
+  "unitGlasses": "glasses",
+  "unitPages": "pages",
+  "unitMinutes": "minutes",
+  "unitTimes": "times",
+  "goal": "Goal",
+  "goalCheck": "Check off",
+  "goalCount": "Count",
+  "target": "Target",
+  "unit": "Unit",
+  "preview": "Preview",
+  "suggestions": "Suggestions",
+  "customUnit": "Or type a unit",
+  "quantityProgress": "{current} / {target} {unit}",
+  "@quantityProgress": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "target": {"type": "int"},
+      "unit": {"type": "String"}
+    }
+  },
+  "percentValue": "{percent}%",
+  "@percentValue": {
+    "placeholders": {"percent": {"type": "int"}}
+  },
+  "noRate": "—",
+  "ringSemantics": "{label}, {value} percent",
+  "@ringSemantics": {
+    "placeholders": {
+      "label": {"type": "String"},
+      "value": {"type": "String"}
+    }
+  },
+  "ringEmpty": "{label}, nothing due",
+  "@ringEmpty": {
+    "placeholders": {"label": {"type": "String"}}
+  },
+  "increaseHabit": "Increase {name}",
+  "@increaseHabit": {
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "decreaseHabit": "Decrease {name}",
+  "@decreaseHabit": {
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "noteTitle": "Note",
+  "saveNote": "Save note",
+  "moodLabel": "How did it feel?",
+  "moodAwful": "Rough",
+  "moodLow": "Low",
+  "moodOkay": "Okay",
+  "moodGood": "Good",
+  "moodGreat": "Great",
+  "recentNotes": "Notes",
+  "noNotesYet": "No notes yet.",
+  "privacy": "Privacy",
+  "privacyBody": "Your habits stay on this device. Nothing is sent from this build, even if usage reports are on.",
+  "archivedHabits": "Archived",
+  "noArchivedHabits": "No archived habits.",
+  "replayOnboarding": "Replay the introduction",
+  "licenses": "Licenses",
+  "versionLabel": "Version {version}",
+  "@versionLabel": {
+    "placeholders": {"version": {"type": "String"}}
+  },
+  "sectionAbout": "About",
+  "archiveHabitTitle": "Archive this habit?",
+  "archiveHabitMessage": "It leaves Today. You can restore it from Profile.",
+  "archivedMessage": "Archived",
+  "restoredMessage": "Restored",
+  "lastSevenDays": "Last 7 days",
+  "completionRate": "Completion",
+  "addNote": "Add a note",
+  "dragToReorder": "Drag to reorder",
+  "nothingDueOnDay": "Nothing due on this day",
+  "cleared": "Cleared",
+  "previousMonth": "Previous month",
+  "nextMonth": "Next month",
+  "previousWeek": "Previous week",
+  "nextWeek": "Next week"
 }
