@@ -15,6 +15,9 @@ void main() {
     await tester.pumpAndSettle();
 
     await tester.enterText(find.byType(TextField).first, 'Water');
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pump();
+    await tester.scrollUntilVisible(find.text('Save'), 400);
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
 
