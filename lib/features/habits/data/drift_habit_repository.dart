@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:drift/drift.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hayati/core/database/app_database.dart';
 import 'package:hayati/core/database/data_scope.dart';
 import 'package:hayati/features/habits/data/habit_codec.dart';
@@ -190,7 +191,12 @@ class DriftHabitRepository implements HabitRepository {
     final controller = StreamController<T>();
     Future<void> emit() async {
       if (controller.isClosed) return;
-      controller.add(await load(await DataScope(_db).current()));
+      try {
+        controller.add(await load(await DataScope(_db).current()));
+      } catch (error, stack) {
+        debugPrint('habit watch failed: $error\n$stack');
+        if (!controller.isClosed) controller.addError(error, stack);
+      }
     }
 
     final habitsSub = _db.select(_db.habits).watch().listen((_) => emit());
