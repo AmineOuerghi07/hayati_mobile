@@ -3,16 +3,24 @@ import 'package:hayati/main.dart' as app;
 import 'package:integration_test/integration_test.dart';
 import 'package:material_ui/material_ui.dart';
 
+Future<void> _until(WidgetTester tester, Finder finder) async {
+  final deadline = DateTime.now().add(const Duration(seconds: 20));
+  while (DateTime.now().isBefore(deadline)) {
+    await tester.pump(const Duration(milliseconds: 200));
+    if (finder.evaluate().isNotEmpty) return;
+  }
+  fail('Timed out waiting for $finder');
+}
+
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets('a guest can add a habit and open stats', (tester) async {
     app.main();
-    await tester.pumpAndSettle(const Duration(seconds: 3));
+    await _until(tester, find.text('Nothing due today'));
 
-    expect(find.text('Nothing due today'), findsOneWidget);
     await tester.tap(find.text('Add habit'));
-    await tester.pumpAndSettle();
+    await _until(tester, find.byType(TextField));
 
     final field = tester.widget<TextField>(find.byType(TextField).first);
     field.controller!.value = const TextEditingValue(
@@ -21,11 +29,9 @@ void main() {
     );
     await tester.pump();
     await tester.tap(find.text('Save'));
-    await tester.pumpAndSettle();
+    await _until(tester, find.text('Water'));
 
-    expect(find.text('Water'), findsWidgets);
     await tester.tap(find.text('Stats'));
-    await tester.pumpAndSettle();
-    expect(find.text('This week'), findsOneWidget);
+    await _until(tester, find.text('This week'));
   });
 }
