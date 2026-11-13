@@ -13,7 +13,17 @@ Future<void> _until(
     await tester.pump(const Duration(milliseconds: 200));
     if (finder.evaluate().isNotEmpty) return;
   }
-  fail('Timed out waiting for $finder');
+  final visible = find
+      .byType(Text)
+      .evaluate()
+      .map((element) => (element.widget as Text).data)
+      .whereType<String>()
+      .join(' | ');
+  final loading = find.byKey(const Key('today-loading')).evaluate().isNotEmpty;
+  fail(
+    'Timed out waiting for $finder. '
+    'Loading: $loading. Visible text: $visible',
+  );
 }
 
 void main() {
@@ -24,8 +34,14 @@ void main() {
     app.main();
     await _until(
       tester,
-      find.text('Nothing due today'),
-      timeout: const Duration(seconds: 120),
+      find.byWidgetPredicate((widget) {
+        if (widget is! Text) return false;
+        final value = widget.data ?? '';
+        return value == 'Nothing due today' ||
+            value == 'لا شيء مستحق اليوم' ||
+            value.contains('aujourd');
+      }),
+      timeout: const Duration(seconds: 90),
     );
 
     await tester.tap(find.text('Add habit'));

@@ -31,7 +31,10 @@ class TodayPage extends ConsumerWidget {
         child: const Icon(Icons.add),
       ),
       body: habits.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const Center(
+          key: Key('today-loading'),
+          child: CircularProgressIndicator(),
+        ),
         error: (error, stack) => const AsyncErrorView(),
         data: (habitList) {
           return completions.when(
