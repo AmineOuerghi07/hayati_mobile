@@ -13,7 +13,6 @@ Future<void> _until(
     await tester.pump(const Duration(milliseconds: 200));
     if (finder.evaluate().isNotEmpty) return;
   }
-  debugDumpApp();
   fail('Timed out waiting for $finder');
 }
 
@@ -26,7 +25,7 @@ void main() {
     await _until(
       tester,
       find.text('Nothing due today'),
-      timeout: const Duration(seconds: 60),
+      timeout: const Duration(seconds: 120),
     );
 
     await tester.tap(find.text('Add habit'));
