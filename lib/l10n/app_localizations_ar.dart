@@ -315,6 +315,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get somethingWentWrong => 'حدث خطأ. حاول مرة أخرى بعد لحظات.';
 
   @override
+  String get usageReports => 'تقارير الاستخدام';
+
+  @override
+  String get usageReportsBody => 'متوقفة افتراضيًا. هذا الإصدار لا يرسل شيئًا.';
+
+  @override
   String streakMilestone(int count) {
     return 'سلسلة من $count يوم';
   }

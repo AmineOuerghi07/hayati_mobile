@@ -7,6 +7,8 @@ import 'package:hayati/core/database/app_database.dart';
 import 'package:hayati/core/database/data_scope.dart';
 import 'package:hayati/features/auth/domain/auth_models.dart';
 import 'package:hayati/features/auth/domain/auth_repository.dart';
+import 'package:hayati/features/habits/data/habit_codec.dart';
+import 'package:hayati/features/sync/data/sync_engine.dart';
 import 'package:uuid/uuid.dart';
 
 class FakeAuthRepository implements AuthRepository {
@@ -151,8 +153,46 @@ class FakeAuthRepository implements AuthRepository {
   }
 
   Future<void> _enter(String userId) async {
-    await DataScope(_db, uuid: _uuid).attachCurrentGuestTo(userId);
+    final scope = DataScope(_db, uuid: _uuid);
+    await scope.attachCurrentGuestTo(userId);
     await _writeSetting(sessionKey, userId);
+    await _queueScope(await scope.current());
+  }
+
+  Future<void> _queueScope(String scopeId) async {
+    final writer = OutboxWriter(_db)..writerId = 'this-device';
+    final habits = await (_db.select(
+      _db.habits,
+    )..where((row) => row.scopeId.equals(scopeId))).get();
+    for (final row in habits) {
+      final habit = habitFromRow(row);
+      await writer.record(
+        SyncRecord(
+          entityType: 'habit',
+          entityKey: habit.id,
+          deleted: habit.deletedAt != null,
+          payload: {...habit.toJson(), 'scopeId': scopeId},
+          updatedAt: habit.updatedAt,
+          writerId: writer.writerId,
+        ),
+      );
+    }
+    final completions = await (_db.select(
+      _db.habitCompletions,
+    )..where((row) => row.scopeId.equals(scopeId))).get();
+    for (final row in completions) {
+      final item = completionFromRow(row);
+      await writer.record(
+        SyncRecord(
+          entityType: 'completion',
+          entityKey: '${item.habitId}|${item.date}',
+          deleted: item.deletedAt != null,
+          payload: {...item.toJson(), 'scopeId': scopeId},
+          updatedAt: item.updatedAt,
+          writerId: writer.writerId,
+        ),
+      );
+    }
   }
 
   Future<OtpChallenge> _issue({

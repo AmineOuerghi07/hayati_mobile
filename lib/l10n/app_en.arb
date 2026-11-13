@@ -153,6 +153,8 @@
   "habits": "Habits",
   "noInsightsYet": "Nothing to measure yet. Finish a habit and it will show up here.",
   "somethingWentWrong": "Something went wrong. Try again in a moment.",
+  "usageReports": "Usage reports",
+  "usageReportsBody": "Off by default. Nothing is sent from this build.",
   "streakMilestone": "{count}-day streak",
   "@streakMilestone": {
     "placeholders": {"count": {"type": "int"}}

@@ -104,7 +104,7 @@ final class CompletionRepositoryProvider
 }
 
 String _$completionRepositoryHash() =>
-    r'67478c0181d81bf87a7b4931b5874790352d7f63';
+    r'b9a1a1e88d6dd866f8dbe76de6f0a7eee149a854';
 
 @ProviderFor(activeHabits)
 final activeHabitsProvider = ActiveHabitsProvider._();

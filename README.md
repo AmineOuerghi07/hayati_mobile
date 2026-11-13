@@ -29,3 +29,5 @@ flutter test
 ```
 
 Run the generator again after changing a Riverpod provider, and commit the generated file.
+
+CI repeats those checks and also builds Android and iOS, then runs the guest flow on an emulator and a simulator. Store upload stays out until signing keys exist. See `docs/release.md`.

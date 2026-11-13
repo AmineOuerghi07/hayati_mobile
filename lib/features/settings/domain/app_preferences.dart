@@ -11,6 +11,7 @@ class AppPreferences {
     required this.themeId,
     required this.appearance,
     required this.weekStart,
+    this.analyticsEnabled = false,
   });
 
   /// Null follows the device language.
@@ -20,6 +21,10 @@ class AppPreferences {
 
   /// 1 = Monday through 7 = Sunday.
   final int weekStart;
+
+  /// Opt-in for a future crash and usage reporter. Nothing is sent while this
+  /// stays off, and the current reporter is a no-op even when it is on.
+  final bool analyticsEnabled;
 
   static const fallback = AppPreferences(
     localeCode: null,
@@ -34,12 +39,14 @@ class AppPreferences {
     AppThemeId? themeId,
     Appearance? appearance,
     int? weekStart,
+    bool? analyticsEnabled,
   }) {
     return AppPreferences(
       localeCode: clearLocale ? null : (localeCode ?? this.localeCode),
       themeId: themeId ?? this.themeId,
       appearance: appearance ?? this.appearance,
       weekStart: weekStart ?? this.weekStart,
+      analyticsEnabled: analyticsEnabled ?? this.analyticsEnabled,
     );
   }
 }

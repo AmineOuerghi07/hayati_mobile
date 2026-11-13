@@ -23,7 +23,11 @@ HabitRepository habitRepository(Ref ref) {
 
 @Riverpod(keepAlive: true)
 CompletionRepository completionRepository(Ref ref) {
-  return DriftCompletionRepository(ref.watch(appDatabaseProvider));
+  final database = ref.watch(appDatabaseProvider);
+  return DriftCompletionRepository(
+    database,
+    outbox: OutboxWriter(database)..writerId = 'this-device',
+  );
 }
 
 @riverpod

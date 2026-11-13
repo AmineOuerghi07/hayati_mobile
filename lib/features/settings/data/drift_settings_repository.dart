@@ -15,6 +15,7 @@ class DriftSettingsRepository implements SettingsRepository {
   static const themeKey = 'themeId';
   static const appearanceKey = 'appearance';
   static const weekStartKey = 'weekStart';
+  static const analyticsKey = 'analyticsEnabled';
 
   @override
   Stream<AppPreferences> watch() {
@@ -48,6 +49,11 @@ class DriftSettingsRepository implements SettingsRepository {
     return _set(weekStartKey, '$weekStart');
   }
 
+  @override
+  Future<void> setAnalyticsEnabled(bool enabled) {
+    return _set(analyticsKey, enabled ? 'true' : 'false');
+  }
+
   AppPreferences _preferencesFrom(List<SettingRow> rows) {
     final values = {for (final row in rows) row.settingKey: row.settingValue};
     final locale = values[localeKey];
@@ -60,6 +66,7 @@ class DriftSettingsRepository implements SettingsRepository {
           Appearance.values.asNameMap()[values[appearanceKey] ?? ''] ??
           Appearance.system,
       weekStart: int.tryParse(values[weekStartKey] ?? '') ?? DateTime.monday,
+      analyticsEnabled: values[analyticsKey] == 'true',
     );
   }
 

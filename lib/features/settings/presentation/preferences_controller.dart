@@ -38,4 +38,8 @@ class PreferencesController extends _$PreferencesController {
   Future<void> setWeekStart(int weekStart) {
     return ref.read(settingsRepositoryProvider).setWeekStart(weekStart);
   }
+
+  Future<void> setAnalyticsEnabled(bool enabled) {
+    return ref.read(settingsRepositoryProvider).setAnalyticsEnabled(enabled);
+  }
 }

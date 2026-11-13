@@ -202,6 +202,58 @@ class SyncEngine {
               timesPerWeek: Value(payload['timesPerWeek'] as int? ?? 1),
             ),
           );
+      return;
     }
+    if (record.entityType == 'completion') {
+      await _applyCompletion(record);
+    }
+  }
+
+  Future<void> _applyCompletion(SyncRecord record) async {
+    final split = record.entityKey.indexOf('|');
+    if (split <= 0) return;
+    final habitId = record.entityKey.substring(0, split);
+    final date = record.entityKey.substring(split + 1);
+    final existing =
+        await (database.select(database.habitCompletions)..where(
+              (row) => row.habitId.equals(habitId) & row.date.equals(date),
+            ))
+            .getSingleOrNull();
+    if (existing != null) {
+      final local = SyncRecord(
+        entityType: 'completion',
+        entityKey: record.entityKey,
+        deleted: existing.deletedAt != null,
+        payload: const {},
+        updatedAt: existing.updatedAt,
+        writerId: '',
+      );
+      if (!incomingWins(local, record)) return;
+    }
+    final payload = record.payload;
+    final createdAt = DateTime.parse(payload['createdAt'] as String);
+    final companion = HabitCompletionsCompanion(
+      id: Value(existing?.id ?? payload['id'] as String? ?? record.entityKey),
+      createdAt: Value(existing?.createdAt ?? createdAt),
+      updatedAt: Value(record.updatedAt),
+      deletedAt: Value(record.deleted ? record.updatedAt : null),
+      habitId: Value(habitId),
+      date: Value(date),
+      value: Value((payload['value'] as num?)?.toDouble() ?? 1),
+      note: Value(payload['note'] as String?),
+      completedAt: Value(
+        payload['completedAt'] == null
+            ? null
+            : DateTime.parse(payload['completedAt'] as String),
+      ),
+      scopeId: Value(payload['scopeId'] as String? ?? 'guest'),
+    );
+    if (existing == null) {
+      await database.into(database.habitCompletions).insert(companion);
+      return;
+    }
+    await (database.update(
+      database.habitCompletions,
+    )..where((row) => row.id.equals(existing.id))).write(companion);
   }
 }

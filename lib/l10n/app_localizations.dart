@@ -696,6 +696,18 @@ abstract class AppLocalizations {
   /// **'Something went wrong. Try again in a moment.'**
   String get somethingWentWrong;
 
+  /// No description provided for @usageReports.
+  ///
+  /// In en, this message translates to:
+  /// **'Usage reports'**
+  String get usageReports;
+
+  /// No description provided for @usageReportsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Off by default. Nothing is sent from this build.'**
+  String get usageReportsBody;
+
   /// No description provided for @streakMilestone.
   ///
   /// In en, this message translates to:
