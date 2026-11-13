@@ -1,9 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hayati/app/hayati_app.dart';
+import 'package:hayati/features/habits/presentation/habit_providers.dart';
 import 'package:hayati/features/settings/presentation/preferences_controller.dart';
 import 'package:material_ui/material_ui.dart';
 
+import 'support/memory_habit_repository.dart';
 import 'support/memory_settings_repository.dart';
 
 Future<void> _settle(WidgetTester tester) async {
@@ -20,7 +22,13 @@ Future<void> _pumpApp(WidgetTester tester) async {
   final settings = MemorySettingsRepository();
   await tester.pumpWidget(
     ProviderScope(
-      overrides: [settingsRepositoryProvider.overrideWith((ref) => settings)],
+      overrides: [
+        settingsRepositoryProvider.overrideWith((ref) => settings),
+        habitRepositoryProvider.overrideWith((ref) => MemoryHabitRepository()),
+        completionRepositoryProvider.overrideWith(
+          (ref) => MemoryCompletionRepository(),
+        ),
+      ],
       child: const HayatiApp(),
     ),
   );
@@ -32,10 +40,7 @@ void main() {
     await _pumpApp(tester);
 
     expect(find.text('Today'), findsWidgets);
-    expect(
-      find.text('Habits you are working on will show up here.'),
-      findsOneWidget,
-    );
+    expect(find.text('Nothing due today'), findsOneWidget);
 
     await tester.tap(find.text('Stats'));
     await _settle(tester);
