@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hayati/core/config/app_config_provider.dart';
 import 'package:hayati/features/settings/presentation/locale_controller.dart';
 import 'package:hayati/l10n/app_localizations.dart';
+import 'package:material_ui/material_ui.dart';
 
 enum _LanguageChoice { system, english, arabic, french }
 

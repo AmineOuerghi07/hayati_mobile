@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Seed for [ColorScheme.fromSeed]. Filled buttons do not use the seed:
 /// white text on #10B981 is hard to read, so they use [hayatiFilledButtonColor].

@@ -23,7 +23,7 @@ flutter run --flavor dev \
 ## Checks
 
 ```bash
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 flutter analyze
 flutter test
 ```

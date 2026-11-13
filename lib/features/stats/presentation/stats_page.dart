@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:hayati/l10n/app_localizations.dart';
+import 'package:material_ui/material_ui.dart';
 
 class StatsPage extends StatelessWidget {
   const StatsPage({super.key});
