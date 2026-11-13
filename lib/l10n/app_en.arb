@@ -106,6 +106,8 @@
   "invalidCode": "That code is not valid.",
   "codeExpired": "That code has expired.",
   "accountNotFound": "No account was found.",
+  "syncNow": "Sync now",
+  "syncing": "Syncing",
   "addHabit": "Add habit",
   "editHabit": "Edit habit",
   "habitName": "Name",

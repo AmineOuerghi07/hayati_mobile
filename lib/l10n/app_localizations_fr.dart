@@ -189,6 +189,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get accountNotFound => 'Aucun compte trouvé.';
 
   @override
+  String get syncNow => 'Synchroniser';
+
+  @override
+  String get syncing => 'Synchronisation';
+
+  @override
   String get addHabit => 'Ajouter une habitude';
 
   @override

@@ -187,6 +187,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accountNotFound => 'No account was found.';
 
   @override
+  String get syncNow => 'Sync now';
+
+  @override
+  String get syncing => 'Syncing';
+
+  @override
   String get addHabit => 'Add habit';
 
   @override

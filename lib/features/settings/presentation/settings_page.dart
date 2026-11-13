@@ -6,6 +6,7 @@ import 'package:hayati/features/auth/domain/auth_models.dart';
 import 'package:hayati/features/auth/presentation/auth_providers.dart';
 import 'package:hayati/features/settings/domain/app_preferences.dart';
 import 'package:hayati/features/settings/presentation/preferences_controller.dart';
+import 'package:hayati/features/sync/presentation/sync_providers.dart';
 import 'package:hayati/l10n/app_localizations.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -280,6 +281,15 @@ class _ProfileCard extends ConsumerWidget {
               OutlinedButton(
                 onPressed: () => context.push('/auth/change-password'),
                 child: Text(l10n.changePassword),
+              ),
+              TextButton(
+                onPressed: () =>
+                    ref.read(syncControllerProvider.notifier).syncNow(),
+                child: Text(
+                  ref.watch(syncControllerProvider) == 'syncing'
+                      ? l10n.syncing
+                      : l10n.syncNow,
+                ),
               ),
               TextButton(
                 onPressed: () => ref.read(authRepositoryProvider).signOut(),

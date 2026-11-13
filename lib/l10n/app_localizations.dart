@@ -450,6 +450,18 @@ abstract class AppLocalizations {
   /// **'No account was found.'**
   String get accountNotFound;
 
+  /// No description provided for @syncNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync now'**
+  String get syncNow;
+
+  /// No description provided for @syncing.
+  ///
+  /// In en, this message translates to:
+  /// **'Syncing'**
+  String get syncing;
+
   /// No description provided for @addHabit.
   ///
   /// In en, this message translates to:
