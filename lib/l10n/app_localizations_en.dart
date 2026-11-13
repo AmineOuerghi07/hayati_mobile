@@ -317,6 +317,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Something went wrong. Try again in a moment.';
 
   @override
+  String get usageReports => 'Usage reports';
+
+  @override
+  String get usageReportsBody =>
+      'Off by default. Nothing is sent from this build.';
+
+  @override
   String streakMilestone(int count) {
     return '$count-day streak';
   }

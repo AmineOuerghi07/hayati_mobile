@@ -10,4 +10,6 @@ abstract class SettingsRepository {
   Future<void> setAppearance(Appearance appearance);
 
   Future<void> setWeekStart(int weekStart);
+
+  Future<void> setAnalyticsEnabled(bool enabled);
 }

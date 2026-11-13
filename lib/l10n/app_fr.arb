@@ -105,6 +105,8 @@
   "habits": "Habitudes",
   "noInsightsYet": "Rien à mesurer pour l''instant. Terminez une habitude et elle apparaîtra ici.",
   "somethingWentWrong": "Une erreur s''est produite. Réessayez dans un instant.",
+  "usageReports": "Rapports d''utilisation",
+  "usageReportsBody": "Désactivés par défaut. Cette version n''envoie rien.",
   "streakMilestone": "Série de {count} jours",
   "@streakMilestone": {
     "placeholders": {"count": {"type": "int"}}

@@ -319,6 +319,13 @@ class AppLocalizationsFr extends AppLocalizations {
       'Une erreur s\'\'est produite. Réessayez dans un instant.';
 
   @override
+  String get usageReports => 'Rapports d\'\'utilisation';
+
+  @override
+  String get usageReportsBody =>
+      'Désactivés par défaut. Cette version n\'\'envoie rien.';
+
+  @override
   String streakMilestone(int count) {
     return 'Série de $count jours';
   }

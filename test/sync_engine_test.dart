@@ -1,7 +1,8 @@
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide isNull;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hayati/core/database/app_database.dart';
+import 'package:hayati/features/habits/data/drift_completion_repository.dart';
 import 'package:hayati/features/habits/data/drift_habit_repository.dart';
 import 'package:hayati/features/habits/domain/habit.dart';
 import 'package:hayati/features/habits/domain/habit_schedule.dart';
@@ -73,6 +74,50 @@ void main() {
 
     final winner = await first.select(first.habits).getSingle();
     expect(winner.name, 'Water late');
+  });
+
+  test('a completion lands on the other device', () async {
+    final first = AppDatabase(NativeDatabase.memory());
+    final second = AppDatabase(NativeDatabase.memory());
+    final remote = MemorySyncRemote();
+    final outA = OutboxWriter(first)..writerId = 'device-a';
+    final outB = OutboxWriter(second)..writerId = 'device-b';
+    addTearDown(first.close);
+    addTearDown(second.close);
+
+    final habitsA = DriftHabitRepository(first, outbox: outA);
+    final created = await habitsA.create(
+      const HabitDraft(
+        name: 'Water',
+        icon: 'water',
+        colorKey: 'sea',
+        type: HabitType.boolean,
+        frequencyType: FrequencyType.daily,
+        startDate: '2026-03-01',
+      ),
+    );
+    await DriftCompletionRepository(
+      first,
+      outbox: outA,
+    ).setValue(habitId: created.id, date: '2026-03-02', value: 1);
+    await SyncEngine(
+      database: first,
+      remote: remote,
+      outbox: outA,
+      writerId: 'device-a',
+    ).run();
+    await SyncEngine(
+      database: second,
+      remote: remote,
+      outbox: outB,
+      writerId: 'device-b',
+    ).run();
+
+    final logged = await second.select(second.habitCompletions).get();
+    expect(logged, hasLength(1));
+    expect(logged.single.habitId, created.id);
+    expect(logged.single.date, '2026-03-02');
+    expect(logged.single.deletedAt, isNull);
   });
 
   test('an equal timestamp breaks the tie by writer id', () {

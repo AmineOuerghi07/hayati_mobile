@@ -122,6 +122,15 @@ class SettingsPage extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 8),
+          SwitchListTile(
+            contentPadding: const EdgeInsetsDirectional.symmetric(
+              horizontal: 8,
+            ),
+            title: Text(l10n.usageReports),
+            subtitle: Text(l10n.usageReportsBody),
+            value: preferences.analyticsEnabled,
+            onChanged: controller.setAnalyticsEnabled,
+          ),
           ListTile(
             contentPadding: const EdgeInsetsDirectional.symmetric(
               horizontal: 8,

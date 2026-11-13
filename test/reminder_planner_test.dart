@@ -1,7 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hayati/features/habits/domain/habit.dart';
 import 'package:hayati/features/habits/domain/habit_schedule.dart';
+import 'package:hayati/features/reminders/data/local_reminder_scheduler.dart';
 import 'package:hayati/features/reminders/domain/reminder_planner.dart';
+import 'package:timezone/data/latest.dart' as tzdata;
+import 'package:timezone/timezone.dart' as tz;
 
 void main() {
   Habit habit({
@@ -71,6 +74,12 @@ void main() {
     final coordinator = ReminderCoordinator(scheduler);
     await coordinator.sync([habit(id: 'a', name: 'Read', reminder: 7 * 60)]);
     expect(scheduler.replaced, isEmpty);
+  });
+
+  test('an unknown timezone name falls back to UTC', () {
+    tzdata.initializeTimeZones();
+    expect(reminderLocation('GMT'), tz.UTC);
+    expect(reminderLocation('Africa/Tunis').name, 'Africa/Tunis');
   });
 }
 

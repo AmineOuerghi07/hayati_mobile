@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:drift/drift.dart';
-import 'package:drift_flutter/drift_flutter.dart';
+import 'package:drift/native.dart';
 import 'package:hayati/core/database/tables.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
+import 'package:sqlite3/sqlite3.dart';
 
 part 'app_database.g.dart';
 
@@ -18,7 +23,21 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   /// File-backed database in the app documents directory.
-  AppDatabase.persistent() : super(driftDatabase(name: 'hayati'));
+  ///
+  /// The connection stays on the UI isolate. A background isolate never
+  /// delivered its first result on the Android emulator used in CI.
+  AppDatabase.persistent()
+    : super(
+        DatabaseConnection.delayed(
+          Future(() async {
+            final cache = await getTemporaryDirectory();
+            sqlite3.tempDirectory = cache.path;
+            final directory = await getApplicationDocumentsDirectory();
+            final file = File(p.join(directory.path, 'hayati.sqlite'));
+            return DatabaseConnection(NativeDatabase(file));
+          }),
+        ),
+      );
 
   @override
   int get schemaVersion => 3;

@@ -68,6 +68,12 @@ class _HabitEditorPageState extends ConsumerState<HabitEditorPage> {
 
     return Scaffold(
       appBar: AppBar(title: Text(editing ? l10n.editHabit : l10n.addHabit)),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 16),
+          child: FilledButton(onPressed: _save, child: Text(l10n.save)),
+        ),
+      ),
       body: ListView(
         padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 24),
         children: [
@@ -205,7 +211,6 @@ class _HabitEditorPageState extends ConsumerState<HabitEditorPage> {
               ),
             ),
           const SizedBox(height: 24),
-          FilledButton(onPressed: _save, child: Text(l10n.save)),
         ],
       ),
     );

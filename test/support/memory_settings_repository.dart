@@ -39,6 +39,11 @@ class MemorySettingsRepository implements SettingsRepository {
     return _update(_current.copyWith(weekStart: weekStart));
   }
 
+  @override
+  Future<void> setAnalyticsEnabled(bool enabled) {
+    return _update(_current.copyWith(analyticsEnabled: enabled));
+  }
+
   Future<void> _update(AppPreferences next) async {
     _current = next;
     _updates.add(next);

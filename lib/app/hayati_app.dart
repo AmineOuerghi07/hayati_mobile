@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hayati/app/router.dart';
+import 'package:hayati/core/telemetry/telemetry_providers.dart';
 import 'package:hayati/app/theme.dart';
 import 'package:hayati/core/config/app_config_provider.dart';
 import 'package:hayati/features/reminders/presentation/reminder_providers.dart';
@@ -16,6 +17,8 @@ class HayatiApp extends ConsumerWidget {
     final router = ref.watch(appRouterProvider);
     final config = ref.watch(appConfigProvider);
     ref.watch(reminderCoordinatorProvider);
+    ref.watch(analyticsProvider);
+    ref.watch(crashReporterProvider);
     final preferences =
         ref.watch(preferencesControllerProvider).value ??
         AppPreferences.fallback;

@@ -105,6 +105,8 @@
   "habits": "العادات",
   "noInsightsYet": "لا يوجد ما يُقاس بعد. أكمل عادة وستظهر هنا.",
   "somethingWentWrong": "حدث خطأ. حاول مرة أخرى بعد لحظات.",
+  "usageReports": "تقارير الاستخدام",
+  "usageReportsBody": "متوقفة افتراضيًا. هذا الإصدار لا يرسل شيئًا.",
   "streakMilestone": "سلسلة من {count} يوم",
   "@streakMilestone": {
     "placeholders": {"count": {"type": "int"}}

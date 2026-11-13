@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:drift/drift.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hayati/core/database/app_database.dart';
 import 'package:hayati/core/database/data_scope.dart';
 import 'package:hayati/features/habits/data/habit_codec.dart';
@@ -97,37 +98,36 @@ class DriftHabitRepository implements HabitRepository {
   }
 
   @override
-  Future<void> archive(String id) {
-    return (_db.update(_db.habits)..where((row) => row.id.equals(id))).write(
-      HabitsCompanion(
-        archivedAt: Value(DateTime.now().toUtc()),
-        updatedAt: Value(DateTime.now().toUtc()),
-      ),
-    );
-  }
-
-  @override
-  Future<void> unarchive(String id) {
-    return (_db.update(_db.habits)..where((row) => row.id.equals(id))).write(
-      HabitsCompanion(
-        archivedAt: const Value(null),
-        updatedAt: Value(DateTime.now().toUtc()),
-      ),
-    );
-  }
-
-  @override
-  Future<void> softDelete(String id) {
+  Future<void> archive(String id) async {
     final now = DateTime.now().toUtc();
-    return (_db.update(_db.habits)..where((row) => row.id.equals(id))).write(
+    await (_db.update(_db.habits)..where((row) => row.id.equals(id))).write(
+      HabitsCompanion(archivedAt: Value(now), updatedAt: Value(now)),
+    );
+    await _enqueueId(id);
+  }
+
+  @override
+  Future<void> unarchive(String id) async {
+    final now = DateTime.now().toUtc();
+    await (_db.update(_db.habits)..where((row) => row.id.equals(id))).write(
+      HabitsCompanion(archivedAt: const Value(null), updatedAt: Value(now)),
+    );
+    await _enqueueId(id);
+  }
+
+  @override
+  Future<void> softDelete(String id) async {
+    final now = DateTime.now().toUtc();
+    await (_db.update(_db.habits)..where((row) => row.id.equals(id))).write(
       HabitsCompanion(deletedAt: Value(now), updatedAt: Value(now)),
     );
+    await _enqueueId(id, deleted: true);
   }
 
   @override
-  Future<void> reorder(List<String> orderedIds) {
-    return _db.transaction(() async {
-      final now = DateTime.now().toUtc();
+  Future<void> reorder(List<String> orderedIds) async {
+    final now = DateTime.now().toUtc();
+    await _db.transaction(() async {
       for (var index = 0; index < orderedIds.length; index++) {
         await (_db.update(
           _db.habits,
@@ -136,6 +136,17 @@ class DriftHabitRepository implements HabitRepository {
         );
       }
     });
+    for (final id in orderedIds) {
+      await _enqueueId(id);
+    }
+  }
+
+  Future<void> _enqueueId(String id, {bool deleted = false}) async {
+    final row = await (_db.select(
+      _db.habits,
+    )..where((item) => item.id.equals(id))).getSingleOrNull();
+    if (row == null) return;
+    await _enqueue(habitFromRow(row), deleted: deleted);
   }
 
   Future<void> _enqueue(Habit habit, {required bool deleted}) async {
@@ -180,7 +191,12 @@ class DriftHabitRepository implements HabitRepository {
     final controller = StreamController<T>();
     Future<void> emit() async {
       if (controller.isClosed) return;
-      controller.add(await load(await DataScope(_db).current()));
+      try {
+        controller.add(await load(await DataScope(_db).current()));
+      } catch (error, stack) {
+        debugPrint('habit watch failed: $error\n$stack');
+        if (!controller.isClosed) controller.addError(error, stack);
+      }
     }
 
     final habitsSub = _db.select(_db.habits).watch().listen((_) => emit());
