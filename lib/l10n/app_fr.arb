@@ -187,5 +187,19 @@
   "previousMonth": "Mois précédent",
   "nextMonth": "Mois suivant",
   "previousWeek": "Semaine précédente",
-  "nextWeek": "Semaine suivante"
+  "nextWeek": "Semaine suivante",
+  "heroStart": "Une nouvelle journée. Un petit pas suffit pour commencer.",
+  "heroProgress": "Joli rythme. Continuez.",
+  "plantGrowth": "Votre plante a poussé à {percent} pour cent",
+  "perfectDays": "Jours parfaits, 30 derniers",
+  "checkIns": "Validations",
+  "moodThisWeek": "Humeur cette semaine",
+  "quote1": "De petits pas chaque jour font une vie que l'on aime.",
+  "quote2": "Pas besoin d'être parfait, juste régulier.",
+  "quote3": "Arrosez la plante que vous voulez voir grandir.",
+  "quote4": "Le progrès, pas la perfection.",
+  "quote5": "Soyez doux avec vous-même. Vous grandissez.",
+  "quote6": "Ce que vous faites chaque jour compte plus que ce que vous faites de temps en temps.",
+  "quote7": "Commencez là où vous êtes, avec ce que vous avez.",
+  "quote8": "Un esprit calme bâtit une vie solide."
 }

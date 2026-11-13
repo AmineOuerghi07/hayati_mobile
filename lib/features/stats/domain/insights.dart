@@ -172,6 +172,44 @@ double? habitCompletionRate({
   return done / due;
 }
 
+/// Days in the last [days] where something was due and everything was done.
+int perfectDays({
+  required List<Habit> habits,
+  required List<HabitCompletion> completions,
+  required CalendarDate today,
+  int days = 30,
+}) {
+  return recentDayCounts(
+    habits: habits,
+    completions: completions,
+    today: today,
+    days: days,
+  ).where((counts) => counts.due > 0 && counts.done == counts.due).length;
+}
+
+/// Logged days that reached the habit's target, for habits still listed.
+int totalCheckIns({
+  required List<Habit> habits,
+  required List<HabitCompletion> completions,
+}) {
+  final targets = {for (final habit in habits) habit.id: habit.targetValue};
+  return completions.where((item) {
+    final target = targets[item.habitId];
+    return target != null && item.value >= target;
+  }).length;
+}
+
+/// Mean of [moods] (1–5), or null when there are none.
+double? averageMood(Iterable<int> moods) {
+  var sum = 0;
+  var count = 0;
+  for (final mood in moods) {
+    sum += mood;
+    count += 1;
+  }
+  return count == 0 ? null : sum / count;
+}
+
 int _level(List<Habit> habits, Map<String, double> values, CalendarDate day) {
   var due = 0;
   var done = 0;

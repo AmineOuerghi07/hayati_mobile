@@ -22,7 +22,7 @@ class _AppShellState extends State<AppShell>
     super.initState();
     _fade = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 220),
+      duration: const Duration(milliseconds: 320),
       value: 1,
     );
   }
@@ -58,8 +58,15 @@ class _AppShellState extends State<AppShell>
       body: AnimatedBuilder(
         animation: _fade,
         builder: (context, child) {
-          final opacity = reduce ? 1.0 : 0.65 + (0.35 * _fade.value);
-          return Opacity(opacity: opacity, child: child);
+          if (reduce) return child!;
+          final t = Curves.easeOutCubic.transform(_fade.value);
+          return Opacity(
+            opacity: 0.4 + (0.6 * t),
+            child: Transform.translate(
+              offset: Offset(0, (1 - t) * 12),
+              child: child,
+            ),
+          );
         },
         child: shell,
       ),
@@ -71,21 +78,45 @@ class _AppShellState extends State<AppShell>
         destinations: [
           NavigationDestination(
             icon: const Icon(Icons.today_outlined),
-            selectedIcon: const Icon(Icons.today),
+            selectedIcon: const _BounceIcon(Icons.today),
             label: l10n.today,
           ),
           NavigationDestination(
             icon: const Icon(Icons.insights_outlined),
-            selectedIcon: const Icon(Icons.insights),
+            selectedIcon: const _BounceIcon(Icons.insights),
             label: l10n.stats,
           ),
           NavigationDestination(
             icon: const Icon(Icons.person_outline),
-            selectedIcon: const Icon(Icons.person),
+            selectedIcon: const _BounceIcon(Icons.person),
             label: l10n.profile,
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Springs in each time its destination becomes selected.
+class _BounceIcon extends StatelessWidget {
+  const _BounceIcon(this.icon);
+
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    if (MediaQuery.disableAnimationsOf(context)) return Icon(icon);
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0, end: 1),
+      duration: const Duration(milliseconds: 600),
+      builder: (context, t, child) {
+        final scale = 0.7 + 0.3 * Curves.elasticOut.transform(t);
+        return Transform.translate(
+          offset: Offset(0, -3 * (1 - Curves.easeOut.transform(t))),
+          child: Transform.scale(scale: scale, child: child),
+        );
+      },
+      child: Icon(icon),
     );
   }
 }

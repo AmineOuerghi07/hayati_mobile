@@ -575,4 +575,48 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get nextWeek => 'الأسبوع التالي';
+
+  @override
+  String get heroStart => 'يوم جديد. خطوة صغيرة تكفي للبداية.';
+
+  @override
+  String get heroProgress => 'إيقاع جميل. واصل.';
+
+  @override
+  String plantGrowth(int percent) {
+    return 'نبتتك نمت بنسبة $percent بالمئة';
+  }
+
+  @override
+  String get perfectDays => 'أيام مثالية، آخر 30 يومًا';
+
+  @override
+  String get checkIns => 'مرات الإنجاز';
+
+  @override
+  String get moodThisWeek => 'المزاج هذا الأسبوع';
+
+  @override
+  String get quote1 => 'الخطوات الصغيرة كل يوم تصنع حياة تحبها.';
+
+  @override
+  String get quote2 => 'لا يلزمك الكمال، يكفيك الاستمرار.';
+
+  @override
+  String get quote3 => 'اسقِ النبتة التي تريدها أن تنمو.';
+
+  @override
+  String get quote4 => 'التقدم، لا الكمال.';
+
+  @override
+  String get quote5 => 'كن لطيفًا مع نفسك. أنت تنمو.';
+
+  @override
+  String get quote6 => 'ما تفعله كل يوم أهم مما تفعله من حين لآخر.';
+
+  @override
+  String get quote7 => 'ابدأ من حيث أنت، بما لديك.';
+
+  @override
+  String get quote8 => 'العقل الهادئ يبني حياة قوية.';
 }

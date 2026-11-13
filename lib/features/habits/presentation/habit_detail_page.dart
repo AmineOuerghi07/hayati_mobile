@@ -1,13 +1,16 @@
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hayati/app/theme.dart';
 import 'package:hayati/core/time/calendar_date.dart';
 import 'package:hayati/core/widgets/animated_count.dart';
 import 'package:hayati/core/widgets/async_error_view.dart';
 import 'package:hayati/core/widgets/confirm_sheet.dart';
-import 'package:hayati/core/widgets/progress_ring.dart';
+import 'package:hayati/core/widgets/aurora_background.dart';
+import 'package:hayati/core/widgets/concentric_rings.dart';
 import 'package:hayati/core/widgets/section_header.dart';
 import 'package:hayati/core/widgets/soft_card.dart';
+import 'package:hayati/core/widgets/streak_flame.dart';
 import 'package:hayati/features/habits/domain/completion_note.dart';
 import 'package:hayati/features/habits/domain/habit.dart';
 import 'package:hayati/features/habits/domain/habit_completion.dart';
@@ -83,6 +86,7 @@ class HabitDetailPage extends ConsumerWidget {
                     child: _StreakCard(
                       title: l10n.currentStreak,
                       value: streak.current,
+                      leading: StreakFlame(active: streak.current > 0),
                       caption: weeks
                           ? l10n.streakWeeks(streak.current)
                           : l10n.streakDays(streak.current),
@@ -93,6 +97,11 @@ class HabitDetailPage extends ConsumerWidget {
                     child: _StreakCard(
                       title: l10n.bestStreak,
                       value: streak.best,
+                      leading: const Icon(
+                        Icons.emoji_events_rounded,
+                        size: 18,
+                        color: Color(0xFFF59E0B),
+                      ),
                       caption: weeks
                           ? l10n.streakWeeks(streak.best)
                           : l10n.streakDays(streak.best),
@@ -238,56 +247,96 @@ class _HeroHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final tokens = HayatiTokens.of(context);
     final color = habitColor(habit.colorKey);
     final percent = rate == null ? null : (rate! * 100).round();
-    return SoftCard(
-      child: Row(
-        children: [
-          Hero(
-            tag: 'habit-${habit.id}',
-            child: CircleAvatar(
-              radius: 28,
-              backgroundColor: color.withValues(alpha: 0.16),
-              child: Icon(habitIcon(habit.icon), color: color),
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  habit.name,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                if (habit.tracksQuantity)
-                  Text(
-                    l10n
-                        .quantityProgress(
-                          0,
-                          habit.targetValue.round(),
-                          unitLabel(l10n, habit.unit),
-                        )
-                        .trim()
-                        .replaceFirst('0 / ', ''),
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-              ],
-            ),
-          ),
-          ProgressRing(
-            value: rate,
-            centerLabel: percent == null
-                ? l10n.noRate
-                : l10n.percentValue(percent),
-            semanticsLabel: percent == null
-                ? l10n.ringEmpty(l10n.completionRate)
-                : l10n.ringSemantics(l10n.completionRate, '$percent'),
-            size: 72,
-            strokeWidth: 7,
-            color: color,
-          ),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(tokens.radiusSheet),
+      child: AuroraBackground(
+        base: Color.lerp(color, Colors.black, 0.22)!,
+        colors: [
+          color,
+          Colors.white.withValues(alpha: 0.14),
+          Color.lerp(color, Colors.black, 0.4)!,
         ],
+        child: Padding(
+          padding: const EdgeInsetsDirectional.all(20),
+          child: Row(
+            children: [
+              Hero(
+                tag: 'habit-${habit.id}',
+                child: Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.22),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.35),
+                    ),
+                  ),
+                  child: Icon(
+                    habitIcon(habit.icon),
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      habit.name,
+                      style: theme.textTheme.headlineSmall?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    if (habit.tracksQuantity)
+                      Text(
+                        l10n
+                            .quantityProgress(
+                              0,
+                              habit.targetValue.round(),
+                              unitLabel(l10n, habit.unit),
+                            )
+                            .trim()
+                            .replaceFirst('0 / ', ''),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: Colors.white.withValues(alpha: 0.85),
+                        ),
+                      ),
+                    const SizedBox(height: 2),
+                    Text(
+                      l10n.completionRate,
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        color: Colors.white.withValues(alpha: 0.8),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              ConcentricRings(
+                size: 80,
+                strokeWidth: 9,
+                semanticsLabel: percent == null
+                    ? l10n.ringEmpty(l10n.completionRate)
+                    : l10n.ringSemantics(l10n.completionRate, '$percent'),
+                rings: [RingValue(value: rate, color: Colors.white)],
+                center: Text(
+                  percent == null ? l10n.noRate : l10n.percentValue(percent),
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -298,11 +347,13 @@ class _StreakCard extends StatelessWidget {
     required this.title,
     required this.value,
     required this.caption,
+    required this.leading,
   });
 
   final String title;
   final int value;
   final String caption;
+  final Widget leading;
 
   @override
   Widget build(BuildContext context) {
@@ -310,7 +361,18 @@ class _StreakCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: Theme.of(context).textTheme.labelLarge),
+          Row(
+            children: [
+              leading,
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  title,
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+              ),
+            ],
+          ),
           const SizedBox(height: 8),
           Semantics(
             label: caption,

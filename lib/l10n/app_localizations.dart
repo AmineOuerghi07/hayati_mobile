@@ -1175,6 +1175,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Next week'**
   String get nextWeek;
+
+  /// No description provided for @heroStart.
+  ///
+  /// In en, this message translates to:
+  /// **'A fresh day. One small step is enough to begin.'**
+  String get heroStart;
+
+  /// No description provided for @heroProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Nice rhythm. Keep it going.'**
+  String get heroProgress;
+
+  /// No description provided for @plantGrowth.
+  ///
+  /// In en, this message translates to:
+  /// **'Your plant is {percent} percent grown'**
+  String plantGrowth(int percent);
+
+  /// No description provided for @perfectDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Perfect days, last 30'**
+  String get perfectDays;
+
+  /// No description provided for @checkIns.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-ins'**
+  String get checkIns;
+
+  /// No description provided for @moodThisWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Mood this week'**
+  String get moodThisWeek;
+
+  /// No description provided for @quote1.
+  ///
+  /// In en, this message translates to:
+  /// **'Small steps every day become a life you love.'**
+  String get quote1;
+
+  /// No description provided for @quote2.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have to be perfect, just consistent.'**
+  String get quote2;
+
+  /// No description provided for @quote3.
+  ///
+  /// In en, this message translates to:
+  /// **'Water the plant you want to grow.'**
+  String get quote3;
+
+  /// No description provided for @quote4.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress, not perfection.'**
+  String get quote4;
+
+  /// No description provided for @quote5.
+  ///
+  /// In en, this message translates to:
+  /// **'Be gentle with yourself. You are growing.'**
+  String get quote5;
+
+  /// No description provided for @quote6.
+  ///
+  /// In en, this message translates to:
+  /// **'What you do every day matters more than what you do once in a while.'**
+  String get quote6;
+
+  /// No description provided for @quote7.
+  ///
+  /// In en, this message translates to:
+  /// **'Begin where you are. Use what you have.'**
+  String get quote7;
+
+  /// No description provided for @quote8.
+  ///
+  /// In en, this message translates to:
+  /// **'A calm mind builds a strong life.'**
+  String get quote8;
 }
 
 class _AppLocalizationsDelegate

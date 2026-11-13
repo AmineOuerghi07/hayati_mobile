@@ -272,5 +272,22 @@
   "previousMonth": "Previous month",
   "nextMonth": "Next month",
   "previousWeek": "Previous week",
-  "nextWeek": "Next week"
+  "nextWeek": "Next week",
+  "heroStart": "A fresh day. One small step is enough to begin.",
+  "heroProgress": "Nice rhythm. Keep it going.",
+  "plantGrowth": "Your plant is {percent} percent grown",
+  "@plantGrowth": {
+    "placeholders": {"percent": {"type": "int"}}
+  },
+  "perfectDays": "Perfect days, last 30",
+  "checkIns": "Check-ins",
+  "moodThisWeek": "Mood this week",
+  "quote1": "Small steps every day become a life you love.",
+  "quote2": "You don't have to be perfect, just consistent.",
+  "quote3": "Water the plant you want to grow.",
+  "quote4": "Progress, not perfection.",
+  "quote5": "Be gentle with yourself. You are growing.",
+  "quote6": "What you do every day matters more than what you do once in a while.",
+  "quote7": "Begin where you are. Use what you have.",
+  "quote8": "A calm mind builds a strong life."
 }

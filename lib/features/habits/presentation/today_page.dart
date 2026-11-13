@@ -8,7 +8,7 @@ import 'package:hayati/core/widgets/async_error_view.dart';
 import 'package:hayati/core/widgets/celebration_overlay.dart';
 import 'package:hayati/core/widgets/confirm_sheet.dart';
 import 'package:hayati/core/widgets/empty_state.dart';
-import 'package:hayati/core/widgets/progress_ring.dart';
+import 'package:hayati/core/widgets/skeleton.dart';
 import 'package:hayati/core/widgets/soft_card.dart';
 import 'package:hayati/core/widgets/staggered_item.dart';
 import 'package:hayati/features/habits/domain/completion_note.dart';
@@ -23,6 +23,7 @@ import 'package:hayati/features/habits/presentation/habit_providers.dart';
 import 'package:hayati/features/habits/presentation/note_sheet.dart';
 import 'package:hayati/features/habits/presentation/selected_date.dart';
 import 'package:hayati/features/habits/presentation/template_sheet.dart';
+import 'package:hayati/features/habits/presentation/today_hero.dart';
 import 'package:hayati/features/habits/presentation/week_strip_bar.dart';
 import 'package:hayati/features/settings/domain/app_preferences.dart';
 import 'package:hayati/features/settings/presentation/preferences_controller.dart';
@@ -78,14 +79,11 @@ class _TodayPageState extends ConsumerState<TodayPage> {
         orElse: () => null,
       ),
       body: habits.when(
-        loading: () => const Center(
-          key: Key('today-loading'),
-          child: CircularProgressIndicator(),
-        ),
+        loading: () => const SkeletonList(key: Key('today-loading')),
         error: (error, stack) => const AsyncErrorView(),
         data: (habitList) {
           return completions.when(
-            loading: () => const Center(child: CircularProgressIndicator()),
+            loading: () => const SkeletonList(),
             error: (error, stack) => const AsyncErrorView(),
             data: (logged) {
               if (habitList.isEmpty) {
@@ -158,7 +156,7 @@ class _TodayPageState extends ConsumerState<TodayPage> {
   void _showBurst(String message) {
     _burstTimer?.cancel();
     setState(() => _burst = message);
-    _burstTimer = Timer(const Duration(milliseconds: 1200), () {
+    _burstTimer = Timer(celebrationDuration, () {
       if (mounted && _burst == message) setState(() => _burst = null);
     });
   }
@@ -172,28 +170,35 @@ class _FirstRun extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    final now = DateTime.now();
+    final locale = Localizations.localeOf(context).toString();
     return SafeArea(
       bottom: false,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(24, 20, 24, 0),
-            child: Text(
-              greetingFor(l10n, DateTime.now()),
-              style: Theme.of(context).textTheme.headlineMedium,
+            padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
+            child: TodayHero(
+              greeting: greetingFor(l10n, now),
+              dateLabel: DateFormat.MMMMEEEEd(locale).format(now),
+              quote: dailyQuote(l10n, now),
+              counts: const DayCounts(done: 0, due: 0),
+              bestStreak: 0,
             ),
           ),
           Expanded(
             child: Center(
-              child: EmptyState(
-                icon: Icons.spa_outlined,
-                title: l10n.emptyTodayTitle,
-                body: l10n.emptyTodayBody,
-                actionLabel: l10n.addHabit,
-                onAction: onAdd,
-                secondaryLabel: l10n.browseTemplates,
-                onSecondary: () => showTemplateSheet(context, ref),
+              child: SingleChildScrollView(
+                child: EmptyState(
+                  icon: Icons.spa_outlined,
+                  title: l10n.emptyTodayTitle,
+                  body: l10n.emptyTodayBody,
+                  actionLabel: l10n.addHabit,
+                  onAction: onAdd,
+                  secondaryLabel: l10n.browseTemplates,
+                  onSecondary: () => showTemplateSheet(context, ref),
+                ),
               ),
             ),
           ),
@@ -236,19 +241,23 @@ class _TodayList extends ConsumerWidget {
       day: selected,
     );
     final locale = Localizations.localeOf(context).toString();
-    final dateLabel = DateFormat.yMMMEd(locale)
-        .format(DateTime(selected.year, selected.month, selected.day));
+    final selectedDay = DateTime(selected.year, selected.month, selected.day);
+    final dateLabel = DateFormat.yMMMEd(locale).format(selectedDay);
+    final streaks = _streaks(weekStart);
+    final bestStreak = streaks.values.fold(0, (a, b) => a > b ? a : b);
     return SafeArea(
       bottom: false,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(20, 12, 20, 8),
-            child: _Header(
+            padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 4),
+            child: TodayHero(
               greeting: greetingFor(l10n, DateTime.now()),
-              dateLabel: dateLabel,
+              dateLabel: DateFormat.MMMMEEEEd(locale).format(selectedDay),
+              quote: dailyQuote(l10n, selectedDay),
               counts: counts,
+              bestStreak: bestStreak,
             ),
           ),
           Padding(
@@ -381,6 +390,7 @@ class _TodayList extends ConsumerWidget {
                               index: index,
                               habit: habit,
                               value: loggedValue,
+                              streak: streaks[habit.id] ?? 0,
                               onOpen: () => context.push('/habits/${habit.id}'),
                               onToggle: () => _toggle(
                                 context,
@@ -549,6 +559,26 @@ class _TodayList extends ConsumerWidget {
     );
   }
 
+  Map<String, int> _streaks(int weekStart) {
+    final byHabit = <String, Map<String, double>>{};
+    for (final item in logged) {
+      (byHabit[item.habitId] ??= {})[item.date] = item.value;
+    }
+    const calculator = StreakCalculator();
+    final realToday = CalendarDate.today().iso;
+    return {
+      for (final habit in due)
+        habit.id: calculator
+            .calculate(
+              habit: habit.schedule,
+              completions: byHabit[habit.id] ?? const {},
+              today: realToday,
+              weekStart: weekStart,
+            )
+            .current,
+    };
+  }
+
   int? _milestoneFor(WidgetRef ref, Habit habit) {
     final weekStart =
         ref.read(preferencesControllerProvider).value?.weekStart ??
@@ -577,60 +607,5 @@ class _TodayList extends ConsumerWidget {
         )
         .current;
     return crossedMilestone(before, after);
-  }
-}
-
-class _Header extends StatelessWidget {
-  const _Header({
-    required this.greeting,
-    required this.dateLabel,
-    required this.counts,
-  });
-
-  final String greeting;
-  final String dateLabel;
-  final DayCounts counts;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final percent = counts.rate == null ? null : (counts.rate! * 100).round();
-    final center = percent == null ? l10n.noRate : l10n.percentValue(percent);
-    final semantics = percent == null
-        ? l10n.ringEmpty(l10n.today)
-        : l10n.ringSemantics(l10n.today, '$percent');
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                greeting,
-                style: Theme.of(context).textTheme.headlineMedium,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 4),
-              Text(dateLabel, style: Theme.of(context).textTheme.bodyMedium),
-              if (counts.due > 0) ...[
-                const SizedBox(height: 4),
-                Text(
-                  l10n.doneOfTotal(counts.done, counts.due),
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-              ],
-            ],
-          ),
-        ),
-        ProgressRing(
-          value: counts.rate,
-          centerLabel: center,
-          semanticsLabel: semantics,
-          size: 76,
-          strokeWidth: 7,
-        ),
-      ],
-    );
   }
 }

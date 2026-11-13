@@ -9,10 +9,14 @@ class SoftCard extends StatefulWidget {
     this.onLongPress,
     this.tint,
     this.padding = const EdgeInsetsDirectional.all(16),
+    this.background,
     super.key,
   });
 
   final Widget child;
+
+  /// Painted behind the padded content, clipped to the card shape.
+  final Widget? background;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
   final Color? tint;
@@ -37,6 +41,7 @@ class _SoftCardState extends State<SoftCard> {
       curve: tokens.easeOut,
       child: Material(
         color: widget.tint ?? tokens.cardTint,
+        clipBehavior: widget.background == null ? Clip.none : Clip.antiAlias,
         shape: RoundedRectangleBorder(
           borderRadius: radius,
           side: BorderSide(
@@ -48,7 +53,14 @@ class _SoftCardState extends State<SoftCard> {
           onTap: widget.onTap,
           onLongPress: widget.onLongPress,
           onHighlightChanged: (pressed) => setState(() => _pressed = pressed),
-          child: Padding(padding: widget.padding, child: widget.child),
+          child: widget.background == null
+              ? Padding(padding: widget.padding, child: widget.child)
+              : Stack(
+                  children: [
+                    Positioned.fill(child: widget.background!),
+                    Padding(padding: widget.padding, child: widget.child),
+                  ],
+                ),
         ),
       ),
     );

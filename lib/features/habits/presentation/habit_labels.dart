@@ -12,6 +12,26 @@ String greetingFor(AppLocalizations l10n, DateTime now) {
   return l10n.greetingEvening;
 }
 
+/// The same line all day, a different one tomorrow.
+String dailyQuote(AppLocalizations l10n, DateTime day) {
+  final quotes = [
+    l10n.quote1,
+    l10n.quote2,
+    l10n.quote3,
+    l10n.quote4,
+    l10n.quote5,
+    l10n.quote6,
+    l10n.quote7,
+    l10n.quote8,
+  ];
+  final dayOfYear = DateTime.utc(
+    day.year,
+    day.month,
+    day.day,
+  ).difference(DateTime.utc(day.year)).inDays;
+  return quotes[dayOfYear % quotes.length];
+}
+
 String unitLabel(AppLocalizations l10n, String? unit) {
   return switch (unit) {
     'glasses' => l10n.unitGlasses,

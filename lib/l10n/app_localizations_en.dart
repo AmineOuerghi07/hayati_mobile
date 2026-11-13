@@ -581,4 +581,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nextWeek => 'Next week';
+
+  @override
+  String get heroStart => 'A fresh day. One small step is enough to begin.';
+
+  @override
+  String get heroProgress => 'Nice rhythm. Keep it going.';
+
+  @override
+  String plantGrowth(int percent) {
+    return 'Your plant is $percent percent grown';
+  }
+
+  @override
+  String get perfectDays => 'Perfect days, last 30';
+
+  @override
+  String get checkIns => 'Check-ins';
+
+  @override
+  String get moodThisWeek => 'Mood this week';
+
+  @override
+  String get quote1 => 'Small steps every day become a life you love.';
+
+  @override
+  String get quote2 => 'You don\'t have to be perfect, just consistent.';
+
+  @override
+  String get quote3 => 'Water the plant you want to grow.';
+
+  @override
+  String get quote4 => 'Progress, not perfection.';
+
+  @override
+  String get quote5 => 'Be gentle with yourself. You are growing.';
+
+  @override
+  String get quote6 =>
+      'What you do every day matters more than what you do once in a while.';
+
+  @override
+  String get quote7 => 'Begin where you are. Use what you have.';
+
+  @override
+  String get quote8 => 'A calm mind builds a strong life.';
 }

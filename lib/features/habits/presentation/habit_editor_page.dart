@@ -163,7 +163,10 @@ class _HabitEditorPageState extends ConsumerState<HabitEditorPage> {
                     selected: _icon == entry.key,
                     tooltip: entry.key,
                     onTap: () => setState(() => _icon = entry.key),
-                    child: Icon(entry.value),
+                    child: Icon(
+                      entry.value,
+                      color: _icon == entry.key ? habitColor(_color) : null,
+                    ),
                   ),
               ],
             ),
@@ -455,7 +458,22 @@ class _Preview extends StatelessWidget {
     return SoftCard(
       child: Row(
         children: [
-          Icon(habitIcon(icon), color: color),
+          AnimatedSwitcher(
+            duration: HayatiTokens.of(context)
+                .motion(context, const Duration(milliseconds: 350)),
+            transitionBuilder: (child, animation) => ScaleTransition(
+              scale: CurvedAnimation(
+                parent: animation,
+                curve: Curves.easeOutBack,
+              ),
+              child: child,
+            ),
+            child: HabitBadge(
+              key: ValueKey('$icon-$colorKey'),
+              icon: icon,
+              colorKey: colorKey,
+            ),
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -570,21 +588,29 @@ class _Choice extends StatelessWidget {
     final tokens = HayatiTokens.of(context);
     return Tooltip(
       message: tooltip,
-      child: AnimatedContainer(
-        duration: tokens.motion(context, tokens.motionFast),
-        curve: tokens.easeOut,
-        decoration: BoxDecoration(
-          color: color ?? Theme.of(context).colorScheme.surfaceContainerHigh,
-          borderRadius: BorderRadius.circular(tokens.radiusChip),
-          border: Border.all(
-            color: selected ? outline : Colors.transparent,
-            width: selected ? 2.5 : 0,
+      child: AnimatedScale(
+        scale: selected ? 1.08 : 1,
+        duration: tokens.motion(context, tokens.motionMedium),
+        curve: tokens.checkOff,
+        child: AnimatedContainer(
+          duration: tokens.motion(context, tokens.motionFast),
+          curve: tokens.easeOut,
+          decoration: BoxDecoration(
+            color: color == null
+                ? Theme.of(context).colorScheme.surfaceContainerHigh
+                : null,
+            gradient: color == null ? null : habitGradient(color!),
+            borderRadius: BorderRadius.circular(tokens.radiusChip),
+            border: Border.all(
+              color: selected ? outline : Colors.transparent,
+              width: selected ? 2.5 : 0,
+            ),
           ),
-        ),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(tokens.radiusChip),
-          child: SizedBox.square(dimension: 48, child: Center(child: child)),
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(tokens.radiusChip),
+            child: SizedBox.square(dimension: 48, child: Center(child: child)),
+          ),
         ),
       ),
     );

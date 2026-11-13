@@ -1,7 +1,12 @@
+import 'dart:math' as math;
+
 import 'package:hayati/app/theme.dart';
+import 'package:hayati/core/widgets/check_button.dart';
 import 'package:hayati/core/widgets/soft_card.dart';
+import 'package:hayati/core/widgets/streak_flame.dart';
 import 'package:hayati/features/habits/domain/habit.dart';
 import 'package:hayati/features/habits/domain/habit_progress.dart';
+import 'package:hayati/features/habits/domain/habit_schedule.dart';
 import 'package:hayati/features/habits/presentation/habit_labels.dart';
 import 'package:hayati/features/habits/presentation/habit_style.dart';
 import 'package:hayati/l10n/app_localizations.dart';
@@ -12,6 +17,7 @@ class HabitCard extends StatelessWidget {
     required this.index,
     required this.habit,
     required this.value,
+    required this.streak,
     required this.onOpen,
     required this.onToggle,
     required this.onStep,
@@ -24,6 +30,7 @@ class HabitCard extends StatelessWidget {
   final int index;
   final Habit habit;
   final double value;
+  final int streak;
   final VoidCallback onOpen;
   final VoidCallback onToggle;
   final void Function(double delta) onStep;
@@ -34,131 +41,366 @@ class HabitCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
     final color = habitColor(habit.colorKey);
     final complete = meetsTarget(value, habit.targetValue);
     final tokens = HayatiTokens.of(context);
+    final reduce = MediaQuery.disableAnimationsOf(context);
+    final weeks = habit.frequencyType == FrequencyType.timesPerWeek;
+    final fill = habit.targetValue <= 0
+        ? 0.0
+        : (value / habit.targetValue).clamp(0.0, 1.0);
     final tint = complete
-        ? Color.alphaBlend(color.withValues(alpha: 0.16), tokens.cardTint)
+        ? Color.alphaBlend(color.withValues(alpha: 0.10), tokens.cardTint)
         : null;
-    return SwipeActions(
-      actions: [
-        _Action(
-          tooltip: l10n.addNote,
-          icon: Icons.edit_note_outlined,
-          onPressed: onNote,
-        ),
-        _Action(
-          tooltip: l10n.editHabit,
-          icon: Icons.edit_outlined,
-          onPressed: onEdit,
-        ),
-        _Action(
-          tooltip: l10n.archive,
-          icon: Icons.archive_outlined,
-          onPressed: onArchive,
-        ),
-      ],
-      child: SoftCard(
-        tint: tint,
-        onTap: onOpen,
-        onLongPress: onNote,
-        padding: const EdgeInsetsDirectional.fromSTEB(4, 8, 8, 8),
-        child: Row(
-          children: [
-            ReorderableDragStartListener(
-              index: index,
-              child: Tooltip(
-                message: l10n.dragToReorder,
-                child: const SizedBox(
-                  width: 48,
-                  height: 48,
-                  child: Icon(Icons.drag_handle),
+    final subtitle = habit.tracksQuantity
+        ? l10n
+              .quantityProgress(
+                value.round(),
+                habit.targetValue.round(),
+                unitLabel(l10n, habit.unit),
+              )
+              .trim()
+        : (weeks ? l10n.streakWeeks(streak) : l10n.streakDays(streak));
+    return _Pop(
+      active: complete,
+      child: SwipeActions(
+        actions: [
+          _Action(
+            tooltip: l10n.addNote,
+            icon: Icons.edit_note_outlined,
+            onPressed: onNote,
+          ),
+          _Action(
+            tooltip: l10n.editHabit,
+            icon: Icons.edit_outlined,
+            onPressed: onEdit,
+          ),
+          _Action(
+            tooltip: l10n.archive,
+            icon: Icons.archive_outlined,
+            onPressed: onArchive,
+          ),
+        ],
+        child: SoftCard(
+          tint: tint,
+          onTap: onOpen,
+          onLongPress: onNote,
+          padding: const EdgeInsetsDirectional.fromSTEB(0, 8, 6, 8),
+          background: habit.tracksQuantity
+              ? TweenAnimationBuilder<double>(
+                  tween: Tween(end: fill),
+                  duration: reduce
+                      ? Duration.zero
+                      : const Duration(milliseconds: 600),
+                  curve: Curves.easeOutCubic,
+                  builder: (context, level, _) =>
+                      _LiquidFill(level: level, color: color, animate: !reduce),
+                )
+              : null,
+          child: Row(
+            children: [
+              ReorderableDragStartListener(
+                index: index,
+                child: Tooltip(
+                  message: l10n.dragToReorder,
+                  child: SizedBox(
+                    width: 40,
+                    height: 48,
+                    child: Icon(
+                      Icons.drag_indicator_rounded,
+                      size: 20,
+                      color: theme.colorScheme.outline.withValues(alpha: 0.7),
+                    ),
+                  ),
                 ),
               ),
-            ),
-            Hero(
-              tag: 'habit-${habit.id}',
-              child: Icon(habitIcon(habit.icon), color: color),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    habit.name,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  if (habit.tracksQuantity) ...[
-                    const SizedBox(height: 8),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: LinearProgressIndicator(
-                        minHeight: 8,
-                        value: habit.targetValue <= 0
-                            ? 0
-                            : (value / habit.targetValue).clamp(0, 1),
-                        color: color,
-                        backgroundColor: color.withValues(alpha: 0.15),
+              Hero(
+                tag: 'habit-${habit.id}',
+                child: HabitBadge(icon: habit.icon, colorKey: habit.colorKey),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AnimatedDefaultTextStyle(
+                      duration: tokens.motion(context, tokens.motionMedium),
+                      style: theme.textTheme.titleMedium!.copyWith(
+                        color: complete
+                            ? theme.colorScheme.onSurface.withValues(alpha: 0.7)
+                            : theme.colorScheme.onSurface,
+                      ),
+                      child: Text(
+                        habit.name,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
+                    const SizedBox(height: 2),
                     Row(
                       children: [
-                        IconButton(
-                          key: ValueKey('minus-${habit.id}'),
-                          tooltip: l10n.decreaseHabit(habit.name),
-                          onPressed: value <= 0 ? null : () => onStep(-1),
-                          icon: const Icon(Icons.remove),
+                        StreakChip(
+                          count: streak,
+                          label: weeks
+                              ? l10n.streakWeeks(streak)
+                              : l10n.streakDays(streak),
                         ),
-                        Expanded(
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
+                        const SizedBox(width: 8),
+                        Flexible(
+                          child: AnimatedSwitcher(
+                            duration: tokens.motion(context, tokens.motionFast),
+                            transitionBuilder: (child, animation) =>
+                                FadeTransition(
+                                  opacity: animation,
+                                  child: SlideTransition(
+                                    position: Tween(
+                                      begin: const Offset(0, 0.4),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  ),
+                                ),
                             child: Text(
-                              l10n
-                                  .quantityProgress(
-                                    value.round(),
-                                    habit.targetValue.round(),
-                                    unitLabel(l10n, habit.unit),
-                                  )
-                                  .trim(),
-                              style: Theme.of(context).textTheme.bodyMedium,
+                              subtitle,
+                              key: ValueKey(subtitle),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
+                              ),
                             ),
                           ),
-                        ),
-                        IconButton(
-                          key: ValueKey('plus-${habit.id}'),
-                          tooltip: l10n.increaseHabit(habit.name),
-                          onPressed: () => onStep(1),
-                          icon: const Icon(Icons.add),
                         ),
                       ],
                     ),
                   ],
-                ],
-              ),
-            ),
-            if (!habit.tracksQuantity)
-              IconButton(
-                tooltip: habit.name,
-                onPressed: onToggle,
-                icon: AnimatedScale(
-                  duration: tokens.motion(context, tokens.motionMedium),
-                  curve: tokens.checkOff,
-                  scale: complete ? 1 : 0.92,
-                  child: Icon(
-                    complete ? Icons.check_circle : Icons.circle_outlined,
-                    color: complete
-                        ? color
-                        : Theme.of(context).colorScheme.outline,
-                    size: 32,
-                  ),
                 ),
               ),
-          ],
+              if (habit.tracksQuantity) ...[
+                _RoundStep(
+                  key: ValueKey('minus-${habit.id}'),
+                  tooltip: l10n.decreaseHabit(habit.name),
+                  icon: Icons.remove_rounded,
+                  color: color,
+                  filled: false,
+                  onPressed: value <= 0 ? null : () => onStep(-1),
+                ),
+                _RoundStep(
+                  key: ValueKey('plus-${habit.id}'),
+                  tooltip: l10n.increaseHabit(habit.name),
+                  icon: complete ? Icons.check_rounded : Icons.add_rounded,
+                  color: color,
+                  filled: true,
+                  onPressed: () => onStep(1),
+                ),
+              ] else
+                AnimatedCheckButton(
+                  checked: complete,
+                  color: color,
+                  tooltip: habit.name,
+                  onPressed: onToggle,
+                ),
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+/// A soft rising level with a gentle wave on its edge.
+class _LiquidFill extends StatefulWidget {
+  const _LiquidFill({
+    required this.level,
+    required this.color,
+    required this.animate,
+  });
+
+  final double level;
+  final Color color;
+  final bool animate;
+
+  @override
+  State<_LiquidFill> createState() => _LiquidFillState();
+}
+
+class _LiquidFillState extends State<_LiquidFill>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _wave = AnimationController(
+    vsync: this,
+    duration: const Duration(seconds: 3),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    _sync();
+  }
+
+  @override
+  void didUpdateWidget(_LiquidFill oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _sync();
+  }
+
+  void _sync() {
+    final run = widget.animate && widget.level > 0 && widget.level < 1;
+    if (run && !_wave.isAnimating) {
+      _wave.repeat();
+    } else if (!run && _wave.isAnimating) {
+      _wave.stop();
+    }
+  }
+
+  @override
+  void dispose() {
+    _wave.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      painter: _LiquidPainter(
+        wave: _wave,
+        level: widget.level,
+        color: widget.color,
+        rtl: Directionality.of(context) == TextDirection.rtl,
+      ),
+    );
+  }
+}
+
+class _LiquidPainter extends CustomPainter {
+  _LiquidPainter({
+    required this.wave,
+    required this.level,
+    required this.color,
+    required this.rtl,
+  }) : super(repaint: wave);
+
+  final Animation<double> wave;
+  final double level;
+  final Color color;
+  final bool rtl;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (level <= 0) return;
+    final edge = size.width * level;
+    final amplitude = level >= 1 ? 0.0 : 5.0;
+    final phase = wave.value * math.pi * 2;
+    final path = Path()..moveTo(0, 0);
+    for (var y = 0.0; y <= size.height; y += 4) {
+      final x =
+          edge + math.sin(y / size.height * math.pi * 2 + phase) * amplitude;
+      path.lineTo(x, y);
+    }
+    path
+      ..lineTo(0, size.height)
+      ..close();
+    if (rtl) {
+      canvas.translate(size.width, 0);
+      canvas.scale(-1, 1);
+    }
+    canvas.drawPath(
+      path,
+      Paint()
+        ..shader = LinearGradient(
+          colors: [
+            color.withValues(alpha: 0.10),
+            color.withValues(alpha: 0.22),
+          ],
+        ).createShader(Offset.zero & size),
+    );
+  }
+
+  @override
+  bool shouldRepaint(_LiquidPainter oldDelegate) {
+    return oldDelegate.level != level ||
+        oldDelegate.color != color ||
+        oldDelegate.rtl != rtl;
+  }
+}
+
+class _RoundStep extends StatelessWidget {
+  const _RoundStep({
+    required this.tooltip,
+    required this.icon,
+    required this.color,
+    required this.filled,
+    required this.onPressed,
+    super.key,
+  });
+
+  final String tooltip;
+  final IconData icon;
+  final Color color;
+  final bool filled;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      tooltip: tooltip,
+      onPressed: onPressed,
+      style: IconButton.styleFrom(
+        backgroundColor: filled ? color : color.withValues(alpha: 0.12),
+        foregroundColor: filled ? Colors.white : color,
+        disabledBackgroundColor: color.withValues(alpha: 0.05),
+        minimumSize: const Size(44, 44),
+        fixedSize: const Size(44, 44),
+        tapTargetSize: MaterialTapTargetSize.padded,
+      ),
+      icon: Icon(icon, size: 22),
+    );
+  }
+}
+
+/// Gives the card a short happy bounce when it becomes complete.
+class _Pop extends StatefulWidget {
+  const _Pop({required this.active, required this.child});
+
+  final bool active;
+  final Widget child;
+
+  @override
+  State<_Pop> createState() => _PopState();
+}
+
+class _PopState extends State<_Pop> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 420),
+  );
+
+  @override
+  void didUpdateWidget(_Pop oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!oldWidget.active &&
+        widget.active &&
+        !MediaQuery.disableAnimationsOf(context)) {
+      _controller.forward(from: 0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        final t = _controller.value;
+        final scale = 1 + math.sin(t * math.pi) * 0.025;
+        return Transform.scale(scale: scale, child: child);
+      },
+      child: widget.child,
     );
   }
 }

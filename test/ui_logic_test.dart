@@ -90,6 +90,39 @@ void main() {
     expect(partial.rate, 0);
   });
 
+  test('perfect days, check-ins, and mood summarize recent history', () {
+    final habit = Habit(
+      id: 'read',
+      createdAt: DateTime.utc(2026),
+      updatedAt: DateTime.utc(2026),
+      name: 'Read',
+      icon: 'book',
+      colorKey: 'dusk',
+      type: HabitType.boolean,
+      frequencyType: FrequencyType.daily,
+      startDate: '2026-01-01',
+    );
+    final today = CalendarDate(2026, 1, 10);
+    HabitCompletion done(CalendarDate day, double value) => HabitCompletion(
+      id: day.iso,
+      createdAt: DateTime.utc(2026),
+      updatedAt: DateTime.utc(2026),
+      habitId: habit.id,
+      date: day.iso,
+      value: value,
+    );
+    final logged = [
+      done(today, 1),
+      done(today.addDays(-1), 1),
+      done(today.addDays(-2), 0),
+    ];
+    expect(perfectDays(habits: [habit], completions: logged, today: today), 2);
+    expect(totalCheckIns(habits: [habit], completions: logged), 2);
+    expect(totalCheckIns(habits: const [], completions: logged), 0);
+    expect(averageMood(const []), isNull);
+    expect(averageMood(const [2, 4, 5]), closeTo(3.67, 0.01));
+  });
+
   test('onboarding redirect waits until the flag is known', () {
     expect(
       onboardingRedirect(onboardingDone: null, location: '/today'),

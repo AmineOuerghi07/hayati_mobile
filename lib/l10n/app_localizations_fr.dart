@@ -583,4 +583,50 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get nextWeek => 'Semaine suivante';
+
+  @override
+  String get heroStart =>
+      'Une nouvelle journée. Un petit pas suffit pour commencer.';
+
+  @override
+  String get heroProgress => 'Joli rythme. Continuez.';
+
+  @override
+  String plantGrowth(int percent) {
+    return 'Votre plante a poussé à $percent pour cent';
+  }
+
+  @override
+  String get perfectDays => 'Jours parfaits, 30 derniers';
+
+  @override
+  String get checkIns => 'Validations';
+
+  @override
+  String get moodThisWeek => 'Humeur cette semaine';
+
+  @override
+  String get quote1 => 'De petits pas chaque jour font une vie que l\'on aime.';
+
+  @override
+  String get quote2 => 'Pas besoin d\'être parfait, juste régulier.';
+
+  @override
+  String get quote3 => 'Arrosez la plante que vous voulez voir grandir.';
+
+  @override
+  String get quote4 => 'Le progrès, pas la perfection.';
+
+  @override
+  String get quote5 => 'Soyez doux avec vous-même. Vous grandissez.';
+
+  @override
+  String get quote6 =>
+      'Ce que vous faites chaque jour compte plus que ce que vous faites de temps en temps.';
+
+  @override
+  String get quote7 => 'Commencez là où vous êtes, avec ce que vous avez.';
+
+  @override
+  String get quote8 => 'Un esprit calme bâtit une vie solide.';
 }
