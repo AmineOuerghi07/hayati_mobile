@@ -1,17 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hayati/app/hayati_app.dart';
-import 'package:hayati/features/habits/presentation/habit_providers.dart';
-import 'package:hayati/features/auth/presentation/auth_providers.dart';
-import 'package:hayati/features/reminders/domain/reminder_planner.dart';
-import 'package:hayati/features/reminders/presentation/reminder_providers.dart';
 import 'package:hayati/features/settings/presentation/preferences_controller.dart';
 import 'package:material_ui/material_ui.dart';
 
-import 'support/memory_auth_repository.dart';
-import 'support/memory_habit_repository.dart';
 import 'support/memory_settings_repository.dart';
-import 'support/silent_reminder_scheduler.dart';
 
 Future<void> _settle(WidgetTester tester) async {
   await tester.pump();
@@ -27,17 +20,7 @@ Future<void> _pumpApp(WidgetTester tester) async {
   final settings = MemorySettingsRepository();
   await tester.pumpWidget(
     ProviderScope(
-      overrides: [
-        settingsRepositoryProvider.overrideWith((ref) => settings),
-        habitRepositoryProvider.overrideWith((ref) => MemoryHabitRepository()),
-        completionRepositoryProvider.overrideWith(
-          (ref) => MemoryCompletionRepository(),
-        ),
-        reminderCoordinatorProvider.overrideWith(
-          (ref) => ReminderCoordinator(SilentReminderScheduler()),
-        ),
-        authRepositoryProvider.overrideWith((ref) => MemoryAuthRepository()),
-      ],
+      overrides: [settingsRepositoryProvider.overrideWith((ref) => settings)],
       child: const HayatiApp(),
     ),
   );
@@ -49,13 +32,16 @@ void main() {
     await _pumpApp(tester);
 
     expect(find.text('Today'), findsWidgets);
-    expect(find.text('Nothing due today'), findsOneWidget);
+    expect(
+      find.text('Habits you are working on will show up here.'),
+      findsOneWidget,
+    );
 
     await tester.tap(find.text('Stats'));
     await _settle(tester);
     expect(find.text('Insights are coming in a later update.'), findsOneWidget);
 
-    await tester.tap(find.text('Profile'));
+    await tester.tap(find.text('Settings'));
     await _settle(tester);
     expect(find.text('Language'), findsOneWidget);
     expect(find.text('Development'), findsOneWidget);
@@ -74,7 +60,7 @@ void main() {
   testWidgets('Arabic selection mirrors the layout', (tester) async {
     await _pumpApp(tester);
 
-    await tester.tap(find.text('Profile'));
+    await tester.tap(find.text('Settings'));
     await _settle(tester);
     await tester.tap(find.text('Arabic'));
     await _settle(tester);
@@ -90,7 +76,7 @@ void main() {
   testWidgets('French selection uses the French strings', (tester) async {
     await _pumpApp(tester);
 
-    await tester.tap(find.text('Profile'));
+    await tester.tap(find.text('Settings'));
     await _settle(tester);
     await tester.tap(find.text('French'));
     await _settle(tester);
