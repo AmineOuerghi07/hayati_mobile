@@ -17,15 +17,17 @@ void main() {
     await tester.enterText(find.byType(TextField).first, 'Water');
     await tester.testTextInput.receiveAction(TextInputAction.done);
     await tester.pump();
-    await tester.scrollUntilVisible(
-      find.text('Save'),
-      400,
-      scrollable: find.descendant(
-        of: find.byKey(const Key('habit-editor')),
-        matching: find.byType(Scrollable),
-      ),
-    );
-    await tester.tap(find.text('Save'));
+    final save = find.text('Save');
+    final editor = find.byKey(const Key('habit-editor'));
+    for (
+      var attempt = 0;
+      attempt < 6 && tester.any(save.hitTestable()) == false;
+      attempt++
+    ) {
+      await tester.drag(editor, const Offset(0, -400));
+      await tester.pumpAndSettle();
+    }
+    await tester.tap(save);
     await tester.pumpAndSettle();
 
     expect(find.text('Water'), findsWidgets);
