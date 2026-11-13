@@ -98,5 +98,15 @@
   "history": "Historique",
   "icon": "Icône",
   "color": "Couleur",
-  "loading": "Chargement"
+  "loading": "Chargement",
+  "thisWeek": "Cette semaine",
+  "thisMonth": "Ce mois",
+  "heatmap": "12 dernières semaines",
+  "habits": "Habitudes",
+  "noInsightsYet": "Rien à mesurer pour l''instant. Terminez une habitude et elle apparaîtra ici.",
+  "somethingWentWrong": "Une erreur s''est produite. Réessayez dans un instant.",
+  "streakMilestone": "Série de {count} jours",
+  "@streakMilestone": {
+    "placeholders": {"count": {"type": "int"}}
+  }
 }
