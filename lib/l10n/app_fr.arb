@@ -58,6 +58,8 @@
   "invalidCode": "Ce code n'est pas valide.",
   "codeExpired": "Ce code a expiré.",
   "accountNotFound": "Aucun compte trouvé.",
+  "syncNow": "Synchroniser",
+  "syncing": "Synchronisation",
   "addHabit": "Ajouter une habitude",
   "editHabit": "Modifier l''habitude",
   "habitName": "Nom",

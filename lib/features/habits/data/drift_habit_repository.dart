@@ -6,13 +6,16 @@ import 'package:hayati/core/database/data_scope.dart';
 import 'package:hayati/features/habits/data/habit_codec.dart';
 import 'package:hayati/features/habits/domain/habit.dart';
 import 'package:hayati/features/habits/domain/habit_repository.dart';
+import 'package:hayati/features/sync/data/sync_engine.dart';
 import 'package:uuid/uuid.dart';
 
 class DriftHabitRepository implements HabitRepository {
-  DriftHabitRepository(this._db, {Uuid? uuid}) : _uuid = uuid ?? const Uuid();
+  DriftHabitRepository(this._db, {Uuid? uuid, this.outbox})
+    : _uuid = uuid ?? const Uuid();
 
   final AppDatabase _db;
   final Uuid _uuid;
+  final OutboxWriter? outbox;
 
   @override
   Stream<List<Habit>> watchActive() {
@@ -73,6 +76,7 @@ class DriftHabitRepository implements HabitRepository {
       sortOrder: active.length,
     );
     await _db.into(_db.habits).insert(await _companion(habit));
+    await _enqueue(habit, deleted: false);
     return habit;
   }
 
@@ -82,16 +86,14 @@ class DriftHabitRepository implements HabitRepository {
     if (error != null) {
       throw ArgumentError.value(habit.name, 'name', error);
     }
+    final saved = habit.copyWith(
+      name: habit.name.trim(),
+      updatedAt: DateTime.now().toUtc(),
+    );
     await (_db.update(
       _db.habits,
-    )..where((row) => row.id.equals(habit.id))).write(
-      await _companion(
-        habit.copyWith(
-          name: habit.name.trim(),
-          updatedAt: DateTime.now().toUtc(),
-        ),
-      ),
-    );
+    )..where((row) => row.id.equals(habit.id))).write(await _companion(saved));
+    await _enqueue(saved, deleted: false);
   }
 
   @override
@@ -134,6 +136,21 @@ class DriftHabitRepository implements HabitRepository {
         );
       }
     });
+  }
+
+  Future<void> _enqueue(Habit habit, {required bool deleted}) async {
+    final writer = outbox;
+    if (writer == null) return;
+    await writer.record(
+      SyncRecord(
+        entityType: 'habit',
+        entityKey: habit.id,
+        deleted: deleted,
+        payload: {...habit.toJson(), 'scopeId': await DataScope(_db).current()},
+        updatedAt: habit.updatedAt,
+        writerId: writer.writerId,
+      ),
+    );
   }
 
   Future<HabitsCompanion> _companion(Habit habit) async {

@@ -11,6 +11,7 @@ part 'app_database.g.dart';
     AppSettings,
     LocalAccounts,
     AuthChallenges,
+    SyncOutbox,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -20,7 +21,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.persistent() : super(driftDatabase(name: 'hayati'));
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -31,6 +32,9 @@ class AppDatabase extends _$AppDatabase {
         await migrator.addColumn(habitCompletions, habitCompletions.scopeId);
         await migrator.createTable(localAccounts);
         await migrator.createTable(authChallenges);
+      }
+      if (from < 3) {
+        await migrator.createTable(syncOutbox);
       }
     },
   );

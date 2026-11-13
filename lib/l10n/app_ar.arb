@@ -58,6 +58,8 @@
   "invalidCode": "الرمز غير صالح.",
   "codeExpired": "انتهت صلاحية الرمز.",
   "accountNotFound": "لا يوجد حساب.",
+  "syncNow": "مزامنة الآن",
+  "syncing": "جار المزامنة",
   "addHabit": "عادة جديدة",
   "editHabit": "تعديل العادة",
   "habitName": "الاسم",

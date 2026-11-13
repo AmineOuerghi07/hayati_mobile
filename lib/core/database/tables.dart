@@ -93,3 +93,20 @@ class AuthChallenges extends Table {
   @override
   Set<Column<Object>> get primaryKey => {id};
 }
+
+@DataClassName('OutboxRow')
+class SyncOutbox extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get entityType => text()();
+  TextColumn get entityKey => text()();
+  BoolColumn get deleted => boolean().withDefault(const Constant(false))();
+  TextColumn get payload => text()();
+  DateTimeColumn get rowUpdatedAt => dateTime()();
+  TextColumn get writerId => text()();
+  IntColumn get attempts => integer().withDefault(const Constant(0))();
+
+  @override
+  List<Set<Column<Object>>> get uniqueKeys => [
+    {entityType, entityKey},
+  ];
+}

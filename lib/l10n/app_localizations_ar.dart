@@ -187,6 +187,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get accountNotFound => 'لا يوجد حساب.';
 
   @override
+  String get syncNow => 'مزامنة الآن';
+
+  @override
+  String get syncing => 'جار المزامنة';
+
+  @override
   String get addHabit => 'عادة جديدة';
 
   @override
