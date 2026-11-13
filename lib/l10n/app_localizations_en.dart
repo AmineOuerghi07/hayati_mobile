@@ -103,4 +103,196 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get weekDaySunday => 'Sunday';
+
+  @override
+  String get profile => 'Profile';
+
+  @override
+  String get signIn => 'Sign in';
+
+  @override
+  String get createAccount => 'Create account';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get password => 'Password';
+
+  @override
+  String get displayName => 'Name';
+
+  @override
+  String get forgotPassword => 'Forgot password';
+
+  @override
+  String get usePhoneCode => 'Use a code instead';
+
+  @override
+  String get emailOrPhone => 'Email or phone';
+
+  @override
+  String get sendCode => 'Send code';
+
+  @override
+  String get verifyCode => 'Verify code';
+
+  @override
+  String get localDemoCode => 'Local demo code';
+
+  @override
+  String get resetHint =>
+      'If an account exists, a local demo code is created. No email is sent.';
+
+  @override
+  String get newPassword => 'New password';
+
+  @override
+  String get currentPassword => 'Current password';
+
+  @override
+  String get changePassword => 'Change password';
+
+  @override
+  String get signOut => 'Sign out';
+
+  @override
+  String get deleteAccount => 'Delete account';
+
+  @override
+  String get onThisDevice => 'On this device';
+
+  @override
+  String get guestStatus => 'Saved only on this device';
+
+  @override
+  String get invalidCredentials => 'Those details do not match.';
+
+  @override
+  String get emailInUse => 'That email already has an account.';
+
+  @override
+  String get invalidEmail => 'Enter a valid email.';
+
+  @override
+  String get weakPassword => 'Use at least 8 characters.';
+
+  @override
+  String get invalidCode => 'That code is not valid.';
+
+  @override
+  String get codeExpired => 'That code has expired.';
+
+  @override
+  String get accountNotFound => 'No account was found.';
+
+  @override
+  String get syncNow => 'Sync now';
+
+  @override
+  String get syncing => 'Syncing';
+
+  @override
+  String get addHabit => 'Add habit';
+
+  @override
+  String get editHabit => 'Edit habit';
+
+  @override
+  String get habitName => 'Name';
+
+  @override
+  String get nameRequired => 'Enter a name';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get archive => 'Archive';
+
+  @override
+  String get unarchive => 'Unarchive';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get deleteHabitTitle => 'Delete this habit?';
+
+  @override
+  String get deleteHabitMessage =>
+      'The habit leaves your list. Its history stays on this device.';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get frequency => 'Frequency';
+
+  @override
+  String get frequencyDaily => 'Every day';
+
+  @override
+  String get frequencyWeekdays => 'Specific days';
+
+  @override
+  String get frequencyTimesPerWeek => 'Times per week';
+
+  @override
+  String get timesEachWeek => 'Times each week';
+
+  @override
+  String get reminder => 'Reminder';
+
+  @override
+  String get reminderNone => 'No reminder';
+
+  @override
+  String get clearReminder => 'Clear reminder';
+
+  @override
+  String get currentStreak => 'Current streak';
+
+  @override
+  String get bestStreak => 'Best streak';
+
+  @override
+  String streakDays(int count) {
+    return '$count days';
+  }
+
+  @override
+  String streakWeeks(int count) {
+    return '$count weeks';
+  }
+
+  @override
+  String get markedDone => 'Marked done';
+
+  @override
+  String get clearedForToday => 'Cleared for today';
+
+  @override
+  String get undo => 'Undo';
+
+  @override
+  String get emptyTodayTitle => 'Nothing due today';
+
+  @override
+  String get emptyTodayBody => 'Add a habit and it will show up here.';
+
+  @override
+  String get chooseDays => 'Choose at least one day';
+
+  @override
+  String get history => 'History';
+
+  @override
+  String get icon => 'Icon';
+
+  @override
+  String get color => 'Color';
+
+  @override
+  String get loading => 'Loading';
 }

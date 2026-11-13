@@ -1,33 +1,53 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart';
 import 'package:hayati/core/database/app_database.dart';
+import 'package:hayati/core/database/data_scope.dart';
 import 'package:hayati/features/habits/data/habit_codec.dart';
 import 'package:hayati/features/habits/domain/habit.dart';
 import 'package:hayati/features/habits/domain/habit_repository.dart';
+import 'package:hayati/features/sync/data/sync_engine.dart';
 import 'package:uuid/uuid.dart';
 
 class DriftHabitRepository implements HabitRepository {
-  DriftHabitRepository(this._db, {Uuid? uuid}) : _uuid = uuid ?? const Uuid();
+  DriftHabitRepository(this._db, {Uuid? uuid, this.outbox})
+    : _uuid = uuid ?? const Uuid();
 
   final AppDatabase _db;
   final Uuid _uuid;
+  final OutboxWriter? outbox;
 
   @override
   Stream<List<Habit>> watchActive() {
-    final query = _db.select(_db.habits)
-      ..where((row) => row.deletedAt.isNull() & row.archivedAt.isNull())
-      ..orderBy([(row) => OrderingTerm.asc(row.sortOrder)]);
-    return query.watch().map(
-      (rows) => [for (final row in rows) habitFromRow(row)],
-    );
+    return _watchScoped((scope) {
+      final query = _db.select(_db.habits)
+        ..where(
+          (row) =>
+              row.deletedAt.isNull() &
+              row.archivedAt.isNull() &
+              row.scopeId.equals(scope),
+        )
+        ..orderBy([(row) => OrderingTerm.asc(row.sortOrder)]);
+      return query.get().then(
+        (rows) => [for (final row in rows) habitFromRow(row)],
+      );
+    });
   }
 
   @override
   Stream<Habit?> watchById(String id) {
-    final query = _db.select(_db.habits)
-      ..where((row) => row.id.equals(id) & row.deletedAt.isNull());
-    return query.watchSingleOrNull().map(
-      (row) => row == null ? null : habitFromRow(row),
-    );
+    return _watchScoped((scope) {
+      final query = _db.select(_db.habits)
+        ..where(
+          (row) =>
+              row.id.equals(id) &
+              row.deletedAt.isNull() &
+              row.scopeId.equals(scope),
+        );
+      return query.getSingleOrNull().then(
+        (row) => row == null ? null : habitFromRow(row),
+      );
+    });
   }
 
   @override
@@ -55,7 +75,8 @@ class DriftHabitRepository implements HabitRepository {
       startDate: draft.startDate,
       sortOrder: active.length,
     );
-    await _db.into(_db.habits).insert(_companion(habit));
+    await _db.into(_db.habits).insert(await _companion(habit));
+    await _enqueue(habit, deleted: false);
     return habit;
   }
 
@@ -65,16 +86,14 @@ class DriftHabitRepository implements HabitRepository {
     if (error != null) {
       throw ArgumentError.value(habit.name, 'name', error);
     }
+    final saved = habit.copyWith(
+      name: habit.name.trim(),
+      updatedAt: DateTime.now().toUtc(),
+    );
     await (_db.update(
       _db.habits,
-    )..where((row) => row.id.equals(habit.id))).write(
-      _companion(
-        habit.copyWith(
-          name: habit.name.trim(),
-          updatedAt: DateTime.now().toUtc(),
-        ),
-      ),
-    );
+    )..where((row) => row.id.equals(habit.id))).write(await _companion(saved));
+    await _enqueue(saved, deleted: false);
   }
 
   @override
@@ -119,7 +138,22 @@ class DriftHabitRepository implements HabitRepository {
     });
   }
 
-  HabitsCompanion _companion(Habit habit) {
+  Future<void> _enqueue(Habit habit, {required bool deleted}) async {
+    final writer = outbox;
+    if (writer == null) return;
+    await writer.record(
+      SyncRecord(
+        entityType: 'habit',
+        entityKey: habit.id,
+        deleted: deleted,
+        payload: {...habit.toJson(), 'scopeId': await DataScope(_db).current()},
+        updatedAt: habit.updatedAt,
+        writerId: writer.writerId,
+      ),
+    );
+  }
+
+  Future<HabitsCompanion> _companion(Habit habit) async {
     return HabitsCompanion.insert(
       id: habit.id,
       createdAt: habit.createdAt,
@@ -138,6 +172,27 @@ class DriftHabitRepository implements HabitRepository {
       startDate: habit.startDate,
       archivedAt: Value(habit.archivedAt),
       sortOrder: Value(habit.sortOrder),
+      scopeId: Value(await DataScope(_db).current()),
     );
+  }
+
+  Stream<T> _watchScoped<T>(Future<T> Function(String scope) load) {
+    final controller = StreamController<T>();
+    Future<void> emit() async {
+      if (controller.isClosed) return;
+      controller.add(await load(await DataScope(_db).current()));
+    }
+
+    final habitsSub = _db.select(_db.habits).watch().listen((_) => emit());
+    final settingsSub = _db
+        .select(_db.appSettings)
+        .watch()
+        .listen((_) => emit());
+    emit();
+    controller.onCancel = () async {
+      await habitsSub.cancel();
+      await settingsSub.cancel();
+    };
+    return controller.stream;
   }
 }

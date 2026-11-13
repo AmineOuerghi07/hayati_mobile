@@ -103,4 +103,196 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get weekDaySunday => 'الأحد';
+
+  @override
+  String get profile => 'الملف';
+
+  @override
+  String get signIn => 'تسجيل الدخول';
+
+  @override
+  String get createAccount => 'إنشاء حساب';
+
+  @override
+  String get email => 'البريد';
+
+  @override
+  String get password => 'كلمة السر';
+
+  @override
+  String get displayName => 'الاسم';
+
+  @override
+  String get forgotPassword => 'نسيت كلمة السر';
+
+  @override
+  String get usePhoneCode => 'الدخول برمز';
+
+  @override
+  String get emailOrPhone => 'البريد أو الهاتف';
+
+  @override
+  String get sendCode => 'إنشاء الرمز';
+
+  @override
+  String get verifyCode => 'تأكيد الرمز';
+
+  @override
+  String get localDemoCode => 'رمز تجريبي محلي';
+
+  @override
+  String get resetHint =>
+      'إذا وُجد حساب، يُنشأ رمز تجريبي على هذا الجهاز. لا يُرسل بريد.';
+
+  @override
+  String get newPassword => 'كلمة سر جديدة';
+
+  @override
+  String get currentPassword => 'كلمة السر الحالية';
+
+  @override
+  String get changePassword => 'تغيير كلمة السر';
+
+  @override
+  String get signOut => 'تسجيل الخروج';
+
+  @override
+  String get deleteAccount => 'حذف الحساب';
+
+  @override
+  String get onThisDevice => 'على هذا الجهاز';
+
+  @override
+  String get guestStatus => 'محفوظ على هذا الجهاز فقط';
+
+  @override
+  String get invalidCredentials => 'البيانات غير مطابقة.';
+
+  @override
+  String get emailInUse => 'هذا البريد مستخدم.';
+
+  @override
+  String get invalidEmail => 'اكتب بريدًا صالحًا.';
+
+  @override
+  String get weakPassword => 'استخدم 8 أحرف على الأقل.';
+
+  @override
+  String get invalidCode => 'الرمز غير صالح.';
+
+  @override
+  String get codeExpired => 'انتهت صلاحية الرمز.';
+
+  @override
+  String get accountNotFound => 'لا يوجد حساب.';
+
+  @override
+  String get syncNow => 'مزامنة الآن';
+
+  @override
+  String get syncing => 'جار المزامنة';
+
+  @override
+  String get addHabit => 'عادة جديدة';
+
+  @override
+  String get editHabit => 'تعديل العادة';
+
+  @override
+  String get habitName => 'الاسم';
+
+  @override
+  String get nameRequired => 'اكتب اسمًا';
+
+  @override
+  String get save => 'حفظ';
+
+  @override
+  String get archive => 'أرشفة';
+
+  @override
+  String get unarchive => 'إلغاء الأرشفة';
+
+  @override
+  String get delete => 'حذف';
+
+  @override
+  String get deleteHabitTitle => 'حذف هذه العادة؟';
+
+  @override
+  String get deleteHabitMessage =>
+      'ستختفي العادة من قائمتك. يبقى سجلها على هذا الجهاز.';
+
+  @override
+  String get cancel => 'إلغاء';
+
+  @override
+  String get frequency => 'التكرار';
+
+  @override
+  String get frequencyDaily => 'كل يوم';
+
+  @override
+  String get frequencyWeekdays => 'أيام محددة';
+
+  @override
+  String get frequencyTimesPerWeek => 'مرات في الأسبوع';
+
+  @override
+  String get timesEachWeek => 'المرات في كل أسبوع';
+
+  @override
+  String get reminder => 'تذكير';
+
+  @override
+  String get reminderNone => 'بدون تذكير';
+
+  @override
+  String get clearReminder => 'إزالة التذكير';
+
+  @override
+  String get currentStreak => 'السلسلة الحالية';
+
+  @override
+  String get bestStreak => 'أفضل سلسلة';
+
+  @override
+  String streakDays(int count) {
+    return '$count يوم';
+  }
+
+  @override
+  String streakWeeks(int count) {
+    return '$count أسبوع';
+  }
+
+  @override
+  String get markedDone => 'تم التسجيل';
+
+  @override
+  String get clearedForToday => 'أُلغي تسجيل اليوم';
+
+  @override
+  String get undo => 'تراجع';
+
+  @override
+  String get emptyTodayTitle => 'لا شيء مستحق اليوم';
+
+  @override
+  String get emptyTodayBody => 'أضف عادة وستظهر هنا.';
+
+  @override
+  String get chooseDays => 'اختر يومًا واحدًا على الأقل';
+
+  @override
+  String get history => 'السجل';
+
+  @override
+  String get icon => 'الأيقونة';
+
+  @override
+  String get color => 'اللون';
+
+  @override
+  String get loading => 'جار التحميل';
 }
