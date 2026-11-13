@@ -13,5 +13,22 @@
   "languageFrench": "الفرنسية",
   "environment": "البيئة",
   "flavorDev": "تطوير",
-  "flavorProd": "إنتاج"
+  "flavorProd": "إنتاج",
+  "appearance": "المظهر",
+  "appearanceSystem": "الجهاز",
+  "appearanceLight": "فاتح",
+  "appearanceDark": "داكن",
+  "colorTheme": "ألوان التطبيق",
+  "themeHayati": "حياتي",
+  "themeOasis": "واحة",
+  "themeDawn": "فجر",
+  "themeDusk": "غسق",
+  "themeBlossom": "زهر",
+  "themeSea": "بحر",
+  "themeInk": "حبر",
+  "themeContrast": "تباين",
+  "weekStartsOn": "يبدأ الأسبوع يوم",
+  "weekDayMonday": "الاثنين",
+  "weekDaySaturday": "السبت",
+  "weekDaySunday": "الأحد"
 }

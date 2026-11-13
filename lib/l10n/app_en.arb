@@ -55,5 +55,28 @@
   "flavorProd": "Production",
   "@flavorProd": {
     "description": "Name of the production build flavor."
-  }
+  },
+  "appearance": "Appearance",
+  "@appearance": {
+    "description": "Settings section for light, dark, or system brightness."
+  },
+  "appearanceSystem": "System",
+  "appearanceLight": "Light",
+  "appearanceDark": "Dark",
+  "colorTheme": "Color theme",
+  "@colorTheme": {
+    "description": "Settings section for the named color palettes."
+  },
+  "themeHayati": "Hayati",
+  "themeOasis": "Oasis",
+  "themeDawn": "Dawn",
+  "themeDusk": "Dusk",
+  "themeBlossom": "Blossom",
+  "themeSea": "Sea",
+  "themeInk": "Ink",
+  "themeContrast": "Contrast",
+  "weekStartsOn": "Week starts on",
+  "weekDayMonday": "Monday",
+  "weekDaySaturday": "Saturday",
+  "weekDaySunday": "Sunday"
 }
