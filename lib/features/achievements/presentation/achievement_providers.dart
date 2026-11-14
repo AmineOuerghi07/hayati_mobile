@@ -23,5 +23,7 @@ final achievementSummaryProvider = Provider.autoDispose<AchievementSummary?>((
     today: CalendarDate.today(),
     weekStart: weekStart,
     reflections: reflections.length,
+    pauseStart: ref.watch(preferencesControllerProvider).value?.pauseStart,
+    pauseEnd: ref.watch(preferencesControllerProvider).value?.pauseEnd,
   );
 });

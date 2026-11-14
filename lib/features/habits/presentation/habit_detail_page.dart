@@ -40,9 +40,8 @@ class HabitDetailPage extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final habitAsync = ref.watch(habitByIdProvider(habitId));
     final completionsAsync = ref.watch(completionsForHabitProvider(habitId));
-    final weekStart =
-        ref.watch(preferencesControllerProvider).value?.weekStart ??
-        AppPreferences.fallback.weekStart;
+    final prefs = ref.watch(preferencesControllerProvider).value;
+    final weekStart = prefs?.weekStart ?? AppPreferences.fallback.weekStart;
 
     return Scaffold(
       appBar: AppBar(
@@ -66,9 +65,14 @@ class HabitDetailPage extends ConsumerWidget {
           final today = CalendarDate.today();
           final streak = const StreakCalculator().calculate(
             habit: habit.schedule,
-            completions: {for (final item in logged) item.date: item.value},
+            completions: {
+              for (final item in logged)
+                item.date: streakAmount(value: item.value, note: item.note),
+            },
             today: today.iso,
             weekStart: weekStart,
+            pauseStart: prefs?.pauseStart,
+            pauseEnd: prefs?.pauseEnd,
           );
           final rate = habitCompletionRate(
             habit: habit,

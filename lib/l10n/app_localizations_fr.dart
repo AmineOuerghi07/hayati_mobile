@@ -1199,4 +1199,37 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get filterNothingDone => 'Rien de terminé pour l\'instant.';
+
+  @override
+  String get close => 'Fermer';
+
+  @override
+  String get dismissRecap => 'Masquer';
+
+  @override
+  String get recapLastWeek => 'La semaine dernière est prête';
+
+  @override
+  String get skipToday => 'Passer aujourd\'hui';
+
+  @override
+  String get undoSkip => 'Annuler le passage';
+
+  @override
+  String get skippedToday => 'Passé';
+
+  @override
+  String get timeOff => 'Pause';
+
+  @override
+  String get timeOffBody =>
+      'Protège toutes les séries et coupe les rappels pendant un voyage ou un repos.';
+
+  @override
+  String timeOffUntil(String date) {
+    return 'Les séries sont protégées jusqu\'au $date';
+  }
+
+  @override
+  String get clearTimeOff => 'Effacer la pause';
 }

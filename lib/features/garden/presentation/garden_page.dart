@@ -40,6 +40,14 @@ class GardenPage extends ConsumerWidget {
               weekStart:
                   ref.watch(preferencesControllerProvider).value?.weekStart ??
                   AppPreferences.fallback.weekStart,
+              pauseStart: ref
+                  .watch(preferencesControllerProvider)
+                  .value
+                  ?.pauseStart,
+              pauseEnd: ref
+                  .watch(preferencesControllerProvider)
+                  .value
+                  ?.pauseEnd,
             ),
     );
   }
@@ -51,12 +59,16 @@ class _GardenBody extends StatelessWidget {
     required this.completions,
     required this.summary,
     required this.weekStart,
+    this.pauseStart,
+    this.pauseEnd,
   });
 
   final List<Habit> habits;
   final List<HabitCompletion> completions;
   final AchievementSummary? summary;
   final int weekStart;
+  final String? pauseStart;
+  final String? pauseEnd;
 
   @override
   Widget build(BuildContext context) {
@@ -102,10 +114,13 @@ class _GardenBody extends StatelessWidget {
     StreakCalculator calculator,
     CalendarDate today,
     int weekStart,
+    String? pauseStart,
+    String? pauseEnd,
   ) {
     final logged = {
       for (final item in completions)
-        if (item.habitId == habit.id) item.date: item.value,
+        if (item.habitId == habit.id)
+          item.date: streakAmount(value: item.value, note: item.note),
     };
     final checkIns = logged.values
         .where((value) => value >= habit.targetValue)
@@ -115,6 +130,8 @@ class _GardenBody extends StatelessWidget {
       completions: logged,
       today: today.iso,
       weekStart: weekStart,
+      pauseStart: pauseStart,
+      pauseEnd: pauseEnd,
     );
     return _Plant(
       habit: habit,
@@ -127,7 +144,7 @@ class _GardenBody extends StatelessWidget {
     const calculator = StreakCalculator();
     return [
       for (final habit in habits)
-        _plantFor(habit, calculator, today, weekStart),
+        _plantFor(habit, calculator, today, weekStart, pauseStart, pauseEnd),
     ];
   }
 }
@@ -370,10 +387,22 @@ class GardenStrip extends ConsumerWidget {
                         habit: habit.schedule,
                         completions: {
                           for (final item in completions)
-                            if (item.habitId == habit.id) item.date: item.value,
+                            if (item.habitId == habit.id)
+                              item.date: streakAmount(
+                                value: item.value,
+                                note: item.note,
+                              ),
                         },
                         today: today.iso,
                         weekStart: weekStart,
+                        pauseStart: ref
+                            .watch(preferencesControllerProvider)
+                            .value
+                            ?.pauseStart,
+                        pauseEnd: ref
+                            .watch(preferencesControllerProvider)
+                            .value
+                            ?.pauseEnd,
                       )
                       .best,
                 ),

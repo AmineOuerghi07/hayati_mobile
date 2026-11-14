@@ -60,6 +60,24 @@ class MemorySettingsRepository implements SettingsRepository {
     return _update(_current.copyWith(displayName: name.trim()));
   }
 
+  @override
+  Future<void> setRecapDismissedWeek(String? weekStartIso) {
+    return _update(
+      _current.copyWith(
+        recapDismissedWeek: weekStartIso,
+        clearRecapDismissedWeek: weekStartIso == null,
+      ),
+    );
+  }
+
+  @override
+  Future<void> setPause({String? start, String? end}) {
+    if (start == null || end == null) {
+      return _update(_current.copyWith(clearPause: true));
+    }
+    return _update(_current.copyWith(pauseStart: start, pauseEnd: end));
+  }
+
   Future<void> _update(AppPreferences next) async {
     _current = next;
     _updates.add(next);

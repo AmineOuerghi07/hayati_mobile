@@ -1,5 +1,15 @@
 import 'package:hayati/core/time/calendar_date.dart';
+import 'package:hayati/features/habits/domain/completion_note.dart';
 import 'package:hayati/features/habits/domain/habit_schedule.dart';
+
+/// A skipped day is stored as a negative amount so the streak can pause
+/// without a second map.
+double streakAmount({required double value, required String? note}) {
+  if (CompletionNote.decode(note).skipped) return -1;
+  return value;
+}
+
+enum _Mark { done, skip, miss }
 
 /// Pure streak rules from the product plan.
 ///
@@ -16,6 +26,8 @@ class StreakCalculator {
     required Map<String, double> completions,
     required String today,
     required int weekStart,
+    String? pauseStart,
+    String? pauseEnd,
   }) {
     final start = CalendarDate.parse(habit.startDate);
     final todayDate = CalendarDate.parse(today);
@@ -37,6 +49,8 @@ class StreakCalculator {
         start: start,
         horizon: horizon,
         forgiveOpenDay: forgiveOpenDay,
+        pauseStart: pauseStart,
+        pauseEnd: pauseEnd,
       ),
       FrequencyType.weekdays => _weekdays(
         habit: habit,
@@ -44,6 +58,8 @@ class StreakCalculator {
         start: start,
         horizon: horizon,
         forgiveOpenDay: forgiveOpenDay,
+        pauseStart: pauseStart,
+        pauseEnd: pauseEnd,
       ),
       FrequencyType.timesPerWeek => _timesPerWeek(
         habit: habit,
@@ -52,17 +68,36 @@ class StreakCalculator {
         horizon: horizon,
         forgiveOpenDay: forgiveOpenDay,
         weekStart: weekStart,
+        pauseStart: pauseStart,
+        pauseEnd: pauseEnd,
       ),
     };
   }
 
-  bool _counts(
+  bool _isPaused(CalendarDate day, String? pauseStart, String? pauseEnd) {
+    if (pauseStart == null ||
+        pauseEnd == null ||
+        pauseStart.isEmpty ||
+        pauseEnd.isEmpty) {
+      return false;
+    }
+    final iso = day.iso;
+    return iso.compareTo(pauseStart) >= 0 && iso.compareTo(pauseEnd) <= 0;
+  }
+
+  _Mark _mark(
     HabitSchedule habit,
     Map<String, double> completions,
     CalendarDate day,
+    String? pauseStart,
+    String? pauseEnd,
   ) {
-    final value = completions[day.iso] ?? 0;
-    return value >= habit.targetValue;
+    if (_isPaused(day, pauseStart, pauseEnd)) return _Mark.skip;
+    if (!completions.containsKey(day.iso)) return _Mark.miss;
+    final value = completions[day.iso]!;
+    if (value < 0) return _Mark.skip;
+    if (value >= habit.targetValue) return _Mark.done;
+    return _Mark.miss;
   }
 
   Streak _daily({
@@ -71,26 +106,41 @@ class StreakCalculator {
     required CalendarDate start,
     required CalendarDate horizon,
     required bool forgiveOpenDay,
+    required String? pauseStart,
+    required String? pauseEnd,
   }) {
+    _Mark mark(CalendarDate day) =>
+        _mark(habit, completions, day, pauseStart, pauseEnd);
+
     var best = 0;
     var run = 0;
     for (var day = start; day <= horizon; day = day.addDays(1)) {
-      if (_counts(habit, completions, day)) {
-        run += 1;
-        if (run > best) best = run;
-      } else {
-        run = 0;
+      switch (mark(day)) {
+        case _Mark.done:
+          run += 1;
+          if (run > best) best = run;
+        case _Mark.skip:
+          break;
+        case _Mark.miss:
+          run = 0;
       }
     }
 
     var cursor = horizon;
-    if (forgiveOpenDay && !_counts(habit, completions, cursor)) {
+    if (forgiveOpenDay && mark(cursor) == _Mark.miss) {
       cursor = cursor.addDays(-1);
     }
     var current = 0;
-    while (cursor >= start && _counts(habit, completions, cursor)) {
-      current += 1;
-      cursor = cursor.addDays(-1);
+    while (cursor >= start) {
+      switch (mark(cursor)) {
+        case _Mark.done:
+          current += 1;
+          cursor = cursor.addDays(-1);
+        case _Mark.skip:
+          cursor = cursor.addDays(-1);
+        case _Mark.miss:
+          return Streak(current: current, best: best);
+      }
     }
     return Streak(current: current, best: best);
   }
@@ -101,19 +151,26 @@ class StreakCalculator {
     required CalendarDate start,
     required CalendarDate horizon,
     required bool forgiveOpenDay,
+    required String? pauseStart,
+    required String? pauseEnd,
   }) {
     final scheduled = habit.weekdays.toSet();
     bool isDue(CalendarDate day) => scheduled.contains(day.weekday);
+    _Mark mark(CalendarDate day) =>
+        _mark(habit, completions, day, pauseStart, pauseEnd);
 
     var best = 0;
     var run = 0;
     for (var day = start; day <= horizon; day = day.addDays(1)) {
       if (!isDue(day)) continue;
-      if (_counts(habit, completions, day)) {
-        run += 1;
-        if (run > best) best = run;
-      } else {
-        run = 0;
+      switch (mark(day)) {
+        case _Mark.done:
+          run += 1;
+          if (run > best) best = run;
+        case _Mark.skip:
+          break;
+        case _Mark.miss:
+          run = 0;
       }
     }
 
@@ -123,18 +180,25 @@ class StreakCalculator {
     if (anchor != null &&
         forgiveOpenDay &&
         anchor == horizon &&
-        !_counts(habit, completions, anchor)) {
+        mark(anchor) == _Mark.miss) {
       anchor = _previousDue(anchor, start, isDue);
     }
-    if (anchor != null && !_counts(habit, completions, anchor)) {
+    if (anchor != null && mark(anchor) == _Mark.miss) {
       return Streak(current: 0, best: best);
     }
 
     var current = 0;
     var cursor = anchor;
-    while (cursor != null && _counts(habit, completions, cursor)) {
-      current += 1;
-      cursor = _previousDue(cursor, start, isDue);
+    while (cursor != null) {
+      switch (mark(cursor)) {
+        case _Mark.done:
+          current += 1;
+          cursor = _previousDue(cursor, start, isDue);
+        case _Mark.skip:
+          cursor = _previousDue(cursor, start, isDue);
+        case _Mark.miss:
+          cursor = null;
+      }
     }
     return Streak(current: current, best: best);
   }
@@ -159,19 +223,34 @@ class StreakCalculator {
     required CalendarDate horizon,
     required bool forgiveOpenDay,
     required int weekStart,
+    required String? pauseStart,
+    required String? pauseEnd,
   }) {
     final target = habit.timesPerWeek;
     final firstWeek = start.startOfWeek(weekStart);
     final lastWeek = horizon.startOfWeek(weekStart);
 
-    int countWeek(CalendarDate week) {
-      var count = 0;
+    _Week weekResult(CalendarDate week) {
+      var done = 0;
+      var skips = 0;
       for (var i = 0; i < 7; i++) {
         final day = week.addDays(i);
         if (day < start || day > horizon) continue;
-        if (_counts(habit, completions, day)) count += 1;
+        switch (_mark(habit, completions, day, pauseStart, pauseEnd)) {
+          case _Mark.done:
+            done += 1;
+          case _Mark.skip:
+            skips += 1;
+          case _Mark.miss:
+            break;
+        }
       }
-      return count;
+      // Skips lower the bar. A week that is only skips freezes the streak
+      // instead of growing it or wiping it.
+      final needed = target - skips;
+      if (needed <= 0) return _Week.freeze;
+      if (done >= needed) return _Week.success;
+      return _Week.fail;
     }
 
     final forgiveWeek =
@@ -180,29 +259,38 @@ class StreakCalculator {
     var best = 0;
     var run = 0;
     for (var week = firstWeek; week <= lastWeek; week = week.addDays(7)) {
-      final success = countWeek(week) >= target;
-      final inProgress = forgiveWeek && week == lastWeek && !success;
-      if (success) {
-        run += 1;
-        if (run > best) best = run;
-      } else if (!inProgress) {
-        run = 0;
+      final result = weekResult(week);
+      final inProgress =
+          forgiveWeek && week == lastWeek && result == _Week.fail;
+      switch (result) {
+        case _Week.success:
+          run += 1;
+          if (run > best) best = run;
+        case _Week.freeze:
+          break;
+        case _Week.fail:
+          if (!inProgress) run = 0;
       }
     }
 
     var week = lastWeek;
-    if (forgiveWeek && countWeek(week) < target) {
+    if (forgiveWeek && weekResult(week) == _Week.fail) {
       week = week.addDays(-7);
     }
     var current = 0;
     while (week.addDays(6) >= start) {
-      if (countWeek(week) >= target) {
-        current += 1;
-        week = week.addDays(-7);
-      } else {
-        break;
+      switch (weekResult(week)) {
+        case _Week.success:
+          current += 1;
+          week = week.addDays(-7);
+        case _Week.freeze:
+          week = week.addDays(-7);
+        case _Week.fail:
+          return Streak(current: current, best: best);
       }
     }
     return Streak(current: current, best: best);
   }
 }
+
+enum _Week { success, freeze, fail }

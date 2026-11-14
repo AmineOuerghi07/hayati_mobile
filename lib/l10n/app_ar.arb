@@ -365,5 +365,15 @@
 "filterToDo": "للإنجاز",
   "filterDone": "المكتملة",
   "filterNothingOpen": "لا شيء متبقٍ في هذا العرض.",
-  "filterNothingDone": "لم يُنجز شيء بعد."
+  "filterNothingDone": "لم يُنجز شيء بعد.",
+"close": "إغلاق",
+  "dismissRecap": "إخفاء",
+  "recapLastWeek": "أسبوعك الماضي جاهز",
+  "skipToday": "تخطَّ اليوم",
+  "undoSkip": "تراجع عن التخطي",
+  "skippedToday": "تم التخطي",
+  "timeOff": "استراحة",
+  "timeOffBody": "تحمي كل السلاسل وتوقف التذكيرات أثناء سفر أو يوم راحة.",
+  "timeOffUntil": "السلاسل محمية حتى {date}",
+  "clearTimeOff": "إلغاء الاستراحة"
 }

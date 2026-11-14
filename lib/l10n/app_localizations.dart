@@ -2243,6 +2243,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Nothing finished yet.'**
   String get filterNothingDone;
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// No description provided for @dismissRecap.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get dismissRecap;
+
+  /// No description provided for @recapLastWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Last week is ready'**
+  String get recapLastWeek;
+
+  /// No description provided for @skipToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip today'**
+  String get skipToday;
+
+  /// No description provided for @undoSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo skip'**
+  String get undoSkip;
+
+  /// No description provided for @skippedToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Skipped'**
+  String get skippedToday;
+
+  /// No description provided for @timeOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Time off'**
+  String get timeOff;
+
+  /// No description provided for @timeOffBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause every streak and quiet reminders for a trip or a rest day.'**
+  String get timeOffBody;
+
+  /// No description provided for @timeOffUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'Streaks are safe through {date}'**
+  String timeOffUntil(String date);
+
+  /// No description provided for @clearTimeOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear time off'**
+  String get clearTimeOff;
 }
 
 class _AppLocalizationsDelegate

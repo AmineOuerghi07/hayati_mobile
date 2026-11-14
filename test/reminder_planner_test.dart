@@ -44,6 +44,13 @@ void main() {
     expect(plans.single.title, 'Water');
   });
 
+  test('time off clears every plan', () {
+    final plans = planReminders([
+      habit(id: 'a', name: 'Water', reminder: 8 * 60),
+    ], paused: true);
+    expect(plans, isEmpty);
+  });
+
   test('the same habit keeps the same notification id', () {
     final first = planReminders([
       habit(id: 'a', name: 'Water', reminder: 8 * 60),

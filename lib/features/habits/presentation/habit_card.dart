@@ -25,6 +25,8 @@ class HabitCard extends StatelessWidget {
     required this.onNote,
     required this.onEdit,
     required this.onArchive,
+    this.onSkip,
+    this.skipped = false,
     this.reorderEnabled = true,
     super.key,
   });
@@ -39,6 +41,8 @@ class HabitCard extends StatelessWidget {
   final VoidCallback onNote;
   final VoidCallback onEdit;
   final VoidCallback onArchive;
+  final VoidCallback? onSkip;
+  final bool skipped;
   final bool reorderEnabled;
 
   @override
@@ -56,7 +60,9 @@ class HabitCard extends StatelessWidget {
     final tint = complete
         ? Color.alphaBlend(color.withValues(alpha: 0.10), tokens.cardTint)
         : null;
-    final subtitle = habit.tracksQuantity
+    final subtitle = skipped
+        ? l10n.skippedToday
+        : habit.tracksQuantity
         ? l10n
               .quantityProgress(
                 value.round(),
@@ -69,6 +75,12 @@ class HabitCard extends StatelessWidget {
       active: complete,
       child: SwipeActions(
         actions: [
+          if (onSkip != null)
+            _Action(
+              tooltip: skipped ? l10n.undoSkip : l10n.skipToday,
+              icon: Icons.redo_rounded,
+              onPressed: onSkip!,
+            ),
           _Action(
             tooltip: l10n.addNote,
             icon: Icons.edit_note_outlined,

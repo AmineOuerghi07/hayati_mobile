@@ -124,8 +124,12 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: '/recap',
         parentNavigatorKey: _rootNavigatorKey,
-        pageBuilder: (context, state) =>
-            slideUpPage(pageKey: state.pageKey, child: const RecapPage()),
+        pageBuilder: (context, state) => slideUpPage(
+          pageKey: state.pageKey,
+          child: RecapPage(
+            previousWeek: state.uri.queryParameters['week'] == 'previous',
+          ),
+        ),
       ),
       GoRoute(
         path: '/breathe',

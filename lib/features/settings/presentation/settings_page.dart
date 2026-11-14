@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hayati/app/theme.dart';
+import 'package:hayati/core/time/calendar_date.dart';
 import 'package:hayati/core/config/app_config.dart';
 import 'package:hayati/core/config/app_config_provider.dart';
 import 'package:hayati/core/widgets/animated_count.dart';
@@ -226,6 +227,40 @@ class SettingsPage extends ConsumerWidget {
                   title: Text(l10n.archivedHabits),
                   trailing: const Icon(Icons.chevron_right_rounded),
                   onTap: () => context.push('/archived'),
+                ),
+                ListTile(
+                  leading: const _TileIcon(
+                    Icons.beach_access_outlined,
+                    Color(0xFF0284C7),
+                  ),
+                  title: Text(l10n.timeOff),
+                  subtitle: Text(
+                    preferences.pauseEnd == null
+                        ? l10n.timeOffBody
+                        : l10n.timeOffUntil(preferences.pauseEnd!),
+                  ),
+                  trailing: preferences.pauseEnd == null
+                      ? const Icon(Icons.chevron_right_rounded)
+                      : IconButton(
+                          tooltip: l10n.clearTimeOff,
+                          onPressed: () => controller.setPause(),
+                          icon: const Icon(Icons.close_rounded),
+                        ),
+                  onTap: () async {
+                    final now = DateTime.now();
+                    final today = DateTime(now.year, now.month, now.day);
+                    final picked = await showDatePicker(
+                      context: context,
+                      initialDate: today,
+                      firstDate: today,
+                      lastDate: today.add(const Duration(days: 90)),
+                    );
+                    if (picked == null) return;
+                    await controller.setPause(
+                      start: CalendarDate.today().iso,
+                      end: CalendarDate.fromDateTime(picked).iso,
+                    );
+                  },
                 ),
                 ListTile(
                   leading: const _TileIcon(

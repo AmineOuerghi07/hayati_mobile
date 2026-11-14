@@ -71,4 +71,4 @@ final class ReminderCoordinatorProvider
 }
 
 String _$reminderCoordinatorHash() =>
-    r'1df673557519eb52b3a99cb0398bb5427d2c54d8';
+    r'856cb5aa065fb395c9c15844d009a9035343616a';

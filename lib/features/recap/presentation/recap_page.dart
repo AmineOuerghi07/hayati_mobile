@@ -1,15 +1,21 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hayati/core/time/calendar_date.dart';
 import 'package:hayati/core/widgets/animated_count.dart';
 import 'package:hayati/features/habits/presentation/habit_labels.dart';
 import 'package:hayati/features/habits/presentation/habit_providers.dart';
+import 'package:hayati/features/settings/domain/app_preferences.dart';
+import 'package:hayati/features/settings/presentation/preferences_controller.dart';
 import 'package:hayati/features/recap/domain/weekly_recap.dart';
 import 'package:hayati/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 
 class RecapPage extends ConsumerWidget {
-  const RecapPage({super.key});
+  const RecapPage({this.previousWeek = false, super.key});
+
+  /// Last week's story, offered on the first day of a new week.
+  final bool previousWeek;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,20 +24,45 @@ class RecapPage extends ConsumerWidget {
     if (habits == null || completions == null) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
+    final today = CalendarDate.today();
+    final end = previousWeek ? previousWeekEnd(today) : today;
+    final weekStart =
+        ref.watch(preferencesControllerProvider).value?.weekStart ??
+        AppPreferences.fallback.weekStart;
     return RecapView(
-      recap: weeklyRecap(
-        habits: habits,
-        completions: completions,
-        today: CalendarDate.today(),
-      ),
+      recap: weeklyRecap(habits: habits, completions: completions, today: end),
+      rangeLabel: _rangeLabel(context, end),
+      onDismiss: previousWeek
+          ? () async {
+              await ref
+                  .read(preferencesControllerProvider.notifier)
+                  .setRecapDismissedWeek(today.startOfWeek(weekStart).iso);
+              if (context.mounted) context.pop();
+            }
+          : null,
     );
   }
 }
 
+String _rangeLabel(BuildContext context, CalendarDate end) {
+  final start = end.addDays(-6);
+  final format = DateFormat.MMMd(Localizations.localeOf(context).toString());
+  String day(CalendarDate date) =>
+      format.format(DateTime(date.year, date.month, date.day));
+  return '${day(start)} – ${day(end)}';
+}
+
 class RecapView extends StatefulWidget {
-  const RecapView({required this.recap, super.key});
+  const RecapView({
+    required this.recap,
+    this.onDismiss,
+    this.rangeLabel,
+    super.key,
+  });
 
   final WeeklyRecap recap;
+  final Future<void> Function()? onDismiss;
+  final String? rangeLabel;
 
   @override
   State<RecapView> createState() => _RecapViewState();
@@ -97,12 +128,31 @@ class _RecapViewState extends State<RecapView>
   @override
   Widget build(BuildContext context) {
     final stories = _stories;
+    final l10n = AppLocalizations.of(context);
     final scheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: scheme.primaryContainer,
       body: SafeArea(
         child: Column(
           children: [
+            Row(
+              children: [
+                IconButton(
+                  tooltip: l10n.close,
+                  onPressed: () => Navigator.of(context).maybePop(),
+                  icon: Icon(
+                    Icons.close_rounded,
+                    color: scheme.onPrimaryContainer,
+                  ),
+                ),
+                const Spacer(),
+                if (widget.onDismiss != null)
+                  TextButton(
+                    onPressed: widget.onDismiss,
+                    child: Text(l10n.dismissRecap),
+                  ),
+              ],
+            ),
             Padding(
               padding: const EdgeInsetsDirectional.fromSTEB(12, 8, 12, 0),
               child: Row(
@@ -129,6 +179,15 @@ class _RecapViewState extends State<RecapView>
                 ],
               ),
             ),
+            if (widget.rangeLabel != null)
+              Padding(
+                padding: const EdgeInsetsDirectional.only(top: 8),
+                child: Text(
+                  widget.rangeLabel!,
+                  style: Theme.of(context).textTheme.labelLarge
+                      ?.copyWith(color: scheme.onPrimaryContainer),
+                ),
+              ),
             Expanded(
               child: Stack(
                 children: [

@@ -81,6 +81,87 @@ void main() {
       ),
       isTrue,
     );
+    expect(
+      showsHabit(
+        part: null,
+        partFilter: null,
+        complete: false,
+        status: TodayStatus.open,
+        skipped: true,
+      ),
+      isFalse,
+    );
+    expect(
+      showsHabit(
+        part: null,
+        partFilter: null,
+        complete: false,
+        status: TodayStatus.done,
+        skipped: true,
+      ),
+      isTrue,
+    );
+  });
+
+  test('last week is offered once, on the first day, when it has data', () {
+    final monday = CalendarDate(2026, 3, 9);
+    const empty = WeeklyRecap(
+      checkIns: 0,
+      bestDay: null,
+      bestDayCount: 0,
+      topHabitName: null,
+      topHabitCount: 0,
+      perfectDays: 0,
+      averageMood: null,
+      grownPlants: 0,
+    );
+    const full = WeeklyRecap(
+      checkIns: 4,
+      bestDay: null,
+      bestDayCount: 2,
+      topHabitName: 'Read',
+      topHabitCount: 3,
+      perfectDays: 1,
+      averageMood: null,
+      grownPlants: 1,
+    );
+    expect(
+      offerPreviousWeekRecap(
+        today: monday,
+        weekStart: DateTime.monday,
+        previousWeek: full,
+        dismissedWeek: null,
+      ),
+      isTrue,
+    );
+    expect(
+      offerPreviousWeekRecap(
+        today: monday.addDays(1),
+        weekStart: DateTime.monday,
+        previousWeek: full,
+        dismissedWeek: null,
+      ),
+      isFalse,
+    );
+    expect(
+      offerPreviousWeekRecap(
+        today: monday,
+        weekStart: DateTime.monday,
+        previousWeek: empty,
+        dismissedWeek: null,
+      ),
+      isFalse,
+    );
+    expect(
+      offerPreviousWeekRecap(
+        today: monday,
+        weekStart: DateTime.monday,
+        previousWeek: full,
+        dismissedWeek: monday.iso,
+      ),
+      isFalse,
+    );
+    expect(previousWeekEnd(monday), monday.addDays(-1));
   });
 
   test('plants grow from check-ins and streaks', () {

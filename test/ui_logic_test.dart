@@ -6,6 +6,7 @@ import 'package:hayati/features/habits/domain/habit_completion.dart';
 import 'package:hayati/features/habits/domain/habit_due.dart';
 import 'package:hayati/features/habits/domain/habit_progress.dart';
 import 'package:hayati/features/habits/domain/habit_schedule.dart';
+import 'package:hayati/features/habits/domain/streak_calculator.dart';
 import 'package:hayati/features/habits/domain/week_strip.dart';
 import 'package:hayati/features/onboarding/presentation/onboarding_redirect.dart';
 import 'package:hayati/features/stats/domain/insights.dart';
@@ -20,6 +21,10 @@ void main() {
     );
     expect(const CompletionNote().encode(), isNull);
     expect(CompletionNote.decode('mood:9|nope').mood, isNull);
+    const skipped = CompletionNote(mood: 2, text: 'rest', skipped: true);
+    expect(CompletionNote.decode(skipped.encode()), skipped);
+    expect(streakAmount(value: 0, note: skipped.encode()), -1);
+    expect(streakAmount(value: 1, note: 'plain'), 1);
   });
 
   test('quantity steps stay inside the target range', () {

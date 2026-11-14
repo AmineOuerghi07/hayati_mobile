@@ -36,9 +36,8 @@ class StatsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final habits = ref.watch(activeHabitsProvider);
     final completions = ref.watch(allCompletionsProvider);
-    final weekStart =
-        ref.watch(preferencesControllerProvider).value?.weekStart ??
-        AppPreferences.fallback.weekStart;
+    final prefs = ref.watch(preferencesControllerProvider).value;
+    final weekStart = prefs?.weekStart ?? AppPreferences.fallback.weekStart;
 
     return habits.when(
       loading: () => const SkeletonList(),
@@ -70,6 +69,8 @@ class StatsPage extends ConsumerWidget {
               ),
               today: today,
               weekStart: weekStart,
+              pauseStart: prefs?.pauseStart,
+              pauseEnd: prefs?.pauseEnd,
             );
           },
         );
@@ -87,6 +88,8 @@ class _StatsBody extends StatelessWidget {
     required this.days,
     required this.today,
     required this.weekStart,
+    this.pauseStart,
+    this.pauseEnd,
   });
 
   final List<Habit> habits;
@@ -96,6 +99,8 @@ class _StatsBody extends StatelessWidget {
   final List<DayCounts> days;
   final CalendarDate today;
   final int weekStart;
+  final String? pauseStart;
+  final String? pauseEnd;
 
   @override
   Widget build(BuildContext context) {
@@ -112,10 +117,13 @@ class _StatsBody extends StatelessWidget {
           habit: habit.schedule,
           completions: {
             for (final item in completions)
-              if (item.habitId == habit.id) item.date: item.value,
+              if (item.habitId == habit.id)
+                item.date: streakAmount(value: item.value, note: item.note),
           },
           today: today.iso,
           weekStart: weekStart,
+          pauseStart: pauseStart,
+          pauseEnd: pauseEnd,
         ),
     };
     final bestStreak = streaks.values.fold(

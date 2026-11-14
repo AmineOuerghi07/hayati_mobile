@@ -269,7 +269,8 @@ class _TodayList extends ConsumerWidget {
     final locale = Localizations.localeOf(context).toString();
     final selectedDay = DateTime(selected.year, selected.month, selected.day);
     final dateLabel = DateFormat.yMMMEd(locale).format(selectedDay);
-    final streaks = _streaks(weekStart);
+    final pause = ref.watch(preferencesControllerProvider).value;
+    final streaks = _streaks(weekStart, pause?.pauseStart, pause?.pauseEnd);
     final bestStreak = streaks.values.fold(0, (a, b) => a > b ? a : b);
     final filter = ref.watch(todayPartFilterProvider);
     final status = ref.watch(todayStatusFilterProvider);
@@ -282,6 +283,7 @@ class _TodayList extends ConsumerWidget {
           ),
           partFilter: filter,
           complete: meetsTarget(done[habit.id]?.value ?? 0, habit.targetValue),
+          skipped: CompletionNote.decode(done[habit.id]?.note).skipped,
           status: status,
         ))
           habit,
@@ -381,13 +383,25 @@ class _TodayList extends ConsumerWidget {
           ),
         const SizedBox(height: 8),
         _TodayFilters(due: due, done: done),
-        if (isFirstDayOfWeek(CalendarDate.today(), weekStart))
+        if (offerPreviousWeekRecap(
+          today: CalendarDate.today(),
+          weekStart: weekStart,
+          previousWeek: weeklyRecap(
+            habits: habits,
+            completions: logged,
+            today: previousWeekEnd(CalendarDate.today()),
+          ),
+          dismissedWeek: ref
+              .watch(preferencesControllerProvider)
+              .value
+              ?.recapDismissedWeek,
+        ))
           Align(
             alignment: AlignmentDirectional.centerStart,
             child: TextButton.icon(
-              onPressed: () => context.push('/recap'),
+              onPressed: () => context.push('/recap?week=previous'),
               icon: const Icon(Icons.auto_stories_outlined, size: 18),
-              label: Text(l10n.recapBanner),
+              label: Text(l10n.recapLastWeek),
             ),
           ),
         if (now.hour >= 18) const _EveningLink(),
@@ -563,6 +577,8 @@ class _TodayList extends ConsumerWidget {
           value: loggedValue,
           streak: streaks[habit.id] ?? 0,
           reorderEnabled: reorder,
+          skipped: CompletionNote.decode(done[habit.id]?.note).skipped,
+          onSkip: () => _skip(context, ref, habit),
           onOpen: () => context.push('/habits/${habit.id}'),
           onToggle: () => _toggle(
             context,
@@ -588,6 +604,10 @@ class _TodayList extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final repository = ref.read(completionRepositoryProvider);
     final note = done[habit.id]?.note;
+    final decoded = CompletionNote.decode(note);
+    final doneNote = decoded.skipped
+        ? CompletionNote(mood: decoded.mood, text: decoded.text).encode()
+        : note;
     if (complete) {
       await repository.clear(habitId: habit.id, date: selected.iso);
       if (!context.mounted) return;
@@ -610,7 +630,7 @@ class _TodayList extends ConsumerWidget {
       habitId: habit.id,
       date: selected.iso,
       value: habit.targetValue,
-      note: note,
+      note: doneNote,
     );
     if (!context.mounted) return;
     playHaptic();
@@ -636,15 +656,19 @@ class _TodayList extends ConsumerWidget {
     final next = stepQuantity(current, delta);
     final repository = ref.read(completionRepositoryProvider);
     final note = done[habit.id]?.note;
+    final decoded = CompletionNote.decode(note);
     if (next <= 0 && (note == null || note.isEmpty)) {
       await repository.clear(habitId: habit.id, date: selected.iso);
       return;
     }
+    final stored = decoded.skipped && next > 0
+        ? CompletionNote(mood: decoded.mood, text: decoded.text).encode()
+        : note;
     await repository.setValue(
       habitId: habit.id,
       date: selected.iso,
       value: next,
-      note: note,
+      note: stored,
     );
     if (!context.mounted) return;
     if (!meetsTarget(current, habit.targetValue) &&
@@ -663,7 +687,21 @@ class _TodayList extends ConsumerWidget {
     final result = await showNoteSheet(context, initial: initial);
     if (result == null || !context.mounted) return;
     final repository = ref.read(completionRepositoryProvider);
-    final encoded = result.encode();
+    final kept = CompletionNote(
+      mood: result.mood,
+      text: result.text,
+      skipped: initial.skipped,
+    );
+    if (kept.skipped) {
+      await repository.setValue(
+        habitId: habit.id,
+        date: selected.iso,
+        value: 0,
+        note: kept.encode(),
+      );
+      return;
+    }
+    final encoded = kept.encode();
     final currentValue = current?.value ?? 0;
     if (encoded == null && currentValue <= 0) {
       if (current != null) {
@@ -679,6 +717,26 @@ class _TodayList extends ConsumerWidget {
       date: selected.iso,
       value: value <= 0 ? habit.targetValue : value,
       note: encoded,
+    );
+  }
+
+  Future<void> _skip(BuildContext context, WidgetRef ref, Habit habit) async {
+    final repository = ref.read(completionRepositoryProvider);
+    final current = done[habit.id];
+    final note = CompletionNote.decode(current?.note);
+    if (note.skipped) {
+      await repository.clear(habitId: habit.id, date: selected.iso);
+      return;
+    }
+    await repository.setValue(
+      habitId: habit.id,
+      date: selected.iso,
+      value: 0,
+      note: CompletionNote(
+        mood: note.mood,
+        text: note.text,
+        skipped: true,
+      ).encode(),
     );
   }
 
@@ -707,10 +765,17 @@ class _TodayList extends ConsumerWidget {
     );
   }
 
-  Map<String, int> _streaks(int weekStart) {
+  Map<String, int> _streaks(
+    int weekStart,
+    String? pauseStart,
+    String? pauseEnd,
+  ) {
     final byHabit = <String, Map<String, double>>{};
     for (final item in logged) {
-      (byHabit[item.habitId] ??= {})[item.date] = item.value;
+      (byHabit[item.habitId] ??= {})[item.date] = streakAmount(
+        value: item.value,
+        note: item.note,
+      );
     }
     const calculator = StreakCalculator();
     final realToday = CalendarDate.today().iso;
@@ -722,18 +787,20 @@ class _TodayList extends ConsumerWidget {
               completions: byHabit[habit.id] ?? const {},
               today: realToday,
               weekStart: weekStart,
+              pauseStart: pauseStart,
+              pauseEnd: pauseEnd,
             )
             .current,
     };
   }
 
   int? _milestoneFor(WidgetRef ref, Habit habit) {
-    final weekStart =
-        ref.read(preferencesControllerProvider).value?.weekStart ??
-        AppPreferences.fallback.weekStart;
+    final prefs = ref.read(preferencesControllerProvider).value;
+    final weekStart = prefs?.weekStart ?? AppPreferences.fallback.weekStart;
     final map = {
       for (final item in logged)
-        if (item.habitId == habit.id) item.date: item.value,
+        if (item.habitId == habit.id)
+          item.date: streakAmount(value: item.value, note: item.note),
     };
     const calculator = StreakCalculator();
     final realToday = CalendarDate.today().iso;
@@ -743,6 +810,8 @@ class _TodayList extends ConsumerWidget {
           completions: map,
           today: realToday,
           weekStart: weekStart,
+          pauseStart: prefs?.pauseStart,
+          pauseEnd: prefs?.pauseEnd,
         )
         .current;
     map[selected.iso] = habit.targetValue;
@@ -752,6 +821,8 @@ class _TodayList extends ConsumerWidget {
           completions: map,
           today: realToday,
           weekStart: weekStart,
+          pauseStart: prefs?.pauseStart,
+          pauseEnd: prefs?.pauseEnd,
         )
         .current;
     return crossedMilestone(before, after);
@@ -772,7 +843,10 @@ class _TodayFilters extends ConsumerWidget {
     var open = 0;
     var finished = 0;
     for (final habit in due) {
-      if (meetsTarget(done[habit.id]?.value ?? 0, habit.targetValue)) {
+      final settled =
+          meetsTarget(done[habit.id]?.value ?? 0, habit.targetValue) ||
+          CompletionNote.decode(done[habit.id]?.note).skipped;
+      if (settled) {
         finished += 1;
       } else {
         open += 1;

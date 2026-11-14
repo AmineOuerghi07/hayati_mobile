@@ -1174,4 +1174,37 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get filterNothingDone => 'لم يُنجز شيء بعد.';
+
+  @override
+  String get close => 'إغلاق';
+
+  @override
+  String get dismissRecap => 'إخفاء';
+
+  @override
+  String get recapLastWeek => 'أسبوعك الماضي جاهز';
+
+  @override
+  String get skipToday => 'تخطَّ اليوم';
+
+  @override
+  String get undoSkip => 'تراجع عن التخطي';
+
+  @override
+  String get skippedToday => 'تم التخطي';
+
+  @override
+  String get timeOff => 'استراحة';
+
+  @override
+  String get timeOffBody =>
+      'تحمي كل السلاسل وتوقف التذكيرات أثناء سفر أو يوم راحة.';
+
+  @override
+  String timeOffUntil(String date) {
+    return 'السلاسل محمية حتى $date';
+  }
+
+  @override
+  String get clearTimeOff => 'إلغاء الاستراحة';
 }

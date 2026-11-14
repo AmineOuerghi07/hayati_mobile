@@ -14,6 +14,9 @@ class AppPreferences {
     this.analyticsEnabled = false,
     this.onboardingDone = false,
     this.displayName = '',
+    this.recapDismissedWeek,
+    this.pauseStart,
+    this.pauseEnd,
   });
 
   /// Null follows the device language.
@@ -35,6 +38,13 @@ class AppPreferences {
   /// name is stored on the account, not here.
   final String displayName;
 
+  /// Week-start day (`yyyy-MM-dd`) whose previous-week story was dismissed.
+  final String? recapDismissedWeek;
+
+  /// Inclusive pause window. Streaks treat these days as a planned rest.
+  final String? pauseStart;
+  final String? pauseEnd;
+
   static const fallback = AppPreferences(
     localeCode: null,
     themeId: AppThemeId.hayati,
@@ -51,6 +61,11 @@ class AppPreferences {
     bool? analyticsEnabled,
     bool? onboardingDone,
     String? displayName,
+    String? recapDismissedWeek,
+    bool clearRecapDismissedWeek = false,
+    String? pauseStart,
+    String? pauseEnd,
+    bool clearPause = false,
   }) {
     return AppPreferences(
       localeCode: clearLocale ? null : (localeCode ?? this.localeCode),
@@ -60,6 +75,11 @@ class AppPreferences {
       analyticsEnabled: analyticsEnabled ?? this.analyticsEnabled,
       onboardingDone: onboardingDone ?? this.onboardingDone,
       displayName: displayName ?? this.displayName,
+      recapDismissedWeek: clearRecapDismissedWeek
+          ? null
+          : (recapDismissedWeek ?? this.recapDismissedWeek),
+      pauseStart: clearPause ? null : (pauseStart ?? this.pauseStart),
+      pauseEnd: clearPause ? null : (pauseEnd ?? this.pauseEnd),
     );
   }
 }

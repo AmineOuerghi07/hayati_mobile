@@ -55,4 +55,16 @@ class PreferencesController extends _$PreferencesController {
   Future<void> setDisplayName(String name) {
     return ref.read(settingsRepositoryProvider).setDisplayName(name);
   }
+
+  Future<void> setRecapDismissedWeek(String? weekStartIso) {
+    return ref
+        .read(settingsRepositoryProvider)
+        .setRecapDismissedWeek(weekStartIso);
+  }
+
+  Future<void> setPause({String? start, String? end}) {
+    return ref
+        .read(settingsRepositoryProvider)
+        .setPause(start: start, end: end);
+  }
 }

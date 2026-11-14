@@ -365,5 +365,15 @@
 "filterToDo": "À faire",
   "filterDone": "Faites",
   "filterNothingOpen": "Plus rien dans cette vue.",
-  "filterNothingDone": "Rien de terminé pour l'instant."
+  "filterNothingDone": "Rien de terminé pour l'instant.",
+"close": "Fermer",
+  "dismissRecap": "Masquer",
+  "recapLastWeek": "La semaine dernière est prête",
+  "skipToday": "Passer aujourd'hui",
+  "undoSkip": "Annuler le passage",
+  "skippedToday": "Passé",
+  "timeOff": "Pause",
+  "timeOffBody": "Protège toutes les séries et coupe les rappels pendant un voyage ou un repos.",
+  "timeOffUntil": "Les séries sont protégées jusqu'au {date}",
+  "clearTimeOff": "Effacer la pause"
 }

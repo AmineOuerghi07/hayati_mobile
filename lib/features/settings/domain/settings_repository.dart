@@ -16,4 +16,8 @@ abstract class SettingsRepository {
   Future<void> setOnboardingDone(bool done);
 
   Future<void> setDisplayName(String name);
+
+  Future<void> setRecapDismissedWeek(String? weekStartIso);
+
+  Future<void> setPause({String? start, String? end});
 }

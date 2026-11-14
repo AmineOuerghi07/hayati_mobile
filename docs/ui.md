@@ -59,6 +59,8 @@ Today opens on what is still to do, the same default Habitify and Benji use, so 
 
 The hero paints a sun in the morning and afternoon, and a moon with stars in the evening. From 6pm a short link asks for a mood, one thing to be glad for, and a note. The journal shows those days as a mood calendar.
 
-The garden turns each habit into a plant. Seeds, sprouts, buds, blooms, and trees come from check-ins and streaks, and unlocked badges grow rare plants. Stats and the first day of the week open a weekly recap: full-screen cards for check-ins, the best day, the top habit, perfect days, mood, and the garden.
+The garden turns each habit into a plant. Seeds, sprouts, buds, blooms, and trees come from check-ins and streaks, and unlocked badges grow rare plants. Stats always opens the last seven days as a story: check-ins, the best day, the top habit, perfect days, mood, and the garden, with the date range on screen. On the first day of a new week, Today offers that story for the week that just ended, and only when it has check-ins. Dismiss hides it for that week. Closing the story leaves the prompt in place.
+
+A swipe on a habit can skip today. The day leaves To do, the streak does not grow, and it does not reset. The same rule covers weekday and times-per-week habits: skips lower that week's target, and a week that is only skips freezes the streak. Time off in Settings pauses every streak through a chosen day and clears reminders until the pause ends. Checking the habit again removes the skip.
 
 Breathing stays in the theme's primary color. The patterns are Calm (4-4-6), Box (4-4-4-4), 4-7-8, and Coherent (5-5), for one, three, or five minutes.

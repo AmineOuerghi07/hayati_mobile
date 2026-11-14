@@ -19,7 +19,11 @@ class ReminderPlan {
 /// Habits with a reminder, that are still active, become plans.
 /// Archived and deleted habits are skipped, which cancels their alarms
 /// when the scheduler replaces the whole set.
-List<ReminderPlan> planReminders(Iterable<Habit> habits) {
+List<ReminderPlan> planReminders(
+  Iterable<Habit> habits, {
+  bool paused = false,
+}) {
+  if (paused) return const [];
   return [
     for (final habit in habits)
       if (!habit.isDeleted && !habit.isArchived && habit.reminderTime != null)
@@ -46,8 +50,8 @@ class ReminderCoordinator {
   final ReminderScheduler _scheduler;
   var _asked = false;
 
-  Future<void> sync(List<Habit> habits) async {
-    final plans = planReminders(habits);
+  Future<void> sync(List<Habit> habits, {bool paused = false}) async {
+    final plans = planReminders(habits, paused: paused);
     if (plans.isEmpty) {
       await _scheduler.replaceAll(const []);
       return;

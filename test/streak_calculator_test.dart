@@ -45,6 +45,77 @@ void main() {
       expect(result.best, expected['best'], reason: 'best');
     });
   }
+
+  HabitSchedule daily(String start) => HabitSchedule(
+    type: HabitType.boolean,
+    frequencyType: FrequencyType.daily,
+    startDate: start,
+    targetValue: 1,
+  );
+
+  test('a skip pauses a daily streak without growing it', () {
+    final result = calculator.calculate(
+      habit: daily('2026-03-01'),
+      completions: {'2026-03-01': 1, '2026-03-02': -1, '2026-03-03': 1},
+      today: '2026-03-04',
+      weekStart: DateTime.monday,
+    );
+    expect(result.current, 2);
+    expect(result.best, 2);
+  });
+
+  test('time off pauses a missed day instead of resetting it', () {
+    final result = calculator.calculate(
+      habit: daily('2026-03-01'),
+      completions: {'2026-03-01': 1, '2026-03-03': 1},
+      today: '2026-03-04',
+      weekStart: DateTime.monday,
+      pauseStart: '2026-03-02',
+      pauseEnd: '2026-03-02',
+    );
+    expect(result.current, 2);
+    expect(result.best, 2);
+  });
+
+  test('weekly skips lower the target and a skipped week freezes', () {
+    final habit = HabitSchedule(
+      type: HabitType.boolean,
+      frequencyType: FrequencyType.timesPerWeek,
+      startDate: '2026-03-02',
+      timesPerWeek: 3,
+      targetValue: 1,
+    );
+    final metWithOneSkip = calculator.calculate(
+      habit: habit,
+      completions: {
+        '2026-03-02': 1,
+        '2026-03-03': 1,
+        '2026-03-04': 1,
+        '2026-03-09': -1,
+        '2026-03-10': 1,
+        '2026-03-11': 1,
+      },
+      today: '2026-03-16',
+      weekStart: DateTime.monday,
+    );
+    expect(metWithOneSkip.current, 2);
+
+    final frozen = calculator.calculate(
+      habit: habit,
+      completions: {
+        '2026-03-02': 1,
+        '2026-03-03': 1,
+        '2026-03-04': 1,
+        '2026-03-09': -1,
+        '2026-03-10': -1,
+        '2026-03-11': -1,
+      },
+      today: '2026-03-16',
+      weekStart: DateTime.monday,
+    );
+    expect(frozen.current, 1);
+    expect(frozen.best, 1);
+  });
 }
 
 int _weekStart(String name) {

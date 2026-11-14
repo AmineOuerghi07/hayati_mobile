@@ -11,11 +11,13 @@ bool showsHabit({
   required PartOfDay? partFilter,
   required bool complete,
   required TodayStatus status,
+  bool skipped = false,
 }) {
   if (partFilter != null && part != partFilter) return false;
+  final settled = complete || skipped;
   return switch (status) {
-    TodayStatus.open => !complete,
-    TodayStatus.done => complete,
+    TodayStatus.open => !settled,
+    TodayStatus.done => settled,
     TodayStatus.all => true,
   };
 }

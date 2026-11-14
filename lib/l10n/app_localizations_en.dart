@@ -1186,4 +1186,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get filterNothingDone => 'Nothing finished yet.';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String get dismissRecap => 'Dismiss';
+
+  @override
+  String get recapLastWeek => 'Last week is ready';
+
+  @override
+  String get skipToday => 'Skip today';
+
+  @override
+  String get undoSkip => 'Undo skip';
+
+  @override
+  String get skippedToday => 'Skipped';
+
+  @override
+  String get timeOff => 'Time off';
+
+  @override
+  String get timeOffBody =>
+      'Pause every streak and quiet reminders for a trip or a rest day.';
+
+  @override
+  String timeOffUntil(String date) {
+    return 'Streaks are safe through $date';
+  }
+
+  @override
+  String get clearTimeOff => 'Clear time off';
 }

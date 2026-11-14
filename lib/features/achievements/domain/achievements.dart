@@ -98,6 +98,8 @@ AchievementSummary evaluateAchievements({
   required CalendarDate today,
   required int weekStart,
   int reflections = 0,
+  String? pauseStart,
+  String? pauseEnd,
 }) {
   final checkIns = totalCheckIns(habits: habits, completions: completions);
   const calculator = StreakCalculator();
@@ -107,10 +109,13 @@ AchievementSummary evaluateAchievements({
       habit: habit.schedule,
       completions: {
         for (final item in completions)
-          if (item.habitId == habit.id) item.date: item.value,
+          if (item.habitId == habit.id)
+            item.date: streakAmount(value: item.value, note: item.note),
       },
       today: today.iso,
       weekStart: weekStart,
+      pauseStart: pauseStart,
+      pauseEnd: pauseEnd,
     );
     if (streak.best > bestStreak) bestStreak = streak.best;
   }

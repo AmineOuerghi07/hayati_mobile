@@ -90,3 +90,19 @@ WeeklyRecap weeklyRecap({
 
 bool isFirstDayOfWeek(CalendarDate today, int weekStart) =>
     today == today.startOfWeek(weekStart);
+
+/// The last day of the week that just finished, when [today] is a week start.
+CalendarDate previousWeekEnd(CalendarDate today) => today.addDays(-1);
+
+/// Today offers last week's story on the first day of a new week, and only
+/// when that week has check-ins the person has not already dismissed.
+bool offerPreviousWeekRecap({
+  required CalendarDate today,
+  required int weekStart,
+  required WeeklyRecap previousWeek,
+  required String? dismissedWeek,
+}) {
+  if (!isFirstDayOfWeek(today, weekStart)) return false;
+  if (previousWeek.isEmpty) return false;
+  return dismissedWeek != today.iso;
+}
