@@ -4,6 +4,8 @@ import 'package:hayati/features/habits/domain/habit.dart';
 abstract class HabitRepository {
   Stream<List<Habit>> watchActive();
 
+  Stream<List<Habit>> watchArchived();
+
   Stream<Habit?> watchById(String id);
 
   Future<Habit> create(HabitDraft draft);

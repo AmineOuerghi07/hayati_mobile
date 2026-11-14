@@ -1,3 +1,6 @@
+/// Matches `version` in pubspec.yaml. Shown on the profile screen.
+const hayatiVersion = '0.1.0';
+
 /// Which installable variant of the app this binary is.
 enum AppFlavor { dev, prod }
 

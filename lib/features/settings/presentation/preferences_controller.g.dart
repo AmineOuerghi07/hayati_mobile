@@ -98,7 +98,7 @@ final class PreferencesControllerProvider
 }
 
 String _$preferencesControllerHash() =>
-    r'18b50789bc4d5e8da775ec767a9be43c01036bac';
+    r'a018e355aeadb43771451f8a7e2b5e38cc526c9c';
 
 /// The saved language, palette, brightness, and week start.
 ///

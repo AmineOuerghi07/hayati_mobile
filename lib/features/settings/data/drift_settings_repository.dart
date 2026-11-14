@@ -15,6 +15,12 @@ class DriftSettingsRepository implements SettingsRepository {
   static const themeKey = 'themeId';
   static const appearanceKey = 'appearance';
   static const weekStartKey = 'weekStart';
+  static const analyticsKey = 'analyticsEnabled';
+  static const onboardingKey = 'onboardingDone';
+  static const displayNameKey = 'displayName';
+  static const recapDismissedWeekKey = 'recapDismissedWeek';
+  static const pauseStartKey = 'pauseStart';
+  static const pauseEndKey = 'pauseEnd';
 
   @override
   Stream<AppPreferences> watch() {
@@ -48,6 +54,30 @@ class DriftSettingsRepository implements SettingsRepository {
     return _set(weekStartKey, '$weekStart');
   }
 
+  @override
+  Future<void> setAnalyticsEnabled(bool enabled) {
+    return _set(analyticsKey, enabled ? 'true' : 'false');
+  }
+
+  @override
+  Future<void> setOnboardingDone(bool done) {
+    return _set(onboardingKey, done ? 'true' : 'false');
+  }
+
+  @override
+  Future<void> setDisplayName(String name) => _set(displayNameKey, name.trim());
+
+  @override
+  Future<void> setRecapDismissedWeek(String? weekStartIso) {
+    return _set(recapDismissedWeekKey, weekStartIso ?? '');
+  }
+
+  @override
+  Future<void> setPause({String? start, String? end}) async {
+    await _set(pauseStartKey, start ?? '');
+    await _set(pauseEndKey, end ?? '');
+  }
+
   AppPreferences _preferencesFrom(List<SettingRow> rows) {
     final values = {for (final row in rows) row.settingKey: row.settingValue};
     final locale = values[localeKey];
@@ -60,7 +90,18 @@ class DriftSettingsRepository implements SettingsRepository {
           Appearance.values.asNameMap()[values[appearanceKey] ?? ''] ??
           Appearance.system,
       weekStart: int.tryParse(values[weekStartKey] ?? '') ?? DateTime.monday,
+      analyticsEnabled: values[analyticsKey] == 'true',
+      onboardingDone: values[onboardingKey] == 'true',
+      displayName: values[displayNameKey] ?? '',
+      recapDismissedWeek: _blank(values[recapDismissedWeekKey]),
+      pauseStart: _blank(values[pauseStartKey]),
+      pauseEnd: _blank(values[pauseEndKey]),
     );
+  }
+
+  String? _blank(String? value) {
+    if (value == null || value.isEmpty) return null;
+    return value;
   }
 
   Future<void> _set(String key, String value) async {

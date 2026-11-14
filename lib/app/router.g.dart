@@ -12,7 +12,8 @@ part of 'router.dart';
 ///
 /// keepAlive because replacing the [GoRouter] clears the back stack. Locale
 /// and theme are read by the app widget, not here, so changing them does
-/// not rebuild this router.
+/// not rebuild this router. The introduction flag is the one exception:
+/// finishing it or replaying it refreshes the redirect.
 
 @ProviderFor(appRouter)
 final appRouterProvider = AppRouterProvider._();
@@ -21,7 +22,8 @@ final appRouterProvider = AppRouterProvider._();
 ///
 /// keepAlive because replacing the [GoRouter] clears the back stack. Locale
 /// and theme are read by the app widget, not here, so changing them does
-/// not rebuild this router.
+/// not rebuild this router. The introduction flag is the one exception:
+/// finishing it or replaying it refreshes the redirect.
 
 final class AppRouterProvider
     extends $FunctionalProvider<GoRouter, GoRouter, GoRouter>
@@ -30,7 +32,8 @@ final class AppRouterProvider
   ///
   /// keepAlive because replacing the [GoRouter] clears the back stack. Locale
   /// and theme are read by the app widget, not here, so changing them does
-  /// not rebuild this router.
+  /// not rebuild this router. The introduction flag is the one exception:
+  /// finishing it or replaying it refreshes the redirect.
   AppRouterProvider._()
     : super(
         from: null,
@@ -64,4 +67,4 @@ final class AppRouterProvider
   }
 }
 
-String _$appRouterHash() => r'97f83fe77b73d3057a500e389336b2646d1e9041';
+String _$appRouterHash() => r'7e6be891a894d20c214c9fff9c2a7475b973a83c';

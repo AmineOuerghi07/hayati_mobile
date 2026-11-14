@@ -27,6 +27,7 @@ _Habit _$HabitFromJson(Map<String, dynamic> json) => _Habit(
       const <int>[],
   timesPerWeek: (json['timesPerWeek'] as num?)?.toInt() ?? 1,
   reminderTime: (json['reminderTime'] as num?)?.toInt(),
+  partOfDay: $enumDecodeNullable(_$PartOfDayEnumMap, json['partOfDay']),
   startDate: json['startDate'] as String,
   archivedAt: json['archivedAt'] == null
       ? null
@@ -49,6 +50,7 @@ Map<String, dynamic> _$HabitToJson(_Habit instance) => <String, dynamic>{
   'weekdays': instance.weekdays,
   'timesPerWeek': instance.timesPerWeek,
   'reminderTime': instance.reminderTime,
+  'partOfDay': _$PartOfDayEnumMap[instance.partOfDay],
   'startDate': instance.startDate,
   'archivedAt': instance.archivedAt?.toIso8601String(),
   'sortOrder': instance.sortOrder,
@@ -63,4 +65,10 @@ const _$FrequencyTypeEnumMap = {
   FrequencyType.daily: 'daily',
   FrequencyType.weekdays: 'weekdays',
   FrequencyType.timesPerWeek: 'timesPerWeek',
+};
+
+const _$PartOfDayEnumMap = {
+  PartOfDay.morning: 'morning',
+  PartOfDay.afternoon: 'afternoon',
+  PartOfDay.evening: 'evening',
 };

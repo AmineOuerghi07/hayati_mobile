@@ -1,4 +1,5 @@
 import 'package:hayati/core/database/database_provider.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:hayati/features/settings/data/drift_settings_repository.dart';
 import 'package:hayati/features/settings/domain/app_preferences.dart';
 import 'package:hayati/features/settings/domain/settings_repository.dart';
@@ -24,6 +25,10 @@ class PreferencesController extends _$PreferencesController {
   }
 
   Future<void> setLocale(String? languageCode) {
+    final platform = WidgetsBinding.instance.platformDispatcher;
+    platform.setApplicationLocale(
+      languageCode == null ? platform.locale : Locale(languageCode),
+    );
     return ref.read(settingsRepositoryProvider).setLocale(languageCode);
   }
 
@@ -37,5 +42,29 @@ class PreferencesController extends _$PreferencesController {
 
   Future<void> setWeekStart(int weekStart) {
     return ref.read(settingsRepositoryProvider).setWeekStart(weekStart);
+  }
+
+  Future<void> setAnalyticsEnabled(bool enabled) {
+    return ref.read(settingsRepositoryProvider).setAnalyticsEnabled(enabled);
+  }
+
+  Future<void> setOnboardingDone(bool done) {
+    return ref.read(settingsRepositoryProvider).setOnboardingDone(done);
+  }
+
+  Future<void> setDisplayName(String name) {
+    return ref.read(settingsRepositoryProvider).setDisplayName(name);
+  }
+
+  Future<void> setRecapDismissedWeek(String? weekStartIso) {
+    return ref
+        .read(settingsRepositoryProvider)
+        .setRecapDismissedWeek(weekStartIso);
+  }
+
+  Future<void> setPause({String? start, String? end}) {
+    return ref
+        .read(settingsRepositoryProvider)
+        .setPause(start: start, end: end);
   }
 }

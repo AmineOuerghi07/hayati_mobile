@@ -5,6 +5,7 @@ import 'package:hayati/features/habits/domain/completion_repository.dart';
 import 'package:hayati/features/habits/domain/habit.dart';
 import 'package:hayati/features/habits/domain/habit_completion.dart';
 import 'package:hayati/features/habits/domain/habit_repository.dart';
+import 'package:hayati/features/sync/data/sync_engine.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'habit_providers.g.dart';
@@ -13,12 +14,20 @@ part 'habit_providers.g.dart';
 /// no state of its own beyond the shared database.
 @Riverpod(keepAlive: true)
 HabitRepository habitRepository(Ref ref) {
-  return DriftHabitRepository(ref.watch(appDatabaseProvider));
+  final database = ref.watch(appDatabaseProvider);
+  return DriftHabitRepository(
+    database,
+    outbox: OutboxWriter(database)..writerId = 'this-device',
+  );
 }
 
 @Riverpod(keepAlive: true)
 CompletionRepository completionRepository(Ref ref) {
-  return DriftCompletionRepository(ref.watch(appDatabaseProvider));
+  final database = ref.watch(appDatabaseProvider);
+  return DriftCompletionRepository(
+    database,
+    outbox: OutboxWriter(database)..writerId = 'this-device',
+  );
 }
 
 @riverpod
@@ -29,6 +38,11 @@ Stream<List<Habit>> activeHabits(Ref ref) {
 @riverpod
 Stream<Habit?> habitById(Ref ref, String id) {
   return ref.watch(habitRepositoryProvider).watchById(id);
+}
+
+@riverpod
+Stream<List<HabitCompletion>> allCompletions(Ref ref) {
+  return ref.watch(completionRepositoryProvider).watchAll();
 }
 
 @riverpod

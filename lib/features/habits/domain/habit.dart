@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hayati/core/time/calendar_date.dart';
 import 'package:hayati/features/habits/domain/habit_schedule.dart';
+import 'package:hayati/features/habits/domain/part_of_day.dart';
 
 part 'habit.freezed.dart';
 part 'habit.g.dart';
@@ -24,6 +25,7 @@ abstract class Habit with _$Habit {
     @Default(<int>[]) List<int> weekdays,
     @Default(1) int timesPerWeek,
     int? reminderTime,
+    PartOfDay? partOfDay,
     required String startDate,
     DateTime? archivedAt,
     @Default(0) int sortOrder,
@@ -36,6 +38,14 @@ abstract class Habit with _$Habit {
   bool get isDeleted => deletedAt != null;
 
   bool get isArchived => archivedAt != null;
+
+  /// A counter on Today, rather than a single check.
+  ///
+  /// Quantity is stored either as the habit type or as a target above one.
+  bool get tracksQuantity =>
+      type == HabitType.quantity ||
+      targetValue > 1 ||
+      (unit != null && unit!.trim().isNotEmpty);
 
   HabitSchedule get schedule => HabitSchedule(
     type: type,
@@ -63,6 +73,7 @@ class HabitDraft {
     this.weekdays = const [],
     this.timesPerWeek = 1,
     this.reminderTime,
+    this.partOfDay,
     required this.startDate,
   });
 
@@ -76,6 +87,7 @@ class HabitDraft {
   final List<int> weekdays;
   final int timesPerWeek;
   final int? reminderTime;
+  final PartOfDay? partOfDay;
   final String startDate;
 
   String? get nameError => name.trim().isEmpty ? 'required' : null;

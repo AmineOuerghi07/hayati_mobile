@@ -56,7 +56,7 @@ final class HabitRepositoryProvider
   }
 }
 
-String _$habitRepositoryHash() => r'0878495ea494280ba2dfa4a3f50ee94d6f1447e9';
+String _$habitRepositoryHash() => r'3ca609bbbc0fbb0cbe6f4dee2cd5f0cac621668a';
 
 @ProviderFor(completionRepository)
 final completionRepositoryProvider = CompletionRepositoryProvider._();
@@ -104,7 +104,7 @@ final class CompletionRepositoryProvider
 }
 
 String _$completionRepositoryHash() =>
-    r'67478c0181d81bf87a7b4931b5874790352d7f63';
+    r'b9a1a1e88d6dd866f8dbe76de6f0a7eee149a854';
 
 @ProviderFor(activeHabits)
 final activeHabitsProvider = ActiveHabitsProvider._();
@@ -213,6 +213,47 @@ final class HabitByIdFamily extends $Family
   @override
   String toString() => r'habitByIdProvider';
 }
+
+@ProviderFor(allCompletions)
+final allCompletionsProvider = AllCompletionsProvider._();
+
+final class AllCompletionsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<HabitCompletion>>,
+          List<HabitCompletion>,
+          Stream<List<HabitCompletion>>
+        >
+    with
+        $FutureModifier<List<HabitCompletion>>,
+        $StreamProvider<List<HabitCompletion>> {
+  AllCompletionsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'allCompletionsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$allCompletionsHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<List<HabitCompletion>> $createElement(
+    $ProviderPointer pointer,
+  ) => $StreamProviderElement(pointer);
+
+  @override
+  Stream<List<HabitCompletion>> create(Ref ref) {
+    return allCompletions(ref);
+  }
+}
+
+String _$allCompletionsHash() => r'a9949a936664720ad80315c189b2cd23b3749db8';
 
 @ProviderFor(completionsForHabit)
 final completionsForHabitProvider = CompletionsForHabitFamily._();

@@ -2,6 +2,8 @@
 
 Habit tracker for iOS and Android.
 
+Today greets you, shows the week, and lets you check a habit or count toward a target. Stats keeps the day, week, and month in rings that stay readable at 100%. The first launch offers a few starter habits and an optional reminder. English, Arabic, and French share one calm theme, with eight palettes.
+
 ## Run
 
 Dev is the default flavor, so `flutter run` is enough. Production:
@@ -29,3 +31,5 @@ flutter test
 ```
 
 Run the generator again after changing a Riverpod provider, and commit the generated file.
+
+CI repeats those checks and also builds Android and iOS, then runs the guest flow on an emulator and a simulator. Store upload stays out until signing keys exist. See `docs/release.md`.
