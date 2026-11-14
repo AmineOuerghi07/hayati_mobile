@@ -58,6 +58,34 @@ void main() {
     expect(await completions.watchForHabit(habit.id).first, isEmpty);
   });
 
+  testWidgets('to do hides a finished habit until Done is selected', (
+    tester,
+  ) async {
+    final habits = MemoryHabitRepository();
+    final completions = MemoryCompletionRepository();
+    await habits.create(
+      HabitDraft(
+        name: 'Water',
+        icon: 'water',
+        colorKey: 'sea',
+        type: HabitType.boolean,
+        frequencyType: FrequencyType.daily,
+        startDate: CalendarDate.today().iso,
+      ),
+    );
+    await _pump(tester, habits: habits, completions: completions);
+
+    await tester.tap(find.byTooltip('Water'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(find.text('Water'), findsNothing);
+
+    await tester.tap(find.textContaining('Done'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text('Water'), findsOneWidget);
+  });
+
   testWidgets('a quantity habit steps up without jumping to done', (
     tester,
   ) async {

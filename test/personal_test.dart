@@ -8,6 +8,7 @@ import 'package:hayati/features/habits/domain/habit.dart';
 import 'package:hayati/features/habits/domain/habit_completion.dart';
 import 'package:hayati/features/habits/domain/habit_schedule.dart';
 import 'package:hayati/features/habits/domain/part_of_day.dart';
+import 'package:hayati/features/habits/domain/today_view.dart';
 import 'package:hayati/features/recap/domain/weekly_recap.dart';
 import 'package:hayati/features/recap/presentation/recap_page.dart';
 import 'package:hayati/features/settings/domain/app_preferences.dart';
@@ -41,6 +42,45 @@ void main() {
       PartOfDay.evening,
     );
     expect(resolvedPartOfDay(chosen: null, reminderMinutes: null), isNull);
+  });
+
+  test('today can hide finished habits without dropping a time filter', () {
+    expect(
+      showsHabit(
+        part: PartOfDay.morning,
+        partFilter: PartOfDay.morning,
+        complete: false,
+        status: TodayStatus.open,
+      ),
+      isTrue,
+    );
+    expect(
+      showsHabit(
+        part: PartOfDay.morning,
+        partFilter: PartOfDay.morning,
+        complete: true,
+        status: TodayStatus.open,
+      ),
+      isFalse,
+    );
+    expect(
+      showsHabit(
+        part: PartOfDay.evening,
+        partFilter: PartOfDay.morning,
+        complete: true,
+        status: TodayStatus.done,
+      ),
+      isFalse,
+    );
+    expect(
+      showsHabit(
+        part: null,
+        partFilter: null,
+        complete: true,
+        status: TodayStatus.all,
+      ),
+      isTrue,
+    );
   });
 
   test('plants grow from check-ins and streaks', () {

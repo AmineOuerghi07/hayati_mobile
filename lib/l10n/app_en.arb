@@ -515,5 +515,9 @@
   "recapMoodEmpty": "No mood written down this week.",
   "recapGardenTitle": "Garden",
   "recapGardenBody": "{count} plants grew this week.",
-  "@recapGardenBody": {"placeholders": {"count": {"type": "int"}}}
+  "@recapGardenBody": {"placeholders": {"count": {"type": "int"}}},
+"filterToDo": "To do",
+  "filterDone": "Done",
+  "filterNothingOpen": "Nothing left in this view.",
+  "filterNothingDone": "Nothing finished yet."
 }

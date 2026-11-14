@@ -2,6 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hayati/app/hayati_app.dart';
 import 'package:hayati/core/widgets/responsive.dart';
+import 'package:hayati/core/time/calendar_date.dart';
+import 'package:hayati/features/habits/domain/habit.dart';
+import 'package:hayati/features/habits/domain/habit_schedule.dart';
 import 'package:hayati/features/habits/presentation/habit_providers.dart';
 import 'package:hayati/features/journal/presentation/reflection_providers.dart';
 import 'package:hayati/features/auth/presentation/auth_providers.dart';
@@ -86,6 +89,54 @@ void main() {
         .colorScheme
         .primary;
     expect(after, isNot(before));
+  });
+
+  testWidgets('changing language with a habit on screen stays stable', (
+    tester,
+  ) async {
+    final habits = MemoryHabitRepository();
+    await habits.create(
+      HabitDraft(
+        name: 'Water',
+        icon: 'water',
+        colorKey: 'sea',
+        type: HabitType.boolean,
+        frequencyType: FrequencyType.daily,
+        startDate: CalendarDate.today().iso,
+      ),
+    );
+    tester.view.physicalSize = const Size(400, 2000);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          settingsRepositoryProvider.overrideWith(
+            (ref) => MemorySettingsRepository(),
+          ),
+          habitRepositoryProvider.overrideWith((ref) => habits),
+          completionRepositoryProvider.overrideWith(
+            (ref) => MemoryCompletionRepository(),
+          ),
+          reminderCoordinatorProvider.overrideWith(
+            (ref) => ReminderCoordinator(SilentReminderScheduler()),
+          ),
+          authRepositoryProvider.overrideWith((ref) => MemoryAuthRepository()),
+          reflectionRepositoryProvider.overrideWith(
+            (ref) => MemoryReflectionRepository(),
+          ),
+        ],
+        child: const HayatiApp(),
+      ),
+    );
+    await _settle(tester);
+    await tester.tap(find.text('Profile'));
+    await _settle(tester);
+    await tester.tap(find.text('Arabic'));
+    await _settle(tester);
+    expect(tester.takeException(), isNull);
+    expect(find.text('اليوم'), findsOneWidget);
   });
 
   testWidgets('Arabic selection mirrors the layout', (tester) async {

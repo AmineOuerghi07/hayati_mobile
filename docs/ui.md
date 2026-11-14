@@ -6,7 +6,7 @@ Hayati is meant to feel quiet: warm surfaces, soft cards, and short motion. The 
 
 `HayatiTokens` lives on the theme. Spacing is 4, 8, 12, 16, 24, and 32. Chips use a 12 radius, cards 20, and sheets 28. Motion is 150, 250, or 400 milliseconds on `Curves.easeOutCubic`. A check-off uses a slight overshoot. Every duration becomes zero when the system asks to reduce motion.
 
-Each palette still has a light and a dark scheme. The scaffold is a warm neutral tinted with the palette seed, and cards sit a step lighter so the list can breathe.
+Each palette still has a light and a dark scheme. In light mode the scaffold, cards, and bottom bar take a visible wash of the seed, so Dawn, Sea, and Dusk read as different rooms. Dark mode keeps a deeper wash of the same seed.
 
 ## Pieces
 
@@ -53,7 +53,11 @@ A guest can set a name during the introduction or from the profile card. Greetin
 
 Signing in no longer moves guest habits by itself. If this device has habits, a sheet asks what to keep: both, the account only, this device only, or a fresh start. A new account only offers to bring the habits along or start fresh. The destructive choices ask for a second tap.
 
-Today can be filtered into morning, afternoon, and evening. A habit with no part of day uses its reminder hour, or stays available under All. The hero paints a sun in the morning and afternoon, and a moon with stars in the evening. From 6pm a reflection card asks for a mood, one thing to be glad for, and a note. The journal shows those days as a mood calendar.
+Launch opens on a warm paper color, then a plant grows and the name fades in before the day appears. Changing the filter crossfades the list. Snack bars with Undo close after four seconds. The name editor keeps its field alive until the sheet has finished closing, and the router is created once so a language change does not mount a second navigator.
+
+Today opens on what is still to do, the same default Habitify and Benji use, so finished habits leave the list. To do, Done, and All sit on the first chip row. Morning, afternoon, evening, and any time sit on a quieter second row. Drag-to-reorder is available on All with no time filter, so a filtered list cannot reshuffle the wrong habits. The hero, week strip, and habit rows stay; the recap, the evening note, and Breathe, Focus, Garden, and Journal are text buttons instead of large cards. Settings lists those same tools as rows.
+
+The hero paints a sun in the morning and afternoon, and a moon with stars in the evening. From 6pm a short link asks for a mood, one thing to be glad for, and a note. The journal shows those days as a mood calendar.
 
 The garden turns each habit into a plant. Seeds, sprouts, buds, blooms, and trees come from check-ins and streaks, and unlocked badges grow rare plants. Stats and the first day of the week open a weekly recap: full-screen cards for check-ins, the best day, the top habit, perfect days, mood, and the garden.
 

@@ -55,6 +55,8 @@ Future<bool> confirmAction(
   return result ?? false;
 }
 
+const snackBarDuration = Duration(seconds: 4);
+
 void showUndoBar(
   BuildContext context, {
   required String message,
@@ -63,6 +65,8 @@ void showUndoBar(
 }) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
+      duration: snackBarDuration,
+      persist: false,
       content: Text(message),
       action: SnackBarAction(label: actionLabel, onPressed: onUndo),
     ),

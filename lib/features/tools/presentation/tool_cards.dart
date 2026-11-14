@@ -4,6 +4,52 @@ import 'package:hayati/core/widgets/soft_card.dart';
 import 'package:hayati/l10n/app_localizations.dart';
 import 'package:material_ui/material_ui.dart';
 
+/// Four quiet shortcuts. Lighter than the gradient cards, so Today stays a list.
+class QuietTools extends StatelessWidget {
+  const QuietTools({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final items = [
+      (Icons.air_rounded, l10n.breatheTitle, '/breathe'),
+      (Icons.timer_outlined, l10n.focusTitle, '/focus'),
+      (Icons.yard_outlined, l10n.gardenTitle, '/garden'),
+      (Icons.menu_book_outlined, l10n.journalTitle, '/journal'),
+    ];
+    return Row(
+      children: [
+        for (final (icon, label, path) in items)
+          Expanded(
+            child: TextButton(
+              onPressed: () => context.push(path),
+              style: TextButton.styleFrom(
+                minimumSize: const Size(48, 64),
+                padding: const EdgeInsetsDirectional.symmetric(
+                  horizontal: 4,
+                  vertical: 8,
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(icon, size: 22),
+                  const SizedBox(height: 4),
+                  Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
+                ],
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
 /// Breathe and Focus side by side.
 class ToolCards extends StatelessWidget {
   const ToolCards({super.key});

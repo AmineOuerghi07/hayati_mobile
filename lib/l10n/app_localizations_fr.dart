@@ -1187,4 +1187,16 @@ class AppLocalizationsFr extends AppLocalizations {
   String recapGardenBody(int count) {
     return '$count plantes ont grandi cette semaine.';
   }
+
+  @override
+  String get filterToDo => 'À faire';
+
+  @override
+  String get filterDone => 'Faites';
+
+  @override
+  String get filterNothingOpen => 'Plus rien dans cette vue.';
+
+  @override
+  String get filterNothingDone => 'Rien de terminé pour l\'instant.';
 }

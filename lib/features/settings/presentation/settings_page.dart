@@ -21,7 +21,6 @@ import 'package:hayati/features/onboarding/presentation/onboarding_gate.dart';
 import 'package:hayati/features/settings/domain/app_preferences.dart';
 import 'package:hayati/features/settings/presentation/preferences_controller.dart';
 import 'package:hayati/features/sync/presentation/sync_providers.dart';
-import 'package:hayati/features/tools/presentation/tool_cards.dart';
 import 'package:hayati/l10n/app_localizations.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -62,7 +61,53 @@ class SettingsPage extends ConsumerWidget {
           ),
           const _AchievementStrip(),
           SectionHeader(l10n.tools, icon: Icons.self_improvement_rounded),
-          const ToolCards(),
+          SoftCard(
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: [
+                ListTile(
+                  leading: const _TileIcon(
+                    Icons.yard_outlined,
+                    Color(0xFF15803D),
+                  ),
+                  title: Text(l10n.gardenTitle),
+                  subtitle: Text(l10n.gardenShort),
+                  trailing: const Icon(Icons.chevron_right_rounded),
+                  onTap: () => context.push('/garden'),
+                ),
+                ListTile(
+                  leading: const _TileIcon(
+                    Icons.menu_book_outlined,
+                    Color(0xFF6D28D9),
+                  ),
+                  title: Text(l10n.journalTitle),
+                  subtitle: Text(l10n.journalShort),
+                  trailing: const Icon(Icons.chevron_right_rounded),
+                  onTap: () => context.push('/journal'),
+                ),
+                ListTile(
+                  leading: const _TileIcon(
+                    Icons.air_rounded,
+                    Color(0xFF0F766E),
+                  ),
+                  title: Text(l10n.breatheTitle),
+                  subtitle: Text(l10n.breatheShort),
+                  trailing: const Icon(Icons.chevron_right_rounded),
+                  onTap: () => context.push('/breathe'),
+                ),
+                ListTile(
+                  leading: const _TileIcon(
+                    Icons.timer_outlined,
+                    Color(0xFFEA580C),
+                  ),
+                  title: Text(l10n.focusTitle),
+                  subtitle: Text(l10n.focusShort),
+                  trailing: const Icon(Icons.chevron_right_rounded),
+                  onTap: () => context.push('/focus'),
+                ),
+              ],
+            ),
+          ),
           SectionHeader(l10n.appearance, icon: Icons.palette_outlined),
           SoftCard(
             padding: const EdgeInsetsDirectional.symmetric(vertical: 8),
@@ -96,20 +141,20 @@ class SettingsPage extends ConsumerWidget {
                     style: theme.textTheme.titleSmall,
                   ),
                 ),
-                RadioGroup<Appearance>(
-                  groupValue: preferences.appearance,
-                  onChanged: (value) {
-                    if (value == null) return;
-                    controller.setAppearance(value);
-                  },
-                  child: Column(
-                    children: [
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(16, 4, 16, 8),
+                  child: SegmentedButton<Appearance>(
+                    segments: [
                       for (final option in Appearance.values)
-                        RadioListTile<Appearance>(
+                        ButtonSegment(
                           value: option,
-                          title: Text(_appearanceLabel(l10n, option)),
+                          label: Text(_appearanceLabel(l10n, option)),
                         ),
                     ],
+                    selected: {preferences.appearance},
+                    onSelectionChanged: (values) {
+                      controller.setAppearance(values.first);
+                    },
                   ),
                 ),
                 Padding(

@@ -23,6 +23,18 @@ void main() {
     }
   });
 
+  test('light palettes tint the background differently', () {
+    final dawn = buildHayatiTheme(AppThemeId.dawn, Brightness.light);
+    final sea = buildHayatiTheme(AppThemeId.sea, Brightness.light);
+    final dusk = buildHayatiTheme(AppThemeId.dusk, Brightness.light);
+    expect(dawn.scaffoldBackgroundColor, isNot(sea.scaffoldBackgroundColor));
+    expect(sea.scaffoldBackgroundColor, isNot(dusk.scaffoldBackgroundColor));
+    expect(
+      dawn.colorScheme.surfaceContainerLowest,
+      isNot(sea.colorScheme.surfaceContainerLowest),
+    );
+  });
+
   test('appearance maps onto ThemeMode', () {
     expect(themeModeFor(Appearance.system), ThemeMode.system);
     expect(themeModeFor(Appearance.light), ThemeMode.light);

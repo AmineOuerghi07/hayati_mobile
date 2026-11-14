@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hayati/app/theme.dart';
 import 'package:hayati/core/config/app_config_provider.dart';
 import 'package:hayati/core/haptics.dart';
+import 'package:hayati/core/widgets/confirm_sheet.dart';
 import 'package:hayati/features/auth/domain/auth_models.dart';
 import 'package:hayati/features/auth/presentation/auth_providers.dart';
 import 'package:hayati/features/auth/presentation/auth_widgets.dart';
@@ -417,7 +418,12 @@ class _ChangePasswordPageState extends ConsumerState<ChangePasswordPage> {
             newPassword: _next.text,
           );
       playHaptic(strong: true);
-      messenger.showSnackBar(SnackBar(content: Text(l10n.passwordUpdated)));
+      messenger.showSnackBar(
+        SnackBar(
+          duration: snackBarDuration,
+          content: Text(l10n.passwordUpdated),
+        ),
+      );
       if (mounted) context.pop();
     } on AuthFailure catch (failure) {
       setState(() => _failure = failure);
