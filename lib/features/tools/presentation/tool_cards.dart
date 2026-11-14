@@ -11,31 +11,62 @@ class ToolCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: ToolCard(
-              icon: Icons.air_rounded,
-              colors: const [Color(0xFF7DD3FC), Color(0xFF0284C7)],
-              title: l10n.breatheTitle,
-              subtitle: l10n.breatheShort,
-              onTap: () => context.push('/breathe'),
-            ),
+    return Column(
+      children: [
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: ToolCard(
+                  icon: Icons.air_rounded,
+                  colors: const [Color(0xFFCCFBF1), Color(0xFF0F766E)],
+                  title: l10n.breatheTitle,
+                  subtitle: l10n.breatheShort,
+                  onTap: () => context.push('/breathe'),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: ToolCard(
+                  icon: Icons.timer_outlined,
+                  colors: const [Color(0xFFFDBA74), Color(0xFFEA580C)],
+                  title: l10n.focusTitle,
+                  subtitle: l10n.focusShort,
+                  onTap: () => context.push('/focus'),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: ToolCard(
-              icon: Icons.timer_outlined,
-              colors: const [Color(0xFFFDBA74), Color(0xFFEA580C)],
-              title: l10n.focusTitle,
-              subtitle: l10n.focusShort,
-              onTap: () => context.push('/focus'),
-            ),
+        ),
+        const SizedBox(height: 12),
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: ToolCard(
+                  icon: Icons.yard_outlined,
+                  colors: const [Color(0xFFBBF7D0), Color(0xFF15803D)],
+                  title: l10n.gardenTitle,
+                  subtitle: l10n.gardenShort,
+                  onTap: () => context.push('/garden'),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: ToolCard(
+                  icon: Icons.menu_book_outlined,
+                  colors: const [Color(0xFFE9D5FF), Color(0xFF6D28D9)],
+                  title: l10n.journalTitle,
+                  subtitle: l10n.journalShort,
+                  onTap: () => context.push('/journal'),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

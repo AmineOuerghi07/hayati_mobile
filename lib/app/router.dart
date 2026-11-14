@@ -4,12 +4,15 @@ import 'package:hayati/app/app_shell.dart';
 import 'package:hayati/features/achievements/presentation/achievements_page.dart';
 import 'package:hayati/features/auth/presentation/account_pages.dart';
 import 'package:hayati/features/auth/presentation/sign_in_page.dart';
+import 'package:hayati/features/garden/presentation/garden_page.dart';
 import 'package:hayati/features/habits/presentation/habit_detail_page.dart';
 import 'package:hayati/features/habits/presentation/habit_editor_page.dart';
 import 'package:hayati/features/habits/presentation/today_page.dart';
 import 'package:hayati/features/onboarding/presentation/onboarding_gate.dart';
 import 'package:hayati/features/onboarding/presentation/onboarding_page.dart';
+import 'package:hayati/features/journal/presentation/journal_page.dart';
 import 'package:hayati/features/onboarding/presentation/onboarding_redirect.dart';
+import 'package:hayati/features/recap/presentation/recap_page.dart';
 import 'package:hayati/features/settings/presentation/archived_habits_page.dart';
 import 'package:hayati/features/settings/presentation/settings_page.dart';
 import 'package:hayati/features/stats/presentation/stats_page.dart';
@@ -105,6 +108,24 @@ GoRouter appRouter(Ref ref) {
           pageKey: state.pageKey,
           child: FocusPage(habitId: state.uri.queryParameters['habit']),
         ),
+      ),
+      GoRoute(
+        path: '/garden',
+        parentNavigatorKey: _rootNavigatorKey,
+        pageBuilder: (context, state) =>
+            slideUpPage(pageKey: state.pageKey, child: const GardenPage()),
+      ),
+      GoRoute(
+        path: '/journal',
+        parentNavigatorKey: _rootNavigatorKey,
+        pageBuilder: (context, state) =>
+            slideUpPage(pageKey: state.pageKey, child: const JournalPage()),
+      ),
+      GoRoute(
+        path: '/recap',
+        parentNavigatorKey: _rootNavigatorKey,
+        pageBuilder: (context, state) =>
+            slideUpPage(pageKey: state.pageKey, child: const RecapPage()),
       ),
       GoRoute(
         path: '/breathe',

@@ -54,6 +54,9 @@ class MemoryAuthRepository implements AuthRepository {
   }) => throw UnimplementedError();
 
   @override
+  Future<void> updateDisplayName(String displayName) async {}
+
+  @override
   Future<void> signOut() async {}
 
   @override

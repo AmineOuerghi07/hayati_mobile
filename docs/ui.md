@@ -48,3 +48,13 @@ The breakpoints follow Material 3. Below 600 wide there is a bottom navigation b
 - From 900 wide, Stats splits into an overview column and a heatmap and habits column. The summary tiles go into one row of four once the column is wide enough.
 - Onboarding scrolls when it is short. On a landscape phone the plant moves beside the steps, and the template grid adds columns as it widens.
 - The focus and breathing dials size themselves from both the width and the height.
+
+A guest can set a name during the introduction or from the profile card. Greetings use it. Once an account is signed in, the account name is the one on screen.
+
+Signing in no longer moves guest habits by itself. If this device has habits, a sheet asks what to keep: both, the account only, this device only, or a fresh start. A new account only offers to bring the habits along or start fresh. The destructive choices ask for a second tap.
+
+Today can be filtered into morning, afternoon, and evening. A habit with no part of day uses its reminder hour, or stays available under All. The hero paints a sun in the morning and afternoon, and a moon with stars in the evening. From 6pm a reflection card asks for a mood, one thing to be glad for, and a note. The journal shows those days as a mood calendar.
+
+The garden turns each habit into a plant. Seeds, sprouts, buds, blooms, and trees come from check-ins and streaks, and unlocked badges grow rare plants. Stats and the first day of the week open a weekly recap: full-screen cards for check-ins, the best day, the top habit, perfect days, mood, and the garden.
+
+Breathing stays in the theme's primary color. The patterns are Calm (4-4-6), Box (4-4-4-4), 4-7-8, and Coherent (5-5), for one, three, or five minutes.

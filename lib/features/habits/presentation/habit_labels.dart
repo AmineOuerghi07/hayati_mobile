@@ -1,16 +1,49 @@
+import 'package:hayati/features/auth/domain/auth_models.dart';
 import 'package:hayati/features/habits/domain/habit.dart';
+import 'package:hayati/features/habits/domain/part_of_day.dart';
+import 'package:hayati/features/settings/domain/app_preferences.dart';
 import 'package:hayati/features/habits/domain/habit_schedule.dart';
 import 'package:hayati/features/habits/domain/habit_templates.dart';
 import 'package:hayati/l10n/app_localizations.dart';
+import 'package:material_ui/material_ui.dart';
 
 const knownUnits = <String>['glasses', 'pages', 'minutes', 'times'];
 
-String greetingFor(AppLocalizations l10n, DateTime now) {
+String greetingFor(AppLocalizations l10n, DateTime now, {String? name}) {
   final hour = now.hour;
-  if (hour < 12) return l10n.greetingMorning;
-  if (hour < 17) return l10n.greetingAfternoon;
-  return l10n.greetingEvening;
+  final base = hour < 12
+      ? l10n.greetingMorning
+      : hour < 17
+      ? l10n.greetingAfternoon
+      : l10n.greetingEvening;
+  final trimmed = name?.trim() ?? '';
+  if (trimmed.isEmpty) return base;
+  return l10n.greetingNamed(base, trimmed);
 }
+
+/// The account name while signed in, otherwise the name saved on this device.
+String? preferredName(AuthSession? session, AppPreferences? preferences) {
+  if (session != null && !session.isGuest) {
+    final account = session.user?.displayName.trim() ?? '';
+    if (account.isNotEmpty) return account;
+  }
+  final guest = preferences?.displayName.trim() ?? '';
+  return guest.isEmpty ? null : guest;
+}
+
+String partLabel(AppLocalizations l10n, PartOfDay? part) => switch (part) {
+  PartOfDay.morning => l10n.partMorning,
+  PartOfDay.afternoon => l10n.partAfternoon,
+  PartOfDay.evening => l10n.partEvening,
+  null => l10n.partAnytime,
+};
+
+IconData partIcon(PartOfDay? part) => switch (part) {
+  PartOfDay.morning => Icons.wb_twilight_rounded,
+  PartOfDay.afternoon => Icons.light_mode_outlined,
+  PartOfDay.evening => Icons.dark_mode_outlined,
+  null => Icons.schedule_rounded,
+};
 
 /// The same line all day, a different one tomorrow.
 String dailyQuote(AppLocalizations l10n, DateTime day) {

@@ -1793,6 +1793,432 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Same pace as last week'**
   String get trendSame;
+
+  /// No description provided for @sessionMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} min'**
+  String sessionMinutes(int count);
+
+  /// No description provided for @breatheComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'That\'s enough'**
+  String get breatheComplete;
+
+  /// No description provided for @breatheCompleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A quiet minute, done.'**
+  String get breatheCompleteBody;
+
+  /// No description provided for @breatheAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Again'**
+  String get breatheAgain;
+
+  /// No description provided for @breathCalm.
+  ///
+  /// In en, this message translates to:
+  /// **'Calm'**
+  String get breathCalm;
+
+  /// No description provided for @breathBox.
+  ///
+  /// In en, this message translates to:
+  /// **'Box'**
+  String get breathBox;
+
+  /// No description provided for @breathFourSevenEight.
+  ///
+  /// In en, this message translates to:
+  /// **'4-7-8'**
+  String get breathFourSevenEight;
+
+  /// No description provided for @breathCoherent.
+  ///
+  /// In en, this message translates to:
+  /// **'Coherent'**
+  String get breathCoherent;
+
+  /// No description provided for @breathStepIn.
+  ///
+  /// In en, this message translates to:
+  /// **'In {seconds}'**
+  String breathStepIn(int seconds);
+
+  /// No description provided for @breathStepHold.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold {seconds}'**
+  String breathStepHold(int seconds);
+
+  /// No description provided for @breathStepOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Out {seconds}'**
+  String breathStepOut(int seconds);
+
+  /// No description provided for @greetingNamed.
+  ///
+  /// In en, this message translates to:
+  /// **'{greeting}, {name}'**
+  String greetingNamed(String greeting, String name);
+
+  /// No description provided for @yourName.
+  ///
+  /// In en, this message translates to:
+  /// **'Your name'**
+  String get yourName;
+
+  /// No description provided for @namePrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'What should we call you?'**
+  String get namePrompt;
+
+  /// No description provided for @partOfDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Part of day'**
+  String get partOfDay;
+
+  /// No description provided for @partAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get partAll;
+
+  /// No description provided for @partMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning'**
+  String get partMorning;
+
+  /// No description provided for @partAfternoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Afternoon'**
+  String get partAfternoon;
+
+  /// No description provided for @partEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Evening'**
+  String get partEvening;
+
+  /// No description provided for @partAnytime.
+  ///
+  /// In en, this message translates to:
+  /// **'Any time'**
+  String get partAnytime;
+
+  /// No description provided for @partEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing in this part of the day.'**
+  String get partEmpty;
+
+  /// No description provided for @dataChoiceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What should we keep?'**
+  String get dataChoiceTitle;
+
+  /// No description provided for @dataChoiceConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get dataChoiceConfirm;
+
+  /// No description provided for @dataChoiceGoBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get dataChoiceGoBack;
+
+  /// No description provided for @dataChoiceMerge.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep both'**
+  String get dataChoiceMerge;
+
+  /// No description provided for @dataChoiceMergeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Bring this device\'s habits into the account.'**
+  String get dataChoiceMergeBody;
+
+  /// No description provided for @dataChoiceKeepAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the account'**
+  String get dataChoiceKeepAccount;
+
+  /// No description provided for @dataChoiceKeepAccountBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave this device\'s habits behind.'**
+  String get dataChoiceKeepAccountBody;
+
+  /// No description provided for @dataChoiceKeepDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this device'**
+  String get dataChoiceKeepDevice;
+
+  /// No description provided for @dataChoiceKeepDeviceBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace the account with what is on this device.'**
+  String get dataChoiceKeepDeviceBody;
+
+  /// No description provided for @dataChoiceFresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Start fresh'**
+  String get dataChoiceFresh;
+
+  /// No description provided for @dataChoiceFreshBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear both and begin with an empty day.'**
+  String get dataChoiceFreshBody;
+
+  /// No description provided for @scopeCounts.
+  ///
+  /// In en, this message translates to:
+  /// **'On this device: {habits} habits, {checkIns} check-ins'**
+  String scopeCounts(int habits, int checkIns);
+
+  /// No description provided for @accountScopeCounts.
+  ///
+  /// In en, this message translates to:
+  /// **'In the account: {habits} habits, {checkIns} check-ins'**
+  String accountScopeCounts(int habits, int checkIns);
+
+  /// No description provided for @gardenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Garden'**
+  String get gardenTitle;
+
+  /// No description provided for @gardenShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Your plants'**
+  String get gardenShort;
+
+  /// No description provided for @gardenEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Each habit you keep becomes a plant.'**
+  String get gardenEmpty;
+
+  /// No description provided for @rarePlants.
+  ///
+  /// In en, this message translates to:
+  /// **'Rare plants'**
+  String get rarePlants;
+
+  /// No description provided for @stageSeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Seed'**
+  String get stageSeed;
+
+  /// No description provided for @stageSprout.
+  ///
+  /// In en, this message translates to:
+  /// **'Sprout'**
+  String get stageSprout;
+
+  /// No description provided for @stageBud.
+  ///
+  /// In en, this message translates to:
+  /// **'Bud'**
+  String get stageBud;
+
+  /// No description provided for @stageBloom.
+  ///
+  /// In en, this message translates to:
+  /// **'In bloom'**
+  String get stageBloom;
+
+  /// No description provided for @stageTree.
+  ///
+  /// In en, this message translates to:
+  /// **'Tree'**
+  String get stageTree;
+
+  /// No description provided for @journalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Journal'**
+  String get journalTitle;
+
+  /// No description provided for @journalShort.
+  ///
+  /// In en, this message translates to:
+  /// **'How the day felt'**
+  String get journalShort;
+
+  /// No description provided for @noReflections.
+  ///
+  /// In en, this message translates to:
+  /// **'Evenings are a good time for one quiet line.'**
+  String get noReflections;
+
+  /// No description provided for @reflectionPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'How was your day?'**
+  String get reflectionPrompt;
+
+  /// No description provided for @reflectionBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A mood, one thing you\'re glad for, and a note if you want.'**
+  String get reflectionBody;
+
+  /// No description provided for @reflectionSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved for today. Tap to change it.'**
+  String get reflectionSaved;
+
+  /// No description provided for @gratitudeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Glad for'**
+  String get gratitudeLabel;
+
+  /// No description provided for @gratitudeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'One small thing'**
+  String get gratitudeHint;
+
+  /// No description provided for @reflectionNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get reflectionNote;
+
+  /// No description provided for @recapTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This week'**
+  String get recapTitle;
+
+  /// No description provided for @recapBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Your week, told in a few cards.'**
+  String get recapBanner;
+
+  /// No description provided for @recapEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A quiet week. Next week is a fresh page.'**
+  String get recapEmptyBody;
+
+  /// No description provided for @recapNextTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Next week'**
+  String get recapNextTitle;
+
+  /// No description provided for @recapNextBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Same habits, a new stretch of days.'**
+  String get recapNextBody;
+
+  /// No description provided for @recapBestDayEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No standout day yet.'**
+  String get recapBestDayEmpty;
+
+  /// No description provided for @recapBestDayBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{day} was the fullest, with {count} check-ins.'**
+  String recapBestDayBody(String day, int count);
+
+  /// No description provided for @recapCheckInsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-ins'**
+  String get recapCheckInsTitle;
+
+  /// No description provided for @recapCheckInsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} habits finished over the last seven days.'**
+  String recapCheckInsBody(int count);
+
+  /// No description provided for @recapBestDayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Best day'**
+  String get recapBestDayTitle;
+
+  /// No description provided for @recapTopHabitTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Top habit'**
+  String get recapTopHabitTitle;
+
+  /// No description provided for @recapTopHabitEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No habit led the week.'**
+  String get recapTopHabitEmpty;
+
+  /// No description provided for @recapTopHabitBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{habit} showed up {count} times.'**
+  String recapTopHabitBody(String habit, int count);
+
+  /// No description provided for @recapPerfectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Perfect days'**
+  String get recapPerfectTitle;
+
+  /// No description provided for @recapPerfectBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} days where everything due was done.'**
+  String recapPerfectBody(int count);
+
+  /// No description provided for @recapMoodTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mood'**
+  String get recapMoodTitle;
+
+  /// No description provided for @recapMoodEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No mood written down this week.'**
+  String get recapMoodEmpty;
+
+  /// No description provided for @recapGardenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Garden'**
+  String get recapGardenTitle;
+
+  /// No description provided for @recapGardenBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} plants grew this week.'**
+  String recapGardenBody(int count);
 }
 
 class _AppLocalizationsDelegate

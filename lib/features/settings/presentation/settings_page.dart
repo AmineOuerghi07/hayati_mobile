@@ -10,6 +10,9 @@ import 'package:hayati/core/widgets/section_header.dart';
 import 'package:hayati/core/widgets/soft_card.dart';
 import 'package:hayati/core/widgets/staggered_item.dart';
 import 'package:hayati/features/achievements/presentation/achievement_providers.dart';
+import 'package:hayati/features/auth/presentation/name_sheet.dart';
+import 'package:hayati/features/garden/presentation/garden_page.dart';
+import 'package:hayati/features/habits/presentation/habit_labels.dart';
 import 'package:hayati/features/achievements/presentation/achievement_style.dart';
 import 'package:hayati/features/achievements/presentation/achievements_page.dart';
 import 'package:hayati/features/auth/domain/auth_models.dart';
@@ -443,6 +446,12 @@ class _ProfileCard extends ConsumerWidget {
     final session =
         ref.watch(authSessionProvider).value ?? const AuthSession.guest();
     final user = session.user;
+    final shownName =
+        preferredName(
+          session,
+          ref.watch(preferencesControllerProvider).value,
+        ) ??
+        l10n.onThisDevice;
     final summary = ref.watch(achievementSummaryProvider);
     final syncing = ref.watch(syncControllerProvider) == 'syncing';
     final onHero = scheme.onPrimaryContainer;
@@ -495,7 +504,7 @@ class _ProfileCard extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          user?.displayName ?? l10n.onThisDevice,
+                          shownName,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: theme.textTheme.titleLarge?.copyWith(
@@ -550,6 +559,11 @@ class _ProfileCard extends ConsumerWidget {
                       ],
                     ),
                   ),
+                  IconButton(
+                    tooltip: l10n.yourName,
+                    onPressed: () => showNameSheet(context, ref),
+                    icon: Icon(Icons.edit_outlined, color: onHero),
+                  ),
                 ],
               ),
               if (summary != null) ...[
@@ -574,6 +588,11 @@ class _ProfileCard extends ConsumerWidget {
                   ],
                 ),
               ],
+              const SizedBox(height: 12),
+              GestureDetector(
+                onTap: () => context.push('/garden'),
+                child: const GardenStrip(),
+              ),
               const SizedBox(height: 18),
               if (user == null)
                 FilledButton.icon(

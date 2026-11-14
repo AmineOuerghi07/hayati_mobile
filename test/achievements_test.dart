@@ -73,11 +73,14 @@ void main() {
   });
 
   test('the breathing cycle moves through inhale, hold, and exhale', () {
-    expect(breathCycleSeconds, 14);
-    expect(breathPhaseAt(0).phase, BreathPhase.inhale);
-    expect(breathPhaseAt(2 / 14).within, closeTo(0.5, 0.001));
-    expect(breathPhaseAt(5 / 14).phase, BreathPhase.hold);
-    expect(breathPhaseAt(11 / 14).phase, BreathPhase.exhale);
-    expect(breathPhaseAt(1).within, 1);
+    final calm = breathPatterns.first;
+    expect(calm.seconds, 14);
+    expect(breathPhaseAt(calm, 0).phase, BreathPhase.inhale);
+    expect(breathPhaseAt(calm, 2 / 14).within, closeTo(0.5, 0.001));
+    expect(breathPhaseAt(calm, 5 / 14).phase, BreathPhase.hold);
+    expect(breathPhaseAt(calm, 11 / 14).phase, BreathPhase.exhale);
+    expect(breathPhaseAt(calm, 1).within, 1);
+    expect(breathPatterns[1].seconds, 16);
+    expect(breathPhaseAt(breathPatterns[1], 0.9).phase, BreathPhase.hold);
   });
 }

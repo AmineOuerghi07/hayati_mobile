@@ -46,4 +46,8 @@ class PreferencesController extends _$PreferencesController {
   Future<void> setOnboardingDone(bool done) {
     return ref.read(settingsRepositoryProvider).setOnboardingDone(done);
   }
+
+  Future<void> setDisplayName(String name) {
+    return ref.read(settingsRepositoryProvider).setDisplayName(name);
+  }
 }

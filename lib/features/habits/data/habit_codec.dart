@@ -2,6 +2,7 @@ import 'package:hayati/core/database/app_database.dart';
 import 'package:hayati/features/habits/domain/habit.dart';
 import 'package:hayati/features/habits/domain/habit_completion.dart';
 import 'package:hayati/features/habits/domain/habit_schedule.dart';
+import 'package:hayati/features/habits/domain/part_of_day.dart';
 
 List<int> decodeWeekdays(String raw) {
   if (raw.trim().isEmpty) return const [];
@@ -29,6 +30,7 @@ Habit habitFromRow(HabitRow row) {
     weekdays: decodeWeekdays(row.weekdays),
     timesPerWeek: row.timesPerWeek,
     reminderTime: row.reminderTime,
+    partOfDay: PartOfDay.values.asNameMap()[row.partOfDay ?? ''],
     startDate: row.startDate,
     archivedAt: row.archivedAt?.toUtc(),
     sortOrder: row.sortOrder,

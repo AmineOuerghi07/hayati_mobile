@@ -13,6 +13,7 @@ part 'app_database.g.dart';
   tables: [
     Habits,
     HabitCompletions,
+    DailyReflections,
     AppSettings,
     LocalAccounts,
     AuthChallenges,
@@ -40,7 +41,7 @@ class AppDatabase extends _$AppDatabase {
       );
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -54,6 +55,10 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 3) {
         await migrator.createTable(syncOutbox);
+      }
+      if (from < 4) {
+        await migrator.addColumn(habits, habits.partOfDay);
+        await migrator.createTable(dailyReflections);
       }
     },
   );

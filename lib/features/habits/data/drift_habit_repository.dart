@@ -90,6 +90,7 @@ class DriftHabitRepository implements HabitRepository {
       weekdays: draft.weekdays,
       timesPerWeek: draft.timesPerWeek,
       reminderTime: draft.reminderTime,
+      partOfDay: draft.partOfDay,
       startDate: draft.startDate,
       sortOrder: active.length,
     );
@@ -197,6 +198,7 @@ class DriftHabitRepository implements HabitRepository {
       weekdays: Value(encodeWeekdays(habit.weekdays)),
       timesPerWeek: Value(habit.timesPerWeek),
       reminderTime: Value(habit.reminderTime),
+      partOfDay: Value(habit.partOfDay?.name),
       startDate: habit.startDate,
       archivedAt: Value(habit.archivedAt),
       sortOrder: Value(habit.sortOrder),

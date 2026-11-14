@@ -940,4 +940,251 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get trendSame => 'Même rythme que la semaine dernière';
+
+  @override
+  String sessionMinutes(int count) {
+    return '$count min';
+  }
+
+  @override
+  String get breatheComplete => 'C\'est assez';
+
+  @override
+  String get breatheCompleteBody => 'Une minute calme, terminée.';
+
+  @override
+  String get breatheAgain => 'Encore';
+
+  @override
+  String get breathCalm => 'Calme';
+
+  @override
+  String get breathBox => 'Carré';
+
+  @override
+  String get breathFourSevenEight => '4-7-8';
+
+  @override
+  String get breathCoherent => 'Cohérent';
+
+  @override
+  String breathStepIn(int seconds) {
+    return 'Inspirez $seconds';
+  }
+
+  @override
+  String breathStepHold(int seconds) {
+    return 'Retenez $seconds';
+  }
+
+  @override
+  String breathStepOut(int seconds) {
+    return 'Expirez $seconds';
+  }
+
+  @override
+  String greetingNamed(String greeting, String name) {
+    return '$greeting, $name';
+  }
+
+  @override
+  String get yourName => 'Votre nom';
+
+  @override
+  String get namePrompt => 'Comment devons-nous vous appeler ?';
+
+  @override
+  String get partOfDay => 'Moment de la journée';
+
+  @override
+  String get partAll => 'Tout';
+
+  @override
+  String get partMorning => 'Matin';
+
+  @override
+  String get partAfternoon => 'Après-midi';
+
+  @override
+  String get partEvening => 'Soir';
+
+  @override
+  String get partAnytime => 'N\'importe quand';
+
+  @override
+  String get partEmpty => 'Rien pour ce moment de la journée.';
+
+  @override
+  String get dataChoiceTitle => 'Que faut-il garder ?';
+
+  @override
+  String get dataChoiceConfirm => 'Continuer';
+
+  @override
+  String get dataChoiceGoBack => 'Retour';
+
+  @override
+  String get dataChoiceMerge => 'Garder les deux';
+
+  @override
+  String get dataChoiceMergeBody =>
+      'Ajouter les habitudes de cet appareil au compte.';
+
+  @override
+  String get dataChoiceKeepAccount => 'Utiliser le compte';
+
+  @override
+  String get dataChoiceKeepAccountBody =>
+      'Laisser les habitudes de cet appareil de côté.';
+
+  @override
+  String get dataChoiceKeepDevice => 'Utiliser cet appareil';
+
+  @override
+  String get dataChoiceKeepDeviceBody =>
+      'Remplacer le compte par ce qui est sur cet appareil.';
+
+  @override
+  String get dataChoiceFresh => 'Repartir à zéro';
+
+  @override
+  String get dataChoiceFreshBody =>
+      'Effacer les deux et commencer une journée vide.';
+
+  @override
+  String scopeCounts(int habits, int checkIns) {
+    return 'Sur cet appareil : $habits habitudes, $checkIns suivis';
+  }
+
+  @override
+  String accountScopeCounts(int habits, int checkIns) {
+    return 'Dans le compte : $habits habitudes, $checkIns suivis';
+  }
+
+  @override
+  String get gardenTitle => 'Jardin';
+
+  @override
+  String get gardenShort => 'Vos plantes';
+
+  @override
+  String get gardenEmpty =>
+      'Chaque habitude que vous gardez devient une plante.';
+
+  @override
+  String get rarePlants => 'Plantes rares';
+
+  @override
+  String get stageSeed => 'Graine';
+
+  @override
+  String get stageSprout => 'Pousse';
+
+  @override
+  String get stageBud => 'Bourgeon';
+
+  @override
+  String get stageBloom => 'En fleur';
+
+  @override
+  String get stageTree => 'Arbre';
+
+  @override
+  String get journalTitle => 'Journal';
+
+  @override
+  String get journalShort => 'Le ressenti du jour';
+
+  @override
+  String get noReflections =>
+      'Le soir est un bon moment pour une ligne tranquille.';
+
+  @override
+  String get reflectionPrompt => 'Comment s\'est passée votre journée ?';
+
+  @override
+  String get reflectionBody =>
+      'Une humeur, une chose dont vous êtes content, et une note si vous voulez.';
+
+  @override
+  String get reflectionSaved =>
+      'Enregistré pour aujourd\'hui. Touchez pour modifier.';
+
+  @override
+  String get gratitudeLabel => 'Content de';
+
+  @override
+  String get gratitudeHint => 'Une petite chose';
+
+  @override
+  String get reflectionNote => 'Note';
+
+  @override
+  String get recapTitle => 'Cette semaine';
+
+  @override
+  String get recapBanner => 'Votre semaine, en quelques cartes.';
+
+  @override
+  String get recapEmptyBody =>
+      'Une semaine calme. La suivante est une page neuve.';
+
+  @override
+  String get recapNextTitle => 'Semaine prochaine';
+
+  @override
+  String get recapNextBody =>
+      'Les mêmes habitudes, une nouvelle série de jours.';
+
+  @override
+  String get recapBestDayEmpty => 'Pas encore de jour marquant.';
+
+  @override
+  String recapBestDayBody(String day, int count) {
+    return '$day a été le plus rempli, avec $count suivis.';
+  }
+
+  @override
+  String get recapCheckInsTitle => 'Suivis';
+
+  @override
+  String recapCheckInsBody(int count) {
+    return '$count habitudes terminées sur les sept derniers jours.';
+  }
+
+  @override
+  String get recapBestDayTitle => 'Meilleur jour';
+
+  @override
+  String get recapTopHabitTitle => 'Habitude principale';
+
+  @override
+  String get recapTopHabitEmpty => 'Aucune habitude n\'a mené la semaine.';
+
+  @override
+  String recapTopHabitBody(String habit, int count) {
+    return '$habit est revenue $count fois.';
+  }
+
+  @override
+  String get recapPerfectTitle => 'Jours parfaits';
+
+  @override
+  String recapPerfectBody(int count) {
+    return '$count jours où tout ce qui était dû a été fait.';
+  }
+
+  @override
+  String get recapMoodTitle => 'Humeur';
+
+  @override
+  String get recapMoodEmpty => 'Aucune humeur notée cette semaine.';
+
+  @override
+  String get recapGardenTitle => 'Jardin';
+
+  @override
+  String recapGardenBody(int count) {
+    return '$count plantes ont grandi cette semaine.';
+  }
 }

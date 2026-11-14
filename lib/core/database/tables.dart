@@ -16,6 +16,7 @@ class Habits extends Table {
   TextColumn get weekdays => text().withDefault(const Constant(''))();
   IntColumn get timesPerWeek => integer().withDefault(const Constant(1))();
   IntColumn get reminderTime => integer().nullable()();
+  TextColumn get partOfDay => text().nullable()();
   TextColumn get startDate => text()();
   DateTimeColumn get archivedAt => dateTime().nullable()();
   IntColumn get sortOrder => integer().withDefault(const Constant(0))();
@@ -45,6 +46,22 @@ class HabitCompletions extends Table {
   List<Set<Column<Object>>> get uniqueKeys => [
     {habitId, date},
   ];
+}
+
+@DataClassName('ReflectionRow')
+class DailyReflections extends Table {
+  TextColumn get id => text()();
+  DateTimeColumn get createdAt => dateTime()();
+  DateTimeColumn get updatedAt => dateTime()();
+  DateTimeColumn get deletedAt => dateTime().nullable()();
+  TextColumn get scopeId => text().withDefault(const Constant('guest'))();
+  TextColumn get date => text()();
+  IntColumn get mood => integer().nullable()();
+  TextColumn get gratitude => text().nullable()();
+  TextColumn get note => text().nullable()();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
 }
 
 @DataClassName('SettingRow')

@@ -6,6 +6,7 @@ import 'package:hayati/core/haptics.dart';
 import 'package:hayati/features/auth/domain/auth_models.dart';
 import 'package:hayati/features/auth/presentation/auth_providers.dart';
 import 'package:hayati/features/auth/presentation/auth_widgets.dart';
+import 'package:hayati/features/auth/presentation/complete_sign_in.dart';
 import 'package:hayati/features/auth/presentation/sign_in_page.dart';
 import 'package:hayati/l10n/app_localizations.dart';
 import 'package:material_ui/material_ui.dart';
@@ -148,11 +149,11 @@ class _OtpPageState extends ConsumerState<OtpPage> {
       _failure = null;
     });
     try {
-      await ref
+      final user = await ref
           .read(authRepositoryProvider)
           .verifyOtp(challengeId: challenge.id, code: _code.text);
       playHaptic(strong: true);
-      if (mounted) context.pop();
+      if (mounted) await completeSignIn(context, ref, user);
     } on AuthFailure catch (failure) {
       playHaptic();
       setState(() => _failure = failure);

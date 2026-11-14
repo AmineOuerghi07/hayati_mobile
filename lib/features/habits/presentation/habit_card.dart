@@ -6,6 +6,7 @@ import 'package:hayati/core/widgets/soft_card.dart';
 import 'package:hayati/core/widgets/streak_flame.dart';
 import 'package:hayati/features/habits/domain/habit.dart';
 import 'package:hayati/features/habits/domain/habit_progress.dart';
+import 'package:hayati/features/habits/domain/part_of_day.dart';
 import 'package:hayati/features/habits/domain/habit_schedule.dart';
 import 'package:hayati/features/habits/presentation/habit_labels.dart';
 import 'package:hayati/features/habits/presentation/habit_style.dart';
@@ -24,6 +25,7 @@ class HabitCard extends StatelessWidget {
     required this.onNote,
     required this.onEdit,
     required this.onArchive,
+    this.reorderEnabled = true,
     super.key,
   });
 
@@ -37,6 +39,7 @@ class HabitCard extends StatelessWidget {
   final VoidCallback onNote;
   final VoidCallback onEdit;
   final VoidCallback onArchive;
+  final bool reorderEnabled;
 
   @override
   Widget build(BuildContext context) {
@@ -100,21 +103,22 @@ class HabitCard extends StatelessWidget {
               : null,
           child: Row(
             children: [
-              ReorderableDragStartListener(
-                index: index,
-                child: Tooltip(
-                  message: l10n.dragToReorder,
-                  child: SizedBox(
-                    width: 40,
-                    height: 48,
-                    child: Icon(
-                      Icons.drag_indicator_rounded,
-                      size: 20,
-                      color: theme.colorScheme.outline.withValues(alpha: 0.7),
+              if (reorderEnabled)
+                ReorderableDragStartListener(
+                  index: index,
+                  child: Tooltip(
+                    message: l10n.dragToReorder,
+                    child: SizedBox(
+                      width: 40,
+                      height: 48,
+                      child: Icon(
+                        Icons.drag_indicator_rounded,
+                        size: 20,
+                        color: theme.colorScheme.outline.withValues(alpha: 0.7),
+                      ),
                     ),
                   ),
                 ),
-              ),
               Hero(
                 tag: 'habit-${habit.id}',
                 child: HabitBadge(icon: habit.icon, colorKey: habit.colorKey),
@@ -131,10 +135,24 @@ class HabitCard extends StatelessWidget {
                             ? theme.colorScheme.onSurface.withValues(alpha: 0.7)
                             : theme.colorScheme.onSurface,
                       ),
-                      child: Text(
-                        habit.name,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                      child: Row(
+                        children: [
+                          if (resolvedPartOfDay(
+                                chosen: habit.partOfDay,
+                                reminderMinutes: habit.reminderTime,
+                              )
+                              case final part?) ...[
+                            Icon(partIcon(part), size: 16, color: color),
+                            const SizedBox(width: 4),
+                          ],
+                          Flexible(
+                            child: Text(
+                              habit.name,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 2),

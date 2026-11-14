@@ -3,6 +3,7 @@ import 'package:hayati/app/theme.dart';
 import 'package:hayati/core/widgets/celebration_overlay.dart';
 import 'package:hayati/core/widgets/check_button.dart';
 import 'package:hayati/core/widgets/concentric_rings.dart';
+import 'package:hayati/features/habits/domain/part_of_day.dart';
 import 'package:hayati/features/habits/presentation/habit_labels.dart';
 import 'package:hayati/features/habits/presentation/today_hero.dart';
 import 'package:hayati/features/settings/domain/app_preferences.dart';
@@ -63,6 +64,7 @@ void main() {
               quote: 'Progress, not perfection.',
               counts: DayCounts(done: 2, due: 5),
               bestStreak: 12,
+              period: PartOfDay.morning,
             ),
           ),
           textScale: 2,

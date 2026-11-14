@@ -8,6 +8,7 @@ import 'package:hayati/core/widgets/section_header.dart';
 import 'package:hayati/core/widgets/soft_card.dart';
 import 'package:hayati/features/habits/domain/habit.dart';
 import 'package:hayati/features/habits/domain/habit_schedule.dart';
+import 'package:hayati/features/habits/domain/part_of_day.dart';
 import 'package:hayati/features/habits/domain/habit_templates.dart';
 import 'package:hayati/features/habits/presentation/habit_labels.dart';
 import 'package:hayati/features/habits/presentation/habit_providers.dart';
@@ -37,6 +38,7 @@ class _HabitEditorPageState extends ConsumerState<HabitEditorPage> {
   final _weekdays = <int>{DateTime.monday, DateTime.wednesday, DateTime.friday};
   double _timesPerWeek = 3;
   int? _reminder;
+  PartOfDay? _part;
   String _startDate = CalendarDate.today().iso;
   var _loaded = false;
   var _showNameError = false;
@@ -69,6 +71,7 @@ class _HabitEditorPageState extends ConsumerState<HabitEditorPage> {
       ..addAll(habit.weekdays);
     _timesPerWeek = habit.timesPerWeek.toDouble();
     _reminder = habit.reminderTime;
+    _part = habit.partOfDay;
     _startDate = habit.startDate;
   }
 
@@ -335,6 +338,20 @@ class _HabitEditorPageState extends ConsumerState<HabitEditorPage> {
               ],
             ),
           ),
+          SectionHeader(l10n.partOfDay),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final part in [null, ...PartOfDay.values])
+                ChoiceChip(
+                  avatar: Icon(partIcon(part), size: 18),
+                  label: Text(partLabel(l10n, part)),
+                  selected: _part == part,
+                  onSelected: (_) => setState(() => _part = part),
+                ),
+            ],
+          ),
           SectionHeader(l10n.reminder),
           SoftCard(
             onTap: () async {
@@ -412,6 +429,7 @@ class _HabitEditorPageState extends ConsumerState<HabitEditorPage> {
       weekdays: _weekdays.toList()..sort(),
       timesPerWeek: _timesPerWeek.round(),
       reminderTime: _reminder,
+      partOfDay: _part,
       startDate: _startDate,
     );
     final repository = ref.read(habitRepositoryProvider);
@@ -432,6 +450,7 @@ class _HabitEditorPageState extends ConsumerState<HabitEditorPage> {
           weekdays: draft.weekdays,
           timesPerWeek: draft.timesPerWeek,
           reminderTime: draft.reminderTime,
+          partOfDay: draft.partOfDay,
           updatedAt: DateTime.now().toUtc(),
         ),
       );

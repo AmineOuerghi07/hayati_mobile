@@ -6,6 +6,7 @@ import 'package:hayati/features/auth/presentation/auth_providers.dart';
 import 'package:hayati/features/habits/domain/habit_schedule.dart';
 import 'package:hayati/features/habits/domain/habit.dart';
 import 'package:hayati/features/habits/presentation/habit_providers.dart';
+import 'package:hayati/features/journal/presentation/reflection_providers.dart';
 import 'package:hayati/features/reminders/domain/reminder_planner.dart';
 import 'package:hayati/features/reminders/presentation/reminder_providers.dart';
 import 'package:hayati/features/settings/presentation/preferences_controller.dart';
@@ -13,6 +14,7 @@ import 'package:material_ui/material_ui.dart';
 
 import 'support/memory_auth_repository.dart';
 import 'support/memory_habit_repository.dart';
+import 'support/memory_reflection_repository.dart';
 import 'support/memory_settings_repository.dart';
 import 'support/silent_reminder_scheduler.dart';
 
@@ -141,6 +143,9 @@ Future<void> _pump(
           (ref) => ReminderCoordinator(SilentReminderScheduler()),
         ),
         authRepositoryProvider.overrideWith((ref) => MemoryAuthRepository()),
+        reflectionRepositoryProvider.overrideWith(
+          (ref) => MemoryReflectionRepository(),
+        ),
       ],
       child: const HayatiApp(),
     ),

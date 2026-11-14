@@ -200,13 +200,66 @@ class SyncEngine {
                 (payload['targetValue'] as num?)?.toDouble() ?? 1,
               ),
               timesPerWeek: Value(payload['timesPerWeek'] as int? ?? 1),
+              partOfDay: Value(payload['partOfDay'] as String?),
             ),
           );
       return;
     }
     if (record.entityType == 'completion') {
       await _applyCompletion(record);
+      return;
     }
+    if (record.entityType == 'reflection') {
+      await _applyReflection(record);
+    }
+  }
+
+  Future<void> _applyReflection(SyncRecord record) async {
+    final split = record.entityKey.indexOf('|');
+    if (split <= 0) return;
+    final scopeId = record.entityKey.substring(0, split);
+    final date = record.entityKey.substring(split + 1);
+    final existing =
+        await (database.select(database.dailyReflections)..where(
+              (row) => row.scopeId.equals(scopeId) & row.date.equals(date),
+            ))
+            .getSingleOrNull();
+    if (existing != null &&
+        !incomingWins(
+          SyncRecord(
+            entityType: 'reflection',
+            entityKey: record.entityKey,
+            deleted: existing.deletedAt != null,
+            payload: const {},
+            updatedAt: existing.updatedAt,
+            writerId: '',
+          ),
+          record,
+        )) {
+      return;
+    }
+    final payload = record.payload;
+    final createdAt = DateTime.parse(
+      payload['createdAt'] as String? ?? record.updatedAt.toIso8601String(),
+    );
+    final companion = DailyReflectionsCompanion(
+      id: Value(existing?.id ?? payload['id'] as String? ?? record.entityKey),
+      createdAt: Value(existing?.createdAt ?? createdAt),
+      updatedAt: Value(record.updatedAt),
+      deletedAt: Value(record.deleted ? record.updatedAt : null),
+      scopeId: Value(scopeId),
+      date: Value(date),
+      mood: Value(payload['mood'] as int?),
+      gratitude: Value(payload['gratitude'] as String?),
+      note: Value(payload['note'] as String?),
+    );
+    if (existing == null) {
+      await database.into(database.dailyReflections).insert(companion);
+      return;
+    }
+    await (database.update(
+      database.dailyReflections,
+    )..where((row) => row.id.equals(existing.id))).write(companion);
   }
 
   Future<void> _applyCompletion(SyncRecord record) async {
