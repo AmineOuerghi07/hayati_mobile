@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
@@ -7,8 +8,6 @@ import 'package:hayati/core/database/app_database.dart';
 import 'package:hayati/core/database/data_scope.dart';
 import 'package:hayati/features/auth/domain/auth_models.dart';
 import 'package:hayati/features/auth/domain/auth_repository.dart';
-import 'package:hayati/features/habits/data/habit_codec.dart';
-import 'package:hayati/features/sync/data/sync_engine.dart';
 import 'package:uuid/uuid.dart';
 
 class FakeAuthRepository implements AuthRepository {
@@ -23,11 +22,24 @@ class FakeAuthRepository implements AuthRepository {
   static const sessionKey = 'sessionUserId';
 
   @override
-  Stream<AuthSession> watch() async* {
-    yield await _session();
-    await for (final _ in _db.select(_db.appSettings).watch()) {
-      yield await _session();
+  Stream<AuthSession> watch() {
+    final controller = StreamController<AuthSession>();
+    Future<void> emit() async {
+      if (controller.isClosed) return;
+      controller.add(await _session());
     }
+
+    final settings = _db.select(_db.appSettings).watch().listen((_) => emit());
+    final accounts = _db
+        .select(_db.localAccounts)
+        .watch()
+        .listen((_) => emit());
+    controller.onCancel = () async {
+      await settings.cancel();
+      await accounts.cancel();
+    };
+    emit();
+    return controller.stream;
   }
 
   @override
@@ -133,6 +145,17 @@ class FakeAuthRepository implements AuthRepository {
   }
 
   @override
+  Future<void> updateDisplayName(String displayName) async {
+    final account = await _currentAccount();
+    if (account == null) throw AuthFailure.accountNotFound;
+    final name = displayName.trim();
+    if (name.isEmpty) return;
+    await (_db.update(_db.localAccounts)
+          ..where((row) => row.id.equals(account.id)))
+        .write(LocalAccountsCompanion(displayName: Value(name)));
+  }
+
+  @override
   Future<void> signOut() async {
     await _writeSetting(sessionKey, '');
     await DataScope(_db, uuid: _uuid).openFreshGuest();
@@ -153,46 +176,7 @@ class FakeAuthRepository implements AuthRepository {
   }
 
   Future<void> _enter(String userId) async {
-    final scope = DataScope(_db, uuid: _uuid);
-    await scope.attachCurrentGuestTo(userId);
     await _writeSetting(sessionKey, userId);
-    await _queueScope(await scope.current());
-  }
-
-  Future<void> _queueScope(String scopeId) async {
-    final writer = OutboxWriter(_db)..writerId = 'this-device';
-    final habits = await (_db.select(
-      _db.habits,
-    )..where((row) => row.scopeId.equals(scopeId))).get();
-    for (final row in habits) {
-      final habit = habitFromRow(row);
-      await writer.record(
-        SyncRecord(
-          entityType: 'habit',
-          entityKey: habit.id,
-          deleted: habit.deletedAt != null,
-          payload: {...habit.toJson(), 'scopeId': scopeId},
-          updatedAt: habit.updatedAt,
-          writerId: writer.writerId,
-        ),
-      );
-    }
-    final completions = await (_db.select(
-      _db.habitCompletions,
-    )..where((row) => row.scopeId.equals(scopeId))).get();
-    for (final row in completions) {
-      final item = completionFromRow(row);
-      await writer.record(
-        SyncRecord(
-          entityType: 'completion',
-          entityKey: '${item.habitId}|${item.date}',
-          deleted: item.deletedAt != null,
-          payload: {...item.toJson(), 'scopeId': scopeId},
-          updatedAt: item.updatedAt,
-          writerId: writer.writerId,
-        ),
-      );
-    }
   }
 
   Future<OtpChallenge> _issue({

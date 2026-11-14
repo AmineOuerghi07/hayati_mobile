@@ -16,7 +16,12 @@ import 'package:hayati/features/habits/domain/completion_note.dart';
 import 'package:hayati/features/habits/domain/habit.dart';
 import 'package:hayati/features/habits/domain/habit_completion.dart';
 import 'package:hayati/features/habits/domain/habit_due.dart';
+import 'package:hayati/features/auth/presentation/auth_providers.dart';
 import 'package:hayati/features/habits/domain/habit_progress.dart';
+import 'package:hayati/features/habits/domain/part_of_day.dart';
+import 'package:hayati/features/journal/presentation/reflection_providers.dart';
+import 'package:hayati/features/journal/presentation/reflection_sheet.dart';
+import 'package:hayati/features/recap/domain/weekly_recap.dart';
 import 'package:hayati/features/habits/domain/streak_calculator.dart';
 import 'package:hayati/features/habits/presentation/habit_card.dart';
 import 'package:hayati/features/habits/presentation/habit_labels.dart';
@@ -33,6 +38,17 @@ import 'package:hayati/features/tools/presentation/tool_cards.dart';
 import 'package:hayati/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
+
+class TodayPartFilter extends Notifier<PartOfDay?> {
+  @override
+  PartOfDay? build() => null;
+
+  void select(PartOfDay? value) => state = value;
+}
+
+final todayPartFilterProvider = NotifierProvider<TodayPartFilter, PartOfDay?>(
+  TodayPartFilter.new,
+);
 
 class TodayPage extends ConsumerStatefulWidget {
   const TodayPage({super.key});
@@ -181,11 +197,19 @@ class _FirstRun extends ConsumerWidget {
           padding: responsiveInsets(constraints.maxWidth, top: 12, bottom: 24),
           children: [
             TodayHero(
-              greeting: greetingFor(l10n, now),
+              greeting: greetingFor(
+                l10n,
+                now,
+                name: preferredName(
+                  ref.watch(authSessionProvider).value,
+                  ref.watch(preferencesControllerProvider).value,
+                ),
+              ),
               dateLabel: DateFormat.MMMMEEEEd(locale).format(now),
               quote: dailyQuote(l10n, now),
               counts: const DayCounts(done: 0, due: 0),
               bestStreak: 0,
+              period: partOfDayAt(now.hour),
             ),
             const SizedBox(height: 24),
             EmptyState(
@@ -243,15 +267,35 @@ class _TodayList extends ConsumerWidget {
     final dateLabel = DateFormat.yMMMEd(locale).format(selectedDay);
     final streaks = _streaks(weekStart);
     final bestStreak = streaks.values.fold(0, (a, b) => a > b ? a : b);
+    final filter = ref.watch(todayPartFilterProvider);
+    final shown = [
+      for (final habit in due)
+        if (filter == null ||
+            resolvedPartOfDay(
+                  chosen: habit.partOfDay,
+                  reminderMinutes: habit.reminderTime,
+                ) ==
+                filter)
+          habit,
+    ];
+    final now = DateTime.now();
     final header = Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         TodayHero(
-          greeting: greetingFor(l10n, DateTime.now()),
+          greeting: greetingFor(
+            l10n,
+            now,
+            name: preferredName(
+              ref.watch(authSessionProvider).value,
+              ref.watch(preferencesControllerProvider).value,
+            ),
+          ),
           dateLabel: DateFormat.MMMMEEEEd(locale).format(selectedDay),
           quote: dailyQuote(l10n, selectedDay),
           counts: counts,
           bestStreak: bestStreak,
+          period: partOfDayAt(now.hour),
         ),
         const SizedBox(height: 4),
         Row(
@@ -319,6 +363,16 @@ class _TodayList extends ConsumerWidget {
             ),
           ),
         const SizedBox(height: 8),
+        _PartChips(due: due),
+        if (isFirstDayOfWeek(CalendarDate.today(), weekStart)) ...[
+          const SizedBox(height: 12),
+          const _RecapBanner(),
+        ],
+        if (now.hour >= 18) ...[
+          const SizedBox(height: 12),
+          const _EveningCard(),
+        ],
+        const SizedBox(height: 8),
       ],
     );
 
@@ -334,7 +388,7 @@ class _TodayList extends ConsumerWidget {
           }
           return false;
         },
-        child: due.isEmpty
+        child: shown.isEmpty
             ? ListView(
                 padding: listInsets,
                 children: [
@@ -352,7 +406,9 @@ class _TodayList extends ConsumerWidget {
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
-                            selected == today
+                            filter != null
+                                ? l10n.partEmpty
+                                : selected == today
                                 ? l10n.emptyTodayTitle
                                 : l10n.nothingDueOnDay,
                             style: Theme.of(context).textTheme.titleMedium,
@@ -362,6 +418,27 @@ class _TodayList extends ConsumerWidget {
                     ),
                   ),
                   const ToolCards(),
+                ],
+              )
+            : filter != null
+            ? ListView(
+                padding: listInsets,
+                children: [
+                  ?top,
+                  for (var index = 0; index < shown.length; index++)
+                    _habitTile(
+                      context,
+                      ref,
+                      shown[index],
+                      index,
+                      reorder: false,
+                      done: done,
+                      streaks: streaks,
+                    ),
+                  const Padding(
+                    padding: EdgeInsetsDirectional.only(top: 12),
+                    child: ToolCards(),
+                  ),
                 ],
               )
             : ReorderableListView.builder(
@@ -390,32 +467,14 @@ class _TodayList extends ConsumerWidget {
                   ref.read(habitRepositoryProvider).reorder(ordered);
                 },
                 itemBuilder: (context, index) {
-                  final habit = due[index];
-                  final loggedValue = done[habit.id]?.value ?? 0;
-                  return StaggeredItem(
-                    key: ValueKey(habit.id),
-                    index: index,
-                    child: Padding(
-                      padding: const EdgeInsetsDirectional.only(bottom: 8),
-                      child: HabitCard(
-                        index: index,
-                        habit: habit,
-                        value: loggedValue,
-                        streak: streaks[habit.id] ?? 0,
-                        onOpen: () => context.push('/habits/${habit.id}'),
-                        onToggle: () => _toggle(
-                          context,
-                          ref,
-                          habit,
-                          meetsTarget(loggedValue, habit.targetValue),
-                        ),
-                        onStep: (delta) =>
-                            _step(context, ref, habit, loggedValue, delta),
-                        onNote: () => _note(context, ref, habit),
-                        onEdit: () => context.push('/habits/${habit.id}/edit'),
-                        onArchive: () => _archive(context, ref, habit),
-                      ),
-                    ),
+                  return _habitTile(
+                    context,
+                    ref,
+                    due[index],
+                    index,
+                    reorder: true,
+                    done: done,
+                    streaks: streaks,
                   );
                 },
               ),
@@ -459,6 +518,43 @@ class _TodayList extends ConsumerWidget {
             insets: responsiveInsets(constraints.maxWidth),
           );
         },
+      ),
+    );
+  }
+
+  Widget _habitTile(
+    BuildContext context,
+    WidgetRef ref,
+    Habit habit,
+    int index, {
+    required bool reorder,
+    required Map<String, HabitCompletion> done,
+    required Map<String, int> streaks,
+  }) {
+    final loggedValue = done[habit.id]?.value ?? 0;
+    return StaggeredItem(
+      key: ValueKey(habit.id),
+      index: index,
+      child: Padding(
+        padding: const EdgeInsetsDirectional.only(bottom: 8),
+        child: HabitCard(
+          index: index,
+          habit: habit,
+          value: loggedValue,
+          streak: streaks[habit.id] ?? 0,
+          reorderEnabled: reorder,
+          onOpen: () => context.push('/habits/${habit.id}'),
+          onToggle: () => _toggle(
+            context,
+            ref,
+            habit,
+            meetsTarget(loggedValue, habit.targetValue),
+          ),
+          onStep: (delta) => _step(context, ref, habit, loggedValue, delta),
+          onNote: () => _note(context, ref, habit),
+          onEdit: () => context.push('/habits/${habit.id}/edit'),
+          onArchive: () => _archive(context, ref, habit),
+        ),
       ),
     );
   }
@@ -649,5 +745,124 @@ class _TodayList extends ConsumerWidget {
         )
         .current;
     return crossedMilestone(before, after);
+  }
+}
+
+class _PartChips extends ConsumerWidget {
+  const _PartChips({required this.due});
+
+  final List<Habit> due;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final selected = ref.watch(todayPartFilterProvider);
+    int count(PartOfDay part) => due
+        .where(
+          (habit) =>
+              resolvedPartOfDay(
+                chosen: habit.partOfDay,
+                reminderMinutes: habit.reminderTime,
+              ) ==
+              part,
+        )
+        .length;
+    final chips = [
+      (null, l10n.partAll),
+      (PartOfDay.morning, '${l10n.partMorning} ${count(PartOfDay.morning)}'),
+      (
+        PartOfDay.afternoon,
+        '${l10n.partAfternoon} ${count(PartOfDay.afternoon)}',
+      ),
+      (PartOfDay.evening, '${l10n.partEvening} ${count(PartOfDay.evening)}'),
+    ];
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: [
+        for (final (part, label) in chips)
+          ChoiceChip(
+            label: Text(label),
+            selected: selected == part,
+            onSelected: (_) =>
+                ref.read(todayPartFilterProvider.notifier).select(part),
+          ),
+      ],
+    );
+  }
+}
+
+class _RecapBanner extends StatelessWidget {
+  const _RecapBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return SoftCard(
+      onTap: () => context.push('/recap'),
+      child: Row(
+        children: [
+          Icon(
+            Icons.auto_stories_outlined,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.recapTitle,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                Text(l10n.recapBanner),
+              ],
+            ),
+          ),
+          const Icon(Icons.chevron_right_rounded),
+        ],
+      ),
+    );
+  }
+}
+
+class _EveningCard extends ConsumerWidget {
+  const _EveningCard();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final today = CalendarDate.today().iso;
+    final existing = ref
+        .watch(reflectionsProvider)
+        .value
+        ?.where((item) => item.date == today)
+        .firstOrNull;
+    return SoftCard(
+      onTap: () => showReflectionSheet(context, ref, existing: existing),
+      child: Row(
+        children: [
+          Icon(
+            Icons.nightlight_outlined,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.reflectionPrompt,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                Text(
+                  existing == null ? l10n.reflectionBody : l10n.reflectionSaved,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

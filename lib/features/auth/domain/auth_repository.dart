@@ -34,6 +34,8 @@ abstract class AuthRepository {
     required String newPassword,
   });
 
+  Future<void> updateDisplayName(String displayName);
+
   Future<void> signOut();
 
   Future<void> deleteAccount({required String password});

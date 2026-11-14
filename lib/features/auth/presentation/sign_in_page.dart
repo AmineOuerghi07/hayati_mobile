@@ -5,6 +5,8 @@ import 'package:hayati/core/haptics.dart';
 import 'package:hayati/features/auth/domain/auth_models.dart';
 import 'package:hayati/features/auth/presentation/auth_providers.dart';
 import 'package:hayati/features/auth/presentation/auth_widgets.dart';
+import 'package:hayati/features/auth/presentation/complete_sign_in.dart';
+import 'package:hayati/features/settings/presentation/preferences_controller.dart';
 import 'package:hayati/l10n/app_localizations.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -21,7 +23,18 @@ class _SignInPageState extends ConsumerState<SignInPage> {
   final _name = TextEditingController();
   var _creating = false;
   var _busy = false;
+  var _seededName = false;
   AuthFailure? _failure;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_seededName) return;
+    _seededName = true;
+    final saved =
+        ref.read(preferencesControllerProvider).value?.displayName ?? '';
+    if (_name.text.isEmpty && saved.isNotEmpty) _name.text = saved;
+  }
 
   @override
   void dispose() {
@@ -143,20 +156,18 @@ class _SignInPageState extends ConsumerState<SignInPage> {
     });
     final auth = ref.read(authRepositoryProvider);
     try {
-      if (_creating) {
-        await auth.createAccount(
-          email: _email.text,
-          password: _password.text,
-          displayName: _name.text,
-        );
-      } else {
-        await auth.signInWithEmail(
-          email: _email.text,
-          password: _password.text,
-        );
-      }
+      final user = _creating
+          ? await auth.createAccount(
+              email: _email.text,
+              password: _password.text,
+              displayName: _name.text,
+            )
+          : await auth.signInWithEmail(
+              email: _email.text,
+              password: _password.text,
+            );
       playHaptic(strong: true);
-      if (mounted) context.pop();
+      if (mounted) await completeSignIn(context, ref, user);
     } on AuthFailure catch (failure) {
       playHaptic();
       setState(() => _failure = failure);

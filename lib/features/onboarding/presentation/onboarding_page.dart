@@ -25,6 +25,7 @@ class OnboardingPage extends ConsumerStatefulWidget {
 
 class _OnboardingPageState extends ConsumerState<OnboardingPage> {
   final _page = PageController();
+  final _name = TextEditingController();
   final _picked = <String>{};
   var _index = 0;
   var _busy = false;
@@ -33,6 +34,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
   @override
   void dispose() {
     _page.dispose();
+    _name.dispose();
     super.dispose();
   }
 
@@ -50,7 +52,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
       controller: _page,
       onPageChanged: (index) => setState(() => _index = index),
       children: [
-        _Welcome(scheme: scheme),
+        _Welcome(scheme: scheme, name: _name),
         _Picker(picked: _picked, onToggle: _toggle),
         _ReminderStep(
           reminder: _reminder,
@@ -201,6 +203,12 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
           );
       if (!mounted) return;
     }
+    final chosenName = _name.text.trim();
+    if (chosenName.isNotEmpty) {
+      await ref
+          .read(preferencesControllerProvider.notifier)
+          .setDisplayName(chosenName);
+    }
     ref.read(onboardingFlagProvider.notifier).markFinished();
     await ref
         .read(preferencesControllerProvider.notifier)
@@ -211,9 +219,10 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
 }
 
 class _Welcome extends StatelessWidget {
-  const _Welcome({required this.scheme});
+  const _Welcome({required this.scheme, required this.name});
 
   final ColorScheme scheme;
+  final TextEditingController name;
 
   @override
   Widget build(BuildContext context) {
@@ -245,6 +254,18 @@ class _Welcome extends StatelessWidget {
             child: Text(
               l10n.welcomeBody,
               style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ),
+          const SizedBox(height: 20),
+          StaggeredItem(
+            index: 5,
+            child: TextField(
+              controller: name,
+              textCapitalization: TextCapitalization.words,
+              decoration: InputDecoration(
+                labelText: l10n.yourName,
+                hintText: l10n.namePrompt,
+              ),
             ),
           ),
           const Spacer(flex: 2),

@@ -13,6 +13,7 @@ class AppPreferences {
     required this.weekStart,
     this.analyticsEnabled = false,
     this.onboardingDone = false,
+    this.displayName = '',
   });
 
   /// Null follows the device language.
@@ -30,6 +31,10 @@ class AppPreferences {
   /// False until the first-run introduction is finished or skipped.
   final bool onboardingDone;
 
+  /// The name a guest chose. Empty until they set one. A signed-in account
+  /// name is stored on the account, not here.
+  final String displayName;
+
   static const fallback = AppPreferences(
     localeCode: null,
     themeId: AppThemeId.hayati,
@@ -45,6 +50,7 @@ class AppPreferences {
     int? weekStart,
     bool? analyticsEnabled,
     bool? onboardingDone,
+    String? displayName,
   }) {
     return AppPreferences(
       localeCode: clearLocale ? null : (localeCode ?? this.localeCode),
@@ -53,6 +59,7 @@ class AppPreferences {
       weekStart: weekStart ?? this.weekStart,
       analyticsEnabled: analyticsEnabled ?? this.analyticsEnabled,
       onboardingDone: onboardingDone ?? this.onboardingDone,
+      displayName: displayName ?? this.displayName,
     );
   }
 }

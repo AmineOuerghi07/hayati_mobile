@@ -55,6 +55,11 @@ class MemorySettingsRepository implements SettingsRepository {
     return _update(_current.copyWith(onboardingDone: done));
   }
 
+  @override
+  Future<void> setDisplayName(String name) {
+    return _update(_current.copyWith(displayName: name.trim()));
+  }
+
   Future<void> _update(AppPreferences next) async {
     _current = next;
     _updates.add(next);

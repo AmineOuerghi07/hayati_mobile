@@ -97,6 +97,7 @@ AchievementSummary evaluateAchievements({
   required List<HabitCompletion> completions,
   required CalendarDate today,
   required int weekStart,
+  int reflections = 0,
 }) {
   final checkIns = totalCheckIns(habits: habits, completions: completions);
   const calculator = StreakCalculator();
@@ -139,9 +140,11 @@ AchievementSummary evaluateAchievements({
       if (targets[item.habitId] case final target? when item.value >= target)
         item,
   ];
-  final notes = completions
-      .where((item) => !CompletionNote.decode(item.note).isEmpty)
-      .length;
+  final notes =
+      completions
+          .where((item) => !CompletionNote.decode(item.note).isEmpty)
+          .length +
+      reflections;
   final early = counted.any((item) => item.createdAt.toLocal().hour < 8);
   final late = counted.any((item) => item.createdAt.toLocal().hour >= 22);
 

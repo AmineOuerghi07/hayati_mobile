@@ -152,6 +152,8 @@ class _StatsBody extends StatelessWidget {
           const SizedBox(height: 12),
           _TrendCard(points: rates.weekTrend!),
         ],
+        const SizedBox(height: 12),
+        const _RecapLink(),
         SectionHeader(l10n.lastSevenDays),
         _WeekBars(days: days, today: today),
       ],
@@ -945,6 +947,40 @@ class _HabitRate extends StatelessWidget {
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RecapLink extends StatelessWidget {
+  const _RecapLink();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return SoftCard(
+      onTap: () => context.push('/recap'),
+      child: Row(
+        children: [
+          Icon(
+            Icons.auto_stories_outlined,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.recapTitle,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                Text(l10n.recapBanner),
+              ],
+            ),
+          ),
+          const Icon(Icons.chevron_right_rounded),
         ],
       ),
     );

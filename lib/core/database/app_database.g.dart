@@ -155,6 +155,17 @@ class $HabitsTable extends Habits with TableInfo<$HabitsTable, HabitRow> {
     type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _partOfDayMeta = const VerificationMeta(
+    'partOfDay',
+  );
+  @override
+  late final GeneratedColumn<String> partOfDay = GeneratedColumn<String>(
+    'part_of_day',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _startDateMeta = const VerificationMeta(
     'startDate',
   );
@@ -217,6 +228,7 @@ class $HabitsTable extends Habits with TableInfo<$HabitsTable, HabitRow> {
     weekdays,
     timesPerWeek,
     reminderTime,
+    partOfDay,
     startDate,
     archivedAt,
     sortOrder,
@@ -343,6 +355,12 @@ class $HabitsTable extends Habits with TableInfo<$HabitsTable, HabitRow> {
         ),
       );
     }
+    if (data.containsKey('part_of_day')) {
+      context.handle(
+        _partOfDayMeta,
+        partOfDay.isAcceptableOrUnknown(data['part_of_day']!, _partOfDayMeta),
+      );
+    }
     if (data.containsKey('start_date')) {
       context.handle(
         _startDateMeta,
@@ -434,6 +452,10 @@ class $HabitsTable extends Habits with TableInfo<$HabitsTable, HabitRow> {
         DriftSqlType.int,
         data['${effectivePrefix}reminder_time'],
       ),
+      partOfDay: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}part_of_day'],
+      ),
       startDate: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}start_date'],
@@ -474,6 +496,7 @@ class HabitRow extends DataClass implements Insertable<HabitRow> {
   final String weekdays;
   final int timesPerWeek;
   final int? reminderTime;
+  final String? partOfDay;
   final String startDate;
   final DateTime? archivedAt;
   final int sortOrder;
@@ -493,6 +516,7 @@ class HabitRow extends DataClass implements Insertable<HabitRow> {
     required this.weekdays,
     required this.timesPerWeek,
     this.reminderTime,
+    this.partOfDay,
     required this.startDate,
     this.archivedAt,
     required this.sortOrder,
@@ -520,6 +544,9 @@ class HabitRow extends DataClass implements Insertable<HabitRow> {
     map['times_per_week'] = Variable<int>(timesPerWeek);
     if (!nullToAbsent || reminderTime != null) {
       map['reminder_time'] = Variable<int>(reminderTime);
+    }
+    if (!nullToAbsent || partOfDay != null) {
+      map['part_of_day'] = Variable<String>(partOfDay);
     }
     map['start_date'] = Variable<String>(startDate);
     if (!nullToAbsent || archivedAt != null) {
@@ -550,6 +577,9 @@ class HabitRow extends DataClass implements Insertable<HabitRow> {
       reminderTime: reminderTime == null && nullToAbsent
           ? const Value.absent()
           : Value(reminderTime),
+      partOfDay: partOfDay == null && nullToAbsent
+          ? const Value.absent()
+          : Value(partOfDay),
       startDate: Value(startDate),
       archivedAt: archivedAt == null && nullToAbsent
           ? const Value.absent()
@@ -579,6 +609,7 @@ class HabitRow extends DataClass implements Insertable<HabitRow> {
       weekdays: serializer.fromJson<String>(json['weekdays']),
       timesPerWeek: serializer.fromJson<int>(json['timesPerWeek']),
       reminderTime: serializer.fromJson<int?>(json['reminderTime']),
+      partOfDay: serializer.fromJson<String?>(json['partOfDay']),
       startDate: serializer.fromJson<String>(json['startDate']),
       archivedAt: serializer.fromJson<DateTime?>(json['archivedAt']),
       sortOrder: serializer.fromJson<int>(json['sortOrder']),
@@ -603,6 +634,7 @@ class HabitRow extends DataClass implements Insertable<HabitRow> {
       'weekdays': serializer.toJson<String>(weekdays),
       'timesPerWeek': serializer.toJson<int>(timesPerWeek),
       'reminderTime': serializer.toJson<int?>(reminderTime),
+      'partOfDay': serializer.toJson<String?>(partOfDay),
       'startDate': serializer.toJson<String>(startDate),
       'archivedAt': serializer.toJson<DateTime?>(archivedAt),
       'sortOrder': serializer.toJson<int>(sortOrder),
@@ -625,6 +657,7 @@ class HabitRow extends DataClass implements Insertable<HabitRow> {
     String? weekdays,
     int? timesPerWeek,
     Value<int?> reminderTime = const Value.absent(),
+    Value<String?> partOfDay = const Value.absent(),
     String? startDate,
     Value<DateTime?> archivedAt = const Value.absent(),
     int? sortOrder,
@@ -644,6 +677,7 @@ class HabitRow extends DataClass implements Insertable<HabitRow> {
     weekdays: weekdays ?? this.weekdays,
     timesPerWeek: timesPerWeek ?? this.timesPerWeek,
     reminderTime: reminderTime.present ? reminderTime.value : this.reminderTime,
+    partOfDay: partOfDay.present ? partOfDay.value : this.partOfDay,
     startDate: startDate ?? this.startDate,
     archivedAt: archivedAt.present ? archivedAt.value : this.archivedAt,
     sortOrder: sortOrder ?? this.sortOrder,
@@ -673,6 +707,7 @@ class HabitRow extends DataClass implements Insertable<HabitRow> {
       reminderTime: data.reminderTime.present
           ? data.reminderTime.value
           : this.reminderTime,
+      partOfDay: data.partOfDay.present ? data.partOfDay.value : this.partOfDay,
       startDate: data.startDate.present ? data.startDate.value : this.startDate,
       archivedAt: data.archivedAt.present
           ? data.archivedAt.value
@@ -699,6 +734,7 @@ class HabitRow extends DataClass implements Insertable<HabitRow> {
           ..write('weekdays: $weekdays, ')
           ..write('timesPerWeek: $timesPerWeek, ')
           ..write('reminderTime: $reminderTime, ')
+          ..write('partOfDay: $partOfDay, ')
           ..write('startDate: $startDate, ')
           ..write('archivedAt: $archivedAt, ')
           ..write('sortOrder: $sortOrder, ')
@@ -723,6 +759,7 @@ class HabitRow extends DataClass implements Insertable<HabitRow> {
     weekdays,
     timesPerWeek,
     reminderTime,
+    partOfDay,
     startDate,
     archivedAt,
     sortOrder,
@@ -746,6 +783,7 @@ class HabitRow extends DataClass implements Insertable<HabitRow> {
           other.weekdays == this.weekdays &&
           other.timesPerWeek == this.timesPerWeek &&
           other.reminderTime == this.reminderTime &&
+          other.partOfDay == this.partOfDay &&
           other.startDate == this.startDate &&
           other.archivedAt == this.archivedAt &&
           other.sortOrder == this.sortOrder &&
@@ -767,6 +805,7 @@ class HabitsCompanion extends UpdateCompanion<HabitRow> {
   final Value<String> weekdays;
   final Value<int> timesPerWeek;
   final Value<int?> reminderTime;
+  final Value<String?> partOfDay;
   final Value<String> startDate;
   final Value<DateTime?> archivedAt;
   final Value<int> sortOrder;
@@ -787,6 +826,7 @@ class HabitsCompanion extends UpdateCompanion<HabitRow> {
     this.weekdays = const Value.absent(),
     this.timesPerWeek = const Value.absent(),
     this.reminderTime = const Value.absent(),
+    this.partOfDay = const Value.absent(),
     this.startDate = const Value.absent(),
     this.archivedAt = const Value.absent(),
     this.sortOrder = const Value.absent(),
@@ -808,6 +848,7 @@ class HabitsCompanion extends UpdateCompanion<HabitRow> {
     this.weekdays = const Value.absent(),
     this.timesPerWeek = const Value.absent(),
     this.reminderTime = const Value.absent(),
+    this.partOfDay = const Value.absent(),
     required String startDate,
     this.archivedAt = const Value.absent(),
     this.sortOrder = const Value.absent(),
@@ -837,6 +878,7 @@ class HabitsCompanion extends UpdateCompanion<HabitRow> {
     Expression<String>? weekdays,
     Expression<int>? timesPerWeek,
     Expression<int>? reminderTime,
+    Expression<String>? partOfDay,
     Expression<String>? startDate,
     Expression<DateTime>? archivedAt,
     Expression<int>? sortOrder,
@@ -858,6 +900,7 @@ class HabitsCompanion extends UpdateCompanion<HabitRow> {
       if (weekdays != null) 'weekdays': weekdays,
       if (timesPerWeek != null) 'times_per_week': timesPerWeek,
       if (reminderTime != null) 'reminder_time': reminderTime,
+      if (partOfDay != null) 'part_of_day': partOfDay,
       if (startDate != null) 'start_date': startDate,
       if (archivedAt != null) 'archived_at': archivedAt,
       if (sortOrder != null) 'sort_order': sortOrder,
@@ -881,6 +924,7 @@ class HabitsCompanion extends UpdateCompanion<HabitRow> {
     Value<String>? weekdays,
     Value<int>? timesPerWeek,
     Value<int?>? reminderTime,
+    Value<String?>? partOfDay,
     Value<String>? startDate,
     Value<DateTime?>? archivedAt,
     Value<int>? sortOrder,
@@ -902,6 +946,7 @@ class HabitsCompanion extends UpdateCompanion<HabitRow> {
       weekdays: weekdays ?? this.weekdays,
       timesPerWeek: timesPerWeek ?? this.timesPerWeek,
       reminderTime: reminderTime ?? this.reminderTime,
+      partOfDay: partOfDay ?? this.partOfDay,
       startDate: startDate ?? this.startDate,
       archivedAt: archivedAt ?? this.archivedAt,
       sortOrder: sortOrder ?? this.sortOrder,
@@ -955,6 +1000,9 @@ class HabitsCompanion extends UpdateCompanion<HabitRow> {
     if (reminderTime.present) {
       map['reminder_time'] = Variable<int>(reminderTime.value);
     }
+    if (partOfDay.present) {
+      map['part_of_day'] = Variable<String>(partOfDay.value);
+    }
     if (startDate.present) {
       map['start_date'] = Variable<String>(startDate.value);
     }
@@ -990,6 +1038,7 @@ class HabitsCompanion extends UpdateCompanion<HabitRow> {
           ..write('weekdays: $weekdays, ')
           ..write('timesPerWeek: $timesPerWeek, ')
           ..write('reminderTime: $reminderTime, ')
+          ..write('partOfDay: $partOfDay, ')
           ..write('startDate: $startDate, ')
           ..write('archivedAt: $archivedAt, ')
           ..write('sortOrder: $sortOrder, ')
@@ -1602,6 +1651,558 @@ class HabitCompletionsCompanion extends UpdateCompanion<CompletionRow> {
           ..write('note: $note, ')
           ..write('completedAt: $completedAt, ')
           ..write('scopeId: $scopeId, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $DailyReflectionsTable extends DailyReflections
+    with TableInfo<$DailyReflectionsTable, ReflectionRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DailyReflectionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
+    'deletedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
+    'deleted_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _scopeIdMeta = const VerificationMeta(
+    'scopeId',
+  );
+  @override
+  late final GeneratedColumn<String> scopeId = GeneratedColumn<String>(
+    'scope_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('guest'),
+  );
+  static const VerificationMeta _dateMeta = const VerificationMeta('date');
+  @override
+  late final GeneratedColumn<String> date = GeneratedColumn<String>(
+    'date',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _moodMeta = const VerificationMeta('mood');
+  @override
+  late final GeneratedColumn<int> mood = GeneratedColumn<int>(
+    'mood',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _gratitudeMeta = const VerificationMeta(
+    'gratitude',
+  );
+  @override
+  late final GeneratedColumn<String> gratitude = GeneratedColumn<String>(
+    'gratitude',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    createdAt,
+    updatedAt,
+    deletedAt,
+    scopeId,
+    date,
+    mood,
+    gratitude,
+    note,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'daily_reflections';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ReflectionRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(
+        _deletedAtMeta,
+        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
+      );
+    }
+    if (data.containsKey('scope_id')) {
+      context.handle(
+        _scopeIdMeta,
+        scopeId.isAcceptableOrUnknown(data['scope_id']!, _scopeIdMeta),
+      );
+    }
+    if (data.containsKey('date')) {
+      context.handle(
+        _dateMeta,
+        date.isAcceptableOrUnknown(data['date']!, _dateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
+    if (data.containsKey('mood')) {
+      context.handle(
+        _moodMeta,
+        mood.isAcceptableOrUnknown(data['mood']!, _moodMeta),
+      );
+    }
+    if (data.containsKey('gratitude')) {
+      context.handle(
+        _gratitudeMeta,
+        gratitude.isAcceptableOrUnknown(data['gratitude']!, _gratitudeMeta),
+      );
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ReflectionRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ReflectionRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      deletedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}deleted_at'],
+      ),
+      scopeId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}scope_id'],
+      )!,
+      date: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}date'],
+      )!,
+      mood: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}mood'],
+      ),
+      gratitude: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}gratitude'],
+      ),
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      ),
+    );
+  }
+
+  @override
+  $DailyReflectionsTable createAlias(String alias) {
+    return $DailyReflectionsTable(attachedDatabase, alias);
+  }
+}
+
+class ReflectionRow extends DataClass implements Insertable<ReflectionRow> {
+  final String id;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final DateTime? deletedAt;
+  final String scopeId;
+  final String date;
+  final int? mood;
+  final String? gratitude;
+  final String? note;
+  const ReflectionRow({
+    required this.id,
+    required this.createdAt,
+    required this.updatedAt,
+    this.deletedAt,
+    required this.scopeId,
+    required this.date,
+    this.mood,
+    this.gratitude,
+    this.note,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt);
+    }
+    map['scope_id'] = Variable<String>(scopeId);
+    map['date'] = Variable<String>(date);
+    if (!nullToAbsent || mood != null) {
+      map['mood'] = Variable<int>(mood);
+    }
+    if (!nullToAbsent || gratitude != null) {
+      map['gratitude'] = Variable<String>(gratitude);
+    }
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
+    return map;
+  }
+
+  DailyReflectionsCompanion toCompanion(bool nullToAbsent) {
+    return DailyReflectionsCompanion(
+      id: Value(id),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
+      scopeId: Value(scopeId),
+      date: Value(date),
+      mood: mood == null && nullToAbsent ? const Value.absent() : Value(mood),
+      gratitude: gratitude == null && nullToAbsent
+          ? const Value.absent()
+          : Value(gratitude),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
+    );
+  }
+
+  factory ReflectionRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ReflectionRow(
+      id: serializer.fromJson<String>(json['id']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
+      scopeId: serializer.fromJson<String>(json['scopeId']),
+      date: serializer.fromJson<String>(json['date']),
+      mood: serializer.fromJson<int?>(json['mood']),
+      gratitude: serializer.fromJson<String?>(json['gratitude']),
+      note: serializer.fromJson<String?>(json['note']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'deletedAt': serializer.toJson<DateTime?>(deletedAt),
+      'scopeId': serializer.toJson<String>(scopeId),
+      'date': serializer.toJson<String>(date),
+      'mood': serializer.toJson<int?>(mood),
+      'gratitude': serializer.toJson<String?>(gratitude),
+      'note': serializer.toJson<String?>(note),
+    };
+  }
+
+  ReflectionRow copyWith({
+    String? id,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    Value<DateTime?> deletedAt = const Value.absent(),
+    String? scopeId,
+    String? date,
+    Value<int?> mood = const Value.absent(),
+    Value<String?> gratitude = const Value.absent(),
+    Value<String?> note = const Value.absent(),
+  }) => ReflectionRow(
+    id: id ?? this.id,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+    scopeId: scopeId ?? this.scopeId,
+    date: date ?? this.date,
+    mood: mood.present ? mood.value : this.mood,
+    gratitude: gratitude.present ? gratitude.value : this.gratitude,
+    note: note.present ? note.value : this.note,
+  );
+  ReflectionRow copyWithCompanion(DailyReflectionsCompanion data) {
+    return ReflectionRow(
+      id: data.id.present ? data.id.value : this.id,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+      scopeId: data.scopeId.present ? data.scopeId.value : this.scopeId,
+      date: data.date.present ? data.date.value : this.date,
+      mood: data.mood.present ? data.mood.value : this.mood,
+      gratitude: data.gratitude.present ? data.gratitude.value : this.gratitude,
+      note: data.note.present ? data.note.value : this.note,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ReflectionRow(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('scopeId: $scopeId, ')
+          ..write('date: $date, ')
+          ..write('mood: $mood, ')
+          ..write('gratitude: $gratitude, ')
+          ..write('note: $note')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    createdAt,
+    updatedAt,
+    deletedAt,
+    scopeId,
+    date,
+    mood,
+    gratitude,
+    note,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ReflectionRow &&
+          other.id == this.id &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.deletedAt == this.deletedAt &&
+          other.scopeId == this.scopeId &&
+          other.date == this.date &&
+          other.mood == this.mood &&
+          other.gratitude == this.gratitude &&
+          other.note == this.note);
+}
+
+class DailyReflectionsCompanion extends UpdateCompanion<ReflectionRow> {
+  final Value<String> id;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<DateTime?> deletedAt;
+  final Value<String> scopeId;
+  final Value<String> date;
+  final Value<int?> mood;
+  final Value<String?> gratitude;
+  final Value<String?> note;
+  final Value<int> rowid;
+  const DailyReflectionsCompanion({
+    this.id = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.scopeId = const Value.absent(),
+    this.date = const Value.absent(),
+    this.mood = const Value.absent(),
+    this.gratitude = const Value.absent(),
+    this.note = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  DailyReflectionsCompanion.insert({
+    required String id,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    this.deletedAt = const Value.absent(),
+    this.scopeId = const Value.absent(),
+    required String date,
+    this.mood = const Value.absent(),
+    this.gratitude = const Value.absent(),
+    this.note = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt),
+       date = Value(date);
+  static Insertable<ReflectionRow> custom({
+    Expression<String>? id,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<DateTime>? deletedAt,
+    Expression<String>? scopeId,
+    Expression<String>? date,
+    Expression<int>? mood,
+    Expression<String>? gratitude,
+    Expression<String>? note,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+      if (scopeId != null) 'scope_id': scopeId,
+      if (date != null) 'date': date,
+      if (mood != null) 'mood': mood,
+      if (gratitude != null) 'gratitude': gratitude,
+      if (note != null) 'note': note,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  DailyReflectionsCompanion copyWith({
+    Value<String>? id,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<DateTime?>? deletedAt,
+    Value<String>? scopeId,
+    Value<String>? date,
+    Value<int?>? mood,
+    Value<String?>? gratitude,
+    Value<String?>? note,
+    Value<int>? rowid,
+  }) {
+    return DailyReflectionsCompanion(
+      id: id ?? this.id,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      scopeId: scopeId ?? this.scopeId,
+      date: date ?? this.date,
+      mood: mood ?? this.mood,
+      gratitude: gratitude ?? this.gratitude,
+      note: note ?? this.note,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt.value);
+    }
+    if (scopeId.present) {
+      map['scope_id'] = Variable<String>(scopeId.value);
+    }
+    if (date.present) {
+      map['date'] = Variable<String>(date.value);
+    }
+    if (mood.present) {
+      map['mood'] = Variable<int>(mood.value);
+    }
+    if (gratitude.present) {
+      map['gratitude'] = Variable<String>(gratitude.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DailyReflectionsCompanion(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('scopeId: $scopeId, ')
+          ..write('date: $date, ')
+          ..write('mood: $mood, ')
+          ..write('gratitude: $gratitude, ')
+          ..write('note: $note, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -3553,6 +4154,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $HabitCompletionsTable habitCompletions = $HabitCompletionsTable(
     this,
   );
+  late final $DailyReflectionsTable dailyReflections = $DailyReflectionsTable(
+    this,
+  );
   late final $AppSettingsTable appSettings = $AppSettingsTable(this);
   late final $LocalAccountsTable localAccounts = $LocalAccountsTable(this);
   late final $AuthChallengesTable authChallenges = $AuthChallengesTable(this);
@@ -3564,6 +4168,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
     habits,
     habitCompletions,
+    dailyReflections,
     appSettings,
     localAccounts,
     authChallenges,
@@ -3586,6 +4191,7 @@ typedef $$HabitsTableCreateCompanionBuilder = HabitsCompanion Function({
   Value<String> weekdays,
   Value<int> timesPerWeek,
   Value<int?> reminderTime,
+  Value<String?> partOfDay,
   required String startDate,
   Value<DateTime?> archivedAt,
   Value<int> sortOrder,
@@ -3607,6 +4213,7 @@ typedef $$HabitsTableUpdateCompanionBuilder = HabitsCompanion Function({
   Value<String> weekdays,
   Value<int> timesPerWeek,
   Value<int?> reminderTime,
+  Value<String?> partOfDay,
   Value<String> startDate,
   Value<DateTime?> archivedAt,
   Value<int> sortOrder,
@@ -3690,6 +4297,11 @@ class $$HabitsTableFilterComposer
 
   ColumnFilters<int> get reminderTime => $composableBuilder(
     column: $table.reminderTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get partOfDay => $composableBuilder(
+    column: $table.partOfDay,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3793,6 +4405,11 @@ class $$HabitsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get partOfDay => $composableBuilder(
+    column: $table.partOfDay,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get startDate => $composableBuilder(
     column: $table.startDate,
     builder: (column) => ColumnOrderings(column),
@@ -3873,6 +4490,9 @@ class $$HabitsTableAnnotationComposer
     builder: (column) => column,
   );
 
+  GeneratedColumn<String> get partOfDay =>
+      $composableBuilder(column: $table.partOfDay, builder: (column) => column);
+
   GeneratedColumn<String> get startDate =>
       $composableBuilder(column: $table.startDate, builder: (column) => column);
 
@@ -3930,6 +4550,7 @@ class $$HabitsTableTableManager
                 Value<String> weekdays = const Value.absent(),
                 Value<int> timesPerWeek = const Value.absent(),
                 Value<int?> reminderTime = const Value.absent(),
+                Value<String?> partOfDay = const Value.absent(),
                 Value<String> startDate = const Value.absent(),
                 Value<DateTime?> archivedAt = const Value.absent(),
                 Value<int> sortOrder = const Value.absent(),
@@ -3950,6 +4571,7 @@ class $$HabitsTableTableManager
                 weekdays: weekdays,
                 timesPerWeek: timesPerWeek,
                 reminderTime: reminderTime,
+                partOfDay: partOfDay,
                 startDate: startDate,
                 archivedAt: archivedAt,
                 sortOrder: sortOrder,
@@ -3972,6 +4594,7 @@ class $$HabitsTableTableManager
                 Value<String> weekdays = const Value.absent(),
                 Value<int> timesPerWeek = const Value.absent(),
                 Value<int?> reminderTime = const Value.absent(),
+                Value<String?> partOfDay = const Value.absent(),
                 required String startDate,
                 Value<DateTime?> archivedAt = const Value.absent(),
                 Value<int> sortOrder = const Value.absent(),
@@ -3992,6 +4615,7 @@ class $$HabitsTableTableManager
                 weekdays: weekdays,
                 timesPerWeek: timesPerWeek,
                 reminderTime: reminderTime,
+                partOfDay: partOfDay,
                 startDate: startDate,
                 archivedAt: archivedAt,
                 sortOrder: sortOrder,
@@ -4339,6 +4963,297 @@ typedef $$HabitCompletionsTableProcessedTableManager =
         BaseReferences<_$AppDatabase, $HabitCompletionsTable, CompletionRow>,
       ),
       CompletionRow,
+      PrefetchHooks Function()
+    >;
+typedef $$DailyReflectionsTableCreateCompanionBuilder =
+    DailyReflectionsCompanion Function({
+      required String id,
+      required DateTime createdAt,
+      required DateTime updatedAt,
+      Value<DateTime?> deletedAt,
+      Value<String> scopeId,
+      required String date,
+      Value<int?> mood,
+      Value<String?> gratitude,
+      Value<String?> note,
+      Value<int> rowid,
+    });
+typedef $$DailyReflectionsTableUpdateCompanionBuilder =
+    DailyReflectionsCompanion Function({
+      Value<String> id,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<DateTime?> deletedAt,
+      Value<String> scopeId,
+      Value<String> date,
+      Value<int?> mood,
+      Value<String?> gratitude,
+      Value<String?> note,
+      Value<int> rowid,
+    });
+
+class $$DailyReflectionsTableFilterComposer
+    extends Composer<_$AppDatabase, $DailyReflectionsTable> {
+  $$DailyReflectionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get scopeId => $composableBuilder(
+    column: $table.scopeId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get mood => $composableBuilder(
+    column: $table.mood,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get gratitude => $composableBuilder(
+    column: $table.gratitude,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$DailyReflectionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $DailyReflectionsTable> {
+  $$DailyReflectionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get scopeId => $composableBuilder(
+    column: $table.scopeId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get mood => $composableBuilder(
+    column: $table.mood,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get gratitude => $composableBuilder(
+    column: $table.gratitude,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$DailyReflectionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $DailyReflectionsTable> {
+  $$DailyReflectionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+
+  GeneratedColumn<String> get scopeId =>
+      $composableBuilder(column: $table.scopeId, builder: (column) => column);
+
+  GeneratedColumn<String> get date =>
+      $composableBuilder(column: $table.date, builder: (column) => column);
+
+  GeneratedColumn<int> get mood =>
+      $composableBuilder(column: $table.mood, builder: (column) => column);
+
+  GeneratedColumn<String> get gratitude =>
+      $composableBuilder(column: $table.gratitude, builder: (column) => column);
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+}
+
+class $$DailyReflectionsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $DailyReflectionsTable,
+          ReflectionRow,
+          $$DailyReflectionsTableFilterComposer,
+          $$DailyReflectionsTableOrderingComposer,
+          $$DailyReflectionsTableAnnotationComposer,
+          $$DailyReflectionsTableCreateCompanionBuilder,
+          $$DailyReflectionsTableUpdateCompanionBuilder,
+          (
+            ReflectionRow,
+            BaseReferences<
+              _$AppDatabase,
+              $DailyReflectionsTable,
+              ReflectionRow
+            >,
+          ),
+          ReflectionRow,
+          PrefetchHooks Function()
+        > {
+  $$DailyReflectionsTableTableManager(
+    _$AppDatabase db,
+    $DailyReflectionsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$DailyReflectionsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$DailyReflectionsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$DailyReflectionsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
+                Value<String> scopeId = const Value.absent(),
+                Value<String> date = const Value.absent(),
+                Value<int?> mood = const Value.absent(),
+                Value<String?> gratitude = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => DailyReflectionsCompanion(
+                id: id,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                scopeId: scopeId,
+                date: date,
+                mood: mood,
+                gratitude: gratitude,
+                note: note,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required DateTime createdAt,
+                required DateTime updatedAt,
+                Value<DateTime?> deletedAt = const Value.absent(),
+                Value<String> scopeId = const Value.absent(),
+                required String date,
+                Value<int?> mood = const Value.absent(),
+                Value<String?> gratitude = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => DailyReflectionsCompanion.insert(
+                id: id,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                scopeId: scopeId,
+                date: date,
+                mood: mood,
+                gratitude: gratitude,
+                note: note,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$DailyReflectionsTable, ReflectionRow>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $DailyReflectionsTable,
+                    ReflectionRow
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$DailyReflectionsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $DailyReflectionsTable,
+      ReflectionRow,
+      $$DailyReflectionsTableFilterComposer,
+      $$DailyReflectionsTableOrderingComposer,
+      $$DailyReflectionsTableAnnotationComposer,
+      $$DailyReflectionsTableCreateCompanionBuilder,
+      $$DailyReflectionsTableUpdateCompanionBuilder,
+      (
+        ReflectionRow,
+        BaseReferences<_$AppDatabase, $DailyReflectionsTable, ReflectionRow>,
+      ),
+      ReflectionRow,
       PrefetchHooks Function()
     >;
 typedef $$AppSettingsTableCreateCompanionBuilder =
@@ -5365,6 +6280,8 @@ class $AppDatabaseManager {
       $$HabitsTableTableManager(_db, _db.habits);
   $$HabitCompletionsTableTableManager get habitCompletions =>
       $$HabitCompletionsTableTableManager(_db, _db.habitCompletions);
+  $$DailyReflectionsTableTableManager get dailyReflections =>
+      $$DailyReflectionsTableTableManager(_db, _db.dailyReflections);
   $$AppSettingsTableTableManager get appSettings =>
       $$AppSettingsTableTableManager(_db, _db.appSettings);
   $$LocalAccountsTableTableManager get localAccounts =>

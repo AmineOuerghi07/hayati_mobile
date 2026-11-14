@@ -14,4 +14,6 @@ abstract class SettingsRepository {
   Future<void> setAnalyticsEnabled(bool enabled);
 
   Future<void> setOnboardingDone(bool done);
+
+  Future<void> setDisplayName(String name);
 }

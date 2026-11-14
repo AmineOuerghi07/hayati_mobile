@@ -924,4 +924,242 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get trendSame => 'نفس وتيرة الأسبوع الماضي';
+
+  @override
+  String sessionMinutes(int count) {
+    return '$count د';
+  }
+
+  @override
+  String get breatheComplete => 'يكفي هذا';
+
+  @override
+  String get breatheCompleteBody => 'دقيقة هادئة، وانتهت.';
+
+  @override
+  String get breatheAgain => 'مرة أخرى';
+
+  @override
+  String get breathCalm => 'هدوء';
+
+  @override
+  String get breathBox => 'مربع';
+
+  @override
+  String get breathFourSevenEight => '4-7-8';
+
+  @override
+  String get breathCoherent => 'متّزن';
+
+  @override
+  String breathStepIn(int seconds) {
+    return 'شهيق $seconds';
+  }
+
+  @override
+  String breathStepHold(int seconds) {
+    return 'احبس $seconds';
+  }
+
+  @override
+  String breathStepOut(int seconds) {
+    return 'زفير $seconds';
+  }
+
+  @override
+  String greetingNamed(String greeting, String name) {
+    return '$greeting، $name';
+  }
+
+  @override
+  String get yourName => 'اسمك';
+
+  @override
+  String get namePrompt => 'بماذا نناديك؟';
+
+  @override
+  String get partOfDay => 'وقت اليوم';
+
+  @override
+  String get partAll => 'الكل';
+
+  @override
+  String get partMorning => 'الصباح';
+
+  @override
+  String get partAfternoon => 'بعد الظهر';
+
+  @override
+  String get partEvening => 'المساء';
+
+  @override
+  String get partAnytime => 'في أي وقت';
+
+  @override
+  String get partEmpty => 'لا شيء في هذا الوقت من اليوم.';
+
+  @override
+  String get dataChoiceTitle => 'ماذا نبقي؟';
+
+  @override
+  String get dataChoiceConfirm => 'متابعة';
+
+  @override
+  String get dataChoiceGoBack => 'رجوع';
+
+  @override
+  String get dataChoiceMerge => 'الإبقاء على الاثنين';
+
+  @override
+  String get dataChoiceMergeBody => 'نقل عادات هذا الجهاز إلى الحساب.';
+
+  @override
+  String get dataChoiceKeepAccount => 'استخدام الحساب';
+
+  @override
+  String get dataChoiceKeepAccountBody => 'ترك عادات هذا الجهاز جانبًا.';
+
+  @override
+  String get dataChoiceKeepDevice => 'استخدام هذا الجهاز';
+
+  @override
+  String get dataChoiceKeepDeviceBody =>
+      'استبدال الحساب بما هو على هذا الجهاز.';
+
+  @override
+  String get dataChoiceFresh => 'بداية جديدة';
+
+  @override
+  String get dataChoiceFreshBody => 'مسح الاثنين والبدء بيوم فارغ.';
+
+  @override
+  String scopeCounts(int habits, int checkIns) {
+    return 'على هذا الجهاز: $habits عادات، $checkIns تسجيلات';
+  }
+
+  @override
+  String accountScopeCounts(int habits, int checkIns) {
+    return 'في الحساب: $habits عادات، $checkIns تسجيلات';
+  }
+
+  @override
+  String get gardenTitle => 'الحديقة';
+
+  @override
+  String get gardenShort => 'نباتاتك';
+
+  @override
+  String get gardenEmpty => 'كل عادة تحافظ عليها تصبح نبتة.';
+
+  @override
+  String get rarePlants => 'نباتات نادرة';
+
+  @override
+  String get stageSeed => 'بذرة';
+
+  @override
+  String get stageSprout => 'برعم';
+
+  @override
+  String get stageBud => 'برعم مغلق';
+
+  @override
+  String get stageBloom => 'مزهرة';
+
+  @override
+  String get stageTree => 'شجرة';
+
+  @override
+  String get journalTitle => 'اليوميات';
+
+  @override
+  String get journalShort => 'شعور اليوم';
+
+  @override
+  String get noReflections => 'المساء وقت مناسب لسطر هادئ.';
+
+  @override
+  String get reflectionPrompt => 'كيف كان يومك؟';
+
+  @override
+  String get reflectionBody => 'مزاج، وشيء واحد تسعد به، وملاحظة إن أردت.';
+
+  @override
+  String get reflectionSaved => 'حُفظ لليوم. المس للتعديل.';
+
+  @override
+  String get gratitudeLabel => 'أفرح بـ';
+
+  @override
+  String get gratitudeHint => 'شيء صغير';
+
+  @override
+  String get reflectionNote => 'ملاحظة';
+
+  @override
+  String get recapTitle => 'هذا الأسبوع';
+
+  @override
+  String get recapBanner => 'أسبوعك في بضع بطاقات.';
+
+  @override
+  String get recapEmptyBody => 'أسبوع هادئ. الأسبوع القادم صفحة جديدة.';
+
+  @override
+  String get recapNextTitle => 'الأسبوع القادم';
+
+  @override
+  String get recapNextBody => 'العادات نفسها، وسلسلة أيام جديدة.';
+
+  @override
+  String get recapBestDayEmpty => 'لا يوم بارز بعد.';
+
+  @override
+  String recapBestDayBody(String day, int count) {
+    return 'كان $day الأكثر امتلاءً، بـ $count تسجيلات.';
+  }
+
+  @override
+  String get recapCheckInsTitle => 'التسجيلات';
+
+  @override
+  String recapCheckInsBody(int count) {
+    return 'أُنجزت $count عادات خلال الأيام السبعة الأخيرة.';
+  }
+
+  @override
+  String get recapBestDayTitle => 'أفضل يوم';
+
+  @override
+  String get recapTopHabitTitle => 'العادة الأبرز';
+
+  @override
+  String get recapTopHabitEmpty => 'لم تتصدر أي عادة الأسبوع.';
+
+  @override
+  String recapTopHabitBody(String habit, int count) {
+    return 'ظهرت $habit $count مرات.';
+  }
+
+  @override
+  String get recapPerfectTitle => 'أيام كاملة';
+
+  @override
+  String recapPerfectBody(int count) {
+    return '$count أيام أُنجز فيها كل ما كان مستحقًا.';
+  }
+
+  @override
+  String get recapMoodTitle => 'المزاج';
+
+  @override
+  String get recapMoodEmpty => 'لم يُكتب مزاج هذا الأسبوع.';
+
+  @override
+  String get recapGardenTitle => 'الحديقة';
+
+  @override
+  String recapGardenBody(int count) {
+    return 'نمت $count نباتات هذا الأسبوع.';
+  }
 }

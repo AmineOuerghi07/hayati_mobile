@@ -1,7 +1,10 @@
+import 'dart:math' as math;
+
 import 'package:hayati/app/theme.dart';
 import 'package:hayati/core/widgets/aurora_background.dart';
 import 'package:hayati/core/widgets/growing_plant.dart';
 import 'package:hayati/core/widgets/streak_flame.dart';
+import 'package:hayati/features/habits/domain/part_of_day.dart';
 import 'package:hayati/features/stats/domain/insights.dart';
 import 'package:hayati/l10n/app_localizations.dart';
 import 'package:material_ui/material_ui.dart';
@@ -13,6 +16,7 @@ class TodayHero extends StatelessWidget {
     required this.quote,
     required this.counts,
     required this.bestStreak,
+    required this.period,
     super.key,
   });
 
@@ -21,6 +25,7 @@ class TodayHero extends StatelessWidget {
   final String quote;
   final DayCounts counts;
   final int bestStreak;
+  final PartOfDay period;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +36,33 @@ class TodayHero extends StatelessWidget {
     final reduce = MediaQuery.disableAnimationsOf(context);
     final rate = counts.rate ?? 0;
     final percent = (rate * 100).round();
-    final onHero = scheme.onPrimaryContainer;
+    final sky = switch (period) {
+      PartOfDay.morning => (
+        base: const Color(0xFFFFF3E8),
+        glows: [
+          const Color(0xFFFFB74D).withValues(alpha: 0.55),
+          scheme.primary.withValues(alpha: 0.2),
+        ],
+        on: const Color(0xFF4A2C1A),
+      ),
+      PartOfDay.afternoon => (
+        base: scheme.primaryContainer,
+        glows: [
+          scheme.primary.withValues(alpha: 0.45),
+          scheme.tertiaryContainer,
+        ],
+        on: scheme.onPrimaryContainer,
+      ),
+      PartOfDay.evening => (
+        base: const Color(0xFF1E1B4B),
+        glows: [
+          const Color(0xFF4338CA).withValues(alpha: 0.45),
+          const Color(0xFF0F172A).withValues(alpha: 0.35),
+        ],
+        on: Colors.white,
+      ),
+    };
+    final onHero = sky.on;
     final mood = counts.due == 0
         ? quote
         : counts.done == counts.due
@@ -43,12 +74,8 @@ class TodayHero extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(tokens.radiusSheet),
       child: AuroraBackground(
-        base: scheme.primaryContainer,
-        colors: [
-          scheme.primary.withValues(alpha: 0.55),
-          scheme.tertiaryContainer,
-          scheme.secondary.withValues(alpha: 0.45),
-        ],
+        base: sky.base,
+        colors: sky.glows,
         child: Padding(
           padding: const EdgeInsetsDirectional.fromSTEB(20, 18, 12, 18),
           child: Row(
@@ -58,12 +85,20 @@ class TodayHero extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      dateLabel.toUpperCase(),
-                      style: theme.textTheme.labelMedium?.copyWith(
-                        color: onHero.withValues(alpha: 0.75),
-                        letterSpacing: 0.6,
-                      ),
+                    Row(
+                      children: [
+                        _SkyMotif(period: period, color: onHero),
+                        const SizedBox(width: 8),
+                        Flexible(
+                          child: Text(
+                            dateLabel.toUpperCase(),
+                            style: theme.textTheme.labelMedium?.copyWith(
+                              color: onHero.withValues(alpha: 0.75),
+                              letterSpacing: 0.6,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -194,4 +229,109 @@ class TodayHero extends StatelessWidget {
       ),
     );
   }
+}
+
+class _SkyMotif extends StatefulWidget {
+  const _SkyMotif({required this.period, required this.color});
+
+  final PartOfDay period;
+  final Color color;
+
+  @override
+  State<_SkyMotif> createState() => _SkyMotifState();
+}
+
+class _SkyMotifState extends State<_SkyMotif>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _twinkle = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1800),
+  );
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (MediaQuery.disableAnimationsOf(context)) {
+      _twinkle.stop();
+    } else if (!_twinkle.isAnimating) {
+      _twinkle.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void dispose() {
+    _twinkle.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.square(
+      dimension: 28,
+      child: AnimatedBuilder(
+        animation: _twinkle,
+        builder: (context, _) => CustomPaint(
+          painter: _SkyPainter(
+            period: widget.period,
+            color: widget.color,
+            pulse: _twinkle.value,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SkyPainter extends CustomPainter {
+  _SkyPainter({required this.period, required this.color, required this.pulse});
+
+  final PartOfDay period;
+  final Color color;
+  final double pulse;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = color;
+    final center = size.center(Offset.zero);
+    if (period == PartOfDay.evening) {
+      canvas.drawArc(
+        Rect.fromCircle(center: center, radius: size.width * 0.28),
+        0.6,
+        4.4,
+        false,
+        paint
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2,
+      );
+      for (final star in const [Offset(4, 4), Offset(20, 6), Offset(16, 20)]) {
+        canvas.drawCircle(
+          star,
+          1.2 + pulse,
+          Paint()..color = color.withValues(alpha: 0.45 + pulse * 0.4),
+        );
+      }
+      return;
+    }
+    canvas.drawCircle(
+      center.translate(0, period == PartOfDay.morning ? 4 : 0),
+      size.width * (period == PartOfDay.morning ? 0.22 : 0.28),
+      paint,
+    );
+    if (period == PartOfDay.morning) {
+      final ray = Paint()
+        ..color = color
+        ..strokeWidth = 1.4
+        ..strokeCap = StrokeCap.round;
+      for (var index = 0; index < 6; index++) {
+        final angle = index * 3.14159 / 3 - 0.6;
+        final inner = Offset(math.cos(angle), math.sin(angle)) * 9;
+        final outer =
+            Offset(math.cos(angle), math.sin(angle)) * (12 + pulse * 2);
+        canvas.drawLine(center + inner, center + outer, ray);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_SkyPainter oldDelegate) => oldDelegate.pulse != pulse;
 }
