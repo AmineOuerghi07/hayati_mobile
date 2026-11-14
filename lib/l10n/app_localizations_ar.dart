@@ -1162,4 +1162,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String recapGardenBody(int count) {
     return 'نمت $count نباتات هذا الأسبوع.';
   }
+
+  @override
+  String get filterToDo => 'للإنجاز';
+
+  @override
+  String get filterDone => 'المكتملة';
+
+  @override
+  String get filterNothingOpen => 'لا شيء متبقٍ في هذا العرض.';
+
+  @override
+  String get filterNothingDone => 'لم يُنجز شيء بعد.';
 }

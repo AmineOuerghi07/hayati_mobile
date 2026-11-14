@@ -2219,6 +2219,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} plants grew this week.'**
   String recapGardenBody(int count);
+
+  /// No description provided for @filterToDo.
+  ///
+  /// In en, this message translates to:
+  /// **'To do'**
+  String get filterToDo;
+
+  /// No description provided for @filterDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get filterDone;
+
+  /// No description provided for @filterNothingOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing left in this view.'**
+  String get filterNothingOpen;
+
+  /// No description provided for @filterNothingDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing finished yet.'**
+  String get filterNothingDone;
 }
 
 class _AppLocalizationsDelegate

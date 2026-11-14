@@ -361,5 +361,9 @@
   "recapMoodTitle": "Humeur",
   "recapMoodEmpty": "Aucune humeur notée cette semaine.",
   "recapGardenTitle": "Jardin",
-  "recapGardenBody": "{count} plantes ont grandi cette semaine."
+  "recapGardenBody": "{count} plantes ont grandi cette semaine.",
+"filterToDo": "À faire",
+  "filterDone": "Faites",
+  "filterNothingOpen": "Plus rien dans cette vue.",
+  "filterNothingDone": "Rien de terminé pour l'instant."
 }

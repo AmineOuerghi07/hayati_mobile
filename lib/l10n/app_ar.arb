@@ -361,5 +361,9 @@
   "recapMoodTitle": "المزاج",
   "recapMoodEmpty": "لم يُكتب مزاج هذا الأسبوع.",
   "recapGardenTitle": "الحديقة",
-  "recapGardenBody": "نمت {count} نباتات هذا الأسبوع."
+  "recapGardenBody": "نمت {count} نباتات هذا الأسبوع.",
+"filterToDo": "للإنجاز",
+  "filterDone": "المكتملة",
+  "filterNothingOpen": "لا شيء متبقٍ في هذا العرض.",
+  "filterNothingDone": "لم يُنجز شيء بعد."
 }

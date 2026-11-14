@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hayati/app/hayati_app.dart';
+import 'package:hayati/core/widgets/responsive.dart';
 import 'package:hayati/features/auth/presentation/auth_providers.dart';
 import 'package:hayati/features/habits/presentation/habit_providers.dart';
 import 'package:hayati/features/journal/presentation/reflection_providers.dart';
@@ -72,6 +73,16 @@ void main() {
 
     await tester.tap(find.text('Profile'));
     await _settle(tester);
+    await tester.scrollUntilVisible(
+      find.text('Language'),
+      300,
+      scrollable: find
+          .descendant(
+            of: find.byType(ResponsiveListView),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
     expect(find.text('Language'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });

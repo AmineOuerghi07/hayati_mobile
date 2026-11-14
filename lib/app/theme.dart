@@ -210,9 +210,7 @@ ThemeData buildHayatiTheme(AppThemeId id, Brightness brightness) {
   );
   final colorScheme = _calmScheme(generated, brightness, preset.seed);
   final tokens = HayatiTokens(
-    cardTint: brightness == Brightness.light
-        ? const Color(0xFFFFFCF8)
-        : const Color(0xFF221F1C),
+    cardTint: colorScheme.surfaceContainerLowest,
     warmSurface: colorScheme.surface,
   );
   final base = ThemeData(
@@ -303,8 +301,8 @@ ThemeData buildHayatiTheme(AppThemeId id, Brightness brightness) {
       contentPadding: const EdgeInsetsDirectional.fromSTEB(16, 14, 16, 14),
     ),
     navigationBarTheme: NavigationBarThemeData(
-      backgroundColor: colorScheme.surface,
-      indicatorColor: colorScheme.primary.withValues(alpha: 0.16),
+      backgroundColor: colorScheme.surfaceContainerLow,
+      indicatorColor: colorScheme.primary.withValues(alpha: 0.22),
       indicatorShape: const StadiumBorder(),
       labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
       height: 72,
@@ -386,23 +384,34 @@ ThemeData buildHayatiTheme(AppThemeId id, Brightness brightness) {
 }
 
 ColorScheme _calmScheme(ColorScheme scheme, Brightness brightness, Color seed) {
-  final warm = brightness == Brightness.light
-      ? const Color(0xFFF7F3EE)
-      : const Color(0xFF141210);
-  final surface = Color.alphaBlend(
-    seed.withValues(alpha: brightness == Brightness.light ? 0.045 : 0.14),
-    warm,
+  final light = brightness == Brightness.light;
+  final warm = light ? const Color(0xFFF3EEE6) : const Color(0xFF141210);
+  final paper = light ? const Color(0xFFFFFBF6) : const Color(0xFF1C1917);
+  final wash = light ? 0.20 : 0.16;
+  final surface = Color.alphaBlend(seed.withValues(alpha: wash), warm);
+  final card = Color.alphaBlend(
+    seed.withValues(alpha: light ? 0.12 : 0.10),
+    paper,
   );
   return scheme.copyWith(
     surface: surface,
-    surfaceContainerLowest: brightness == Brightness.light
-        ? const Color(0xFFFFFCF8)
-        : const Color(0xFF1C1917),
+    surfaceContainerLowest: card,
     surfaceContainerLow: Color.alphaBlend(
-      seed.withValues(alpha: 0.06),
+      seed.withValues(alpha: light ? 0.16 : 0.12),
       surface,
     ),
-    surfaceContainer: Color.alphaBlend(seed.withValues(alpha: 0.09), surface),
+    surfaceContainer: Color.alphaBlend(
+      seed.withValues(alpha: light ? 0.24 : 0.16),
+      surface,
+    ),
+    surfaceContainerHigh: Color.alphaBlend(
+      seed.withValues(alpha: light ? 0.30 : 0.20),
+      surface,
+    ),
+    primaryContainer: Color.alphaBlend(
+      seed.withValues(alpha: light ? 0.34 : 0.42),
+      light ? paper : scheme.surface,
+    ),
   );
 }
 
